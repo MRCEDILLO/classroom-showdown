@@ -182,6 +182,31 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 .key-item .ans { color: var(--good); font-weight: 700; }
 .warn-line { font-weight: 700; color: var(--margin); }
 
+/* question pictures */
+.qbody { display: grid; gap: 18px; }
+.qside { display: grid; gap: 18px; min-width: 0; align-content: start; }
+@media (min-width: 1000px) {
+  .qbody.has-img { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; }
+  .qbody.has-img .opts { grid-template-columns: 1fr; }
+}
+.qimg { margin: 0; background: var(--card); border: 2px solid var(--ink); border-radius: 10px; padding: 10px; display: grid; place-items: center; min-height: 120px; }
+.qimg img { display: block; max-width: 100%; max-height: 52vh; object-fit: contain; cursor: zoom-in; }
+.qimg .miss { color: var(--bad); font-weight: 700; text-align: center; }
+.qimg .hint { font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+.zoom { position: fixed; inset: 0; z-index: 40; background: rgba(23, 33, 77, .92); display: grid; place-items: center; padding: 16px; cursor: zoom-out; }
+.zoom img { max-width: 100%; max-height: 100%; object-fit: contain; background: #fff; border-radius: 6px; }
+.key-item .pic { font-size: 14px; color: var(--ink-2); }
+/* open (say-it) questions */
+.judge { display: flex; flex-wrap: wrap; gap: 14px; }
+.jbtn { font-size: clamp(22px, 2.6vw, 34px); padding: 14px 30px; border-width: 2.5px; color: #fff; }
+.jbtn.good { background: var(--good); border-color: var(--good); }
+.jbtn.good:hover { background: #177a4c; }
+.jbtn.bad { background: var(--bad); border-color: var(--bad); }
+.jbtn.bad:hover { background: #b33434; }
+.answer-box { background: var(--good); color: #fff; border-radius: 10px; padding: 16px 20px; font-size: clamp(24px, 3vw, 42px); font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+.answer-box .lbl { display: block; font-family: var(--font-display); font-weight: 800; font-size: .5em; text-transform: uppercase; letter-spacing: .06em; opacity: .9; }
+.team.nopick { cursor: default; }
+.team.nopick:hover { border-color: var(--ink); }
 /* live game: setup, lobby, projector */
 .join-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; background: var(--highlight); border: 2px solid var(--ink); border-radius: 10px; padding: 12px 16px; font-weight: 700; font-size: 18px; }
 .mode-note { margin: 0; color: var(--ink-2); line-height: 1.45; max-width: 62ch; }
@@ -277,8 +302,22 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
       </div>
     </div>
     <p class="prompt" id="qPrompt"></p>
-    <div class="live-panel" id="qLive" hidden aria-live="polite"></div>
-    <div class="opts" id="qOpts"></div>
+    <div class="qbody" id="qBody">
+      <figure class="qimg" id="qImg" hidden>
+        <img id="qImgEl" alt="Picture for this question">
+        <div class="miss" id="qImgMiss" hidden></div>
+        <figcaption class="hint" id="qImgHint">Click the picture to make it bigger</figcaption>
+      </figure>
+      <div class="qside">
+        <div class="live-panel" id="qLive" hidden aria-live="polite"></div>
+        <div class="opts" id="qOpts"></div>
+        <div class="judge" id="qJudge" hidden>
+          <button class="btn jbtn good" id="qRight" type="button">Correct</button>
+          <button class="btn jbtn bad" id="qWrong" type="button">Incorrect</button>
+        </div>
+        <div class="answer-box" id="qAnswer" hidden aria-live="polite"></div>
+      </div>
+    </div>
     <div class="feedback" id="qMsg" aria-live="polite"></div>
     <div class="explain" id="qExplain" hidden></div>
     <div class="qfoot">
@@ -308,10 +347,10 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
       <h3>Question set</h3>
       <div class="bank" id="bankInfo"></div>
       <div class="drop">
-        <label class="btn primary upload" for="fileIn">Upload a CSV file<input type="file" id="fileIn" accept=".csv,text/csv"></label>
+        <label class="btn primary upload" for="fileIn">Upload a CSV or zip file<input type="file" id="fileIn" accept=".csv,.zip,text/csv,application/zip"></label>
         <button class="btn" id="useSample" type="button">Use the sample set</button>
         <button class="btn" id="dlSample" type="button">Download the sample set</button>
-        <span class="hint">or drop a .csv file here</span>
+        <span class="hint">or drop a .csv or .zip file here</span>
         <span class="dl-msg" id="dlMsg" aria-live="polite"></span>
       </div>
       <details class="fmt">
@@ -322,7 +361,9 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
             <tr><td>Year 7 Algebra</td><td>Solve 6m = 42</td><td>36</td><td>48</td><td>7</td><td>252</td><td>C</td><td>Divide both sides by 6.</td><td>Equations</td></tr>
           </table>
         </div>
-        <p>The easiest way to start is to download the sample set and edit it in Excel or Google Sheets, then save it as CSV. The first row holds the column names. Every question needs at least options A and B, and the answer is the letter of the right option. Explanation and topics are optional. Without a topics column, questions are put into columns of five in file order. The board holds up to 6 topics with 5 questions each.</p>
+        <p>The easiest way to start is to download the sample set and edit it in Excel or Google Sheets, then save it as CSV. The first row holds the column names. For a multiple-choice question, fill in at least options A and B and put the letter of the right option in the answer column. For an open question, leave A to D empty and type the answer itself in the answer column: after a buzz you mark it Correct or Incorrect. Explanation and topics are optional.</p>
+        <p><b>Adding pictures:</b> add an <b>image</b> column and type the picture's file name on that question's row, for example <i>q3.png</i>. Put the CSV and the pictures in one folder, compress the folder into a zip file, and upload the zip. PNG, JPG, GIF, WebP and SVG pictures work. You can also type a full web address (starting with https://) instead of a file name.</p>
+        <p> Without a topics column, questions are put into columns of five in file order. The board holds up to 6 topics with 5 questions each.</p>
       </details>
     </div>
 
@@ -395,6 +436,8 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
   </div>
 </div>
 
+<div class="zoom" id="imgZoom" hidden><img id="imgZoomEl" alt="Enlarged picture"></div>
+
 <!-- live game lobby (projector) -->
 <div class="overlay" id="lobby" hidden>
   <div class="sheet lobby">
@@ -462,6 +505,8 @@ const MAX_CATS = 6, MAX_ROWS = 5;
 const K_GAME = 'classroom-showdown-game-v1', K_BANK = 'classroom-showdown-bank-v1';
 
 const $ = id => document.getElementById(id);
+const isOpen = q => !q.o || !q.o.length;
+const answerText = q => (isOpen(q) ? (q.ans || '(no answer in the file)') : `${LETTERS[q.a]}: ${q.o[q.a]}`);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const store = {
   get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
@@ -493,13 +538,10 @@ function buildBank(text, source) {
   const head = rows[0].map(h => h.trim().toLowerCase());
   const col = (...names) => { for (const n of names) { const i = head.indexOf(n); if (i >= 0) return i; } return -1; };
   const ci = { title: col('bank title', 'title'), q: col('question'), ans: col('answer', 'correct', 'correct answer'),
-    ex: col('explanation'), topic: col('topics', 'topic', 'category'),
+    ex: col('explanation'), topic: col('topics', 'topic', 'category'), img: col('image', 'picture', 'photo', 'img'),
     opt: LETTERS.map(L => col(L.toLowerCase(), 'option ' + L.toLowerCase(), 'choice ' + L.toLowerCase())) };
   const missing = [];
   if (ci.q < 0) missing.push('question');
-  if (ci.opt[0] < 0) missing.push('A');
-  if (ci.opt[1] < 0) missing.push('B');
-  if (ci.ans < 0) missing.push('answer');
   if (missing.length) return { errors: [`The header row is missing: ${missing.join(', ')}. The first row should name the columns, like the example below.`], warnings, cats: [] };
 
   let title = '';
@@ -511,12 +553,13 @@ function buildBank(text, source) {
     if (!p) { errors.push(`Row ${line}: the question is blank, so it was skipped.`); return; }
     const opts = [];
     LETTERS.forEach((L, j) => { const v = get(ci.opt[j]); if (v) opts.push({ L, v }); });
-    if (opts.length < 2) { errors.push(`Row ${line}: needs at least two options, so it was skipped.`); return; }
+    if (!opts.length) { qs.push({ p, o: [], a: -1, ans: get(ci.ans), e: get(ci.ex), topic: get(ci.topic), img: get(ci.img), line }); return; }
+    if (opts.length < 2) { errors.push(`Row ${line}: has only one option. Give at least two options, or leave A to D empty for an open question. The row was skipped.`); return; }
     const raw = get(ci.ans);
     let a = opts.findIndex(o => o.L === raw.toUpperCase().replace(/[^A-D]/g, '').slice(0, 1) && raw.replace(/[\s.)]/g, '').length === 1);
     if (a < 0) a = opts.findIndex(o => o.v.toLowerCase() === raw.toLowerCase());
     if (a < 0) { errors.push(`Row ${line}: the answer “${raw || 'blank'}” doesn't match an option, so it was skipped.`); return; }
-    qs.push({ p, o: opts.map(o => o.v), a, e: get(ci.ex), topic: get(ci.topic), line });
+    qs.push({ p, o: opts.map(o => o.v), a, e: get(ci.ex), topic: get(ci.topic), img: get(ci.img), line });
   });
 
   let cats = [];
@@ -535,7 +578,7 @@ function buildBank(text, source) {
   }
   cats.forEach(c => {
     if (c.qs.length > MAX_ROWS) { warnings.push(`“${c.name}” has ${c.qs.length} questions. The first 5 are used.`); c.qs = c.qs.slice(0, MAX_ROWS); }
-    c.qs = c.qs.map(({ p, o, a, e }) => ({ p, o, a, e }));
+    c.qs = c.qs.map(({ p, o, a, e, ans, img }) => ({ p, o, a, e, ans: ans || '', img: img || '' }));
   });
   const total = cats.reduce((s, c) => s + c.qs.length, 0);
   if (!total) errors.unshift('No usable questions were found in this file.');
@@ -600,14 +643,18 @@ function renderScores() {
   const box = $('scores'); box.innerHTML = '';
   if (!S) return;
   S.teams.forEach((t, i) => {
-    const d = document.createElement('div'); d.className = 'team' + (i === S.turn ? ' turn' : ''); d.dataset.pick = i;
-    const pb = document.createElement('button'); pb.type = 'button'; pb.className = 'pick'; pb.dataset.pick = i;
-    pb.setAttribute('aria-pressed', String(i === S.turn)); pb.setAttribute('aria-label', `${t.name}, ${t.score} points. Choose to pick next`);
+    const pickable = !S.live;
+    const d = document.createElement('div'); d.className = 'team' + (pickable && i === S.turn ? ' turn' : '') + (pickable ? '' : ' nopick');
+    const pb = document.createElement(pickable ? 'button' : 'div'); pb.className = 'pick';
+    if (pickable) {
+      d.dataset.pick = i; pb.type = 'button'; pb.dataset.pick = i;
+      pb.setAttribute('aria-pressed', String(i === S.turn)); pb.setAttribute('aria-label', `${t.name}, ${t.score} points. Choose to pick next`);
+    }
     const nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = t.name;
     const adj = document.createElement('div'); adj.className = 'adj';
     adj.innerHTML = `<button type="button" data-adj="${i}" data-d="100" aria-label="Add 100 to ${esc(t.name)}">+</button><button type="button" data-adj="${i}" data-d="-100" aria-label="Take 100 from ${esc(t.name)}">−</button>`;
     const sc = document.createElement('div'); sc.className = 'sc'; sc.textContent = t.score;
-    const tag = document.createElement('div'); tag.className = 'tag'; tag.textContent = 'Picking'; tag.hidden = i !== S.turn;
+    const tag = document.createElement('div'); tag.className = 'tag'; tag.textContent = 'Picking'; tag.hidden = !pickable || i !== S.turn;
     pb.append(nm, sc, tag);
     if (S.live) {
       const n = Object.values(players).filter(p => p && p.team === i).length;
@@ -616,8 +663,10 @@ function renderScores() {
     }
     d.append(pb, adj); box.appendChild(d);
   });
-  const hint = document.createElement('div'); hint.className = 'score-hint'; hint.textContent = 'Click a team to choose who picks next.';
-  box.prepend(hint);
+  if (!S.live) {
+    const hint = document.createElement('div'); hint.className = 'score-hint'; hint.textContent = 'Click a team to choose who picks next.';
+    box.prepend(hint);
+  }
 }
 function renderAll() { renderBoard(); renderScores(); }
 
@@ -634,6 +683,7 @@ function renderQ() {
   $('qVal').textContent = val;
   $('qDouble').hidden = !dbl;
   $('qPrompt').textContent = q.p;
+  showQImg(q);
   $('qLive').hidden = true; $('qOpts').hidden = false; $('qClose').hidden = false;
   const opts = $('qOpts'); opts.innerHTML = '';
   q.o.forEach((o, i) => {
@@ -645,6 +695,12 @@ function renderQ() {
     b.disabled = Q.done || Q.wrong.includes(i);
     opts.appendChild(b);
   });
+  const open = isOpen(q);
+  opts.hidden = open;
+  $('qJudge').hidden = !open || Q.done;
+  const ab = $('qAnswer'), showAns = open && Q.done;
+  ab.hidden = !showAns;
+  ab.innerHTML = showAns ? `<span class="lbl">Answer</span>${q.ans ? esc(q.ans) : 'No answer was given in the question file.'}` : '';
   const who = $('qWho'); who.innerHTML = '';
   const lab = document.createElement('span'); lab.className = 'lab'; lab.textContent = Q.done ? 'Teams:' : 'Answering:'; who.appendChild(lab);
   S.teams.forEach((t, i) => {
@@ -659,7 +715,7 @@ function renderQ() {
   $('qReveal').hidden = Q.done;
   $('qClose').textContent = Q.done ? 'Back to board' : 'Back (keep this tile)';
   const n = q.o.length;
-  $('qKeys').textContent = `Keys: A–${LETTERS[n - 1]} or 1–${n} to answer · Esc to go back`;
+  $('qKeys').textContent = open ? 'Mark the answering team Correct or Incorrect, or reveal the answer · Esc to go back' : `Keys: A–${LETTERS[n - 1]} or 1–${n} to answer · Esc to go back`;
   if (Q.live) renderLiveQ();
   renderTimer();
 }
@@ -684,7 +740,27 @@ function finish(by, msg, kind) {
   Q.done = true; Q.msg = msg; Q.msgKind = kind; Q.running = false; stopTimer();
   S.used[Q.id] = { by }; save(); renderQ(); renderAll(); $('qClose').focus();
 }
-function reveal() { if (!Q || Q.done) return; if (Q.live) { liveReveal(); return; } finish(null, `The answer is ${LETTERS[info(Q.id).q.a]}. No points this time.`, ''); }
+function reveal() {
+  if (!Q || Q.done) return;
+  if (Q.live) { liveReveal(); return; }
+  const q = info(Q.id).q;
+  finish(null, isOpen(q) ? 'No points this time.' : `The answer is ${LETTERS[q.a]}. No points this time.`, '');
+}
+function markOpen(ok) {
+  if (!Q || Q.done) return;
+  if (Q.live) { liveMark(ok); return; }
+  const { val } = info(Q.id), team = Q.answering, name = S.teams[team].name;
+  if (ok) { S.teams[team].score += val; finish(team, `Correct! +${val} to ${name}.`, 'good'); return; }
+  Q.tried.push(team);
+  if (S.penalty) S.teams[team].score -= val;
+  const lost = S.penalty ? `, −${val} to ${name}` : '';
+  const left = S.teams.map((_, k) => k).filter(k => !Q.tried.includes(k));
+  if (!left.length) { finish(null, `Not quite${lost}. Nobody gets the points this time.`, 'bad'); return; }
+  const next = left.find(k => k > team) ?? left[0];
+  Q.answering = next; Q.msg = `Not quite${lost}. ${S.teams[next].name} can steal.`; Q.msgKind = 'bad';
+  if (S.timer > 0) { Q.time = S.timer; Q.running = true; startTimer(); }
+  save(); renderQ(); renderScores();
+}
 function closeQ() {
   if (!Q) return;
   stopTimer();
@@ -720,7 +796,7 @@ function renderTimer() {
 /* ---------- setup ---------- */
 function setBank(b) {
   bank = b;
-  if (b && b.source !== 'sample' && b.total) store.set(K_BANK, { text: b.text, name: b.fileName });
+  if (b && b.source !== 'sample' && b.total) store.set(K_BANK, { text: b.text, name: b.fileName, zip: b.source === 'zip' });
   renderBankInfo();
 }
 function loadText(text, source, fileName) {
@@ -730,11 +806,19 @@ function renderBankInfo() {
   const box = $('bankInfo');
   if (!bank) { box.innerHTML = '<div class="bank-meta">No question set loaded yet.</div>'; $('startBtn').disabled = true; return; }
   const parts = [];
-  parts.push(`<div><span class="src">${bank.source === 'sample' ? 'Sample set' : 'Your file'}</span>${bank.fileName ? ` <span class="bank-meta">${esc(bank.fileName)}</span>` : ''}</div>`);
+  parts.push(`<div><span class="src">${bank.source === 'sample' ? 'Sample set' : bank.source === 'zip' ? 'Your zip file' : 'Your file'}</span>${bank.fileName ? ` <span class="bank-meta">${esc(bank.fileName)}</span>` : ''}</div>`);
   if (bank.total) {
     parts.push(`<div class="bank-title">${esc(bank.title)}</div>`);
-    parts.push(`<div class="bank-meta">${bank.total} question${bank.total === 1 ? '' : 's'} in ${bank.cats.length} column${bank.cats.length === 1 ? '' : 's'}</div>`);
+    const nOpen = bank.cats.reduce((n, c) => n + c.qs.filter(isOpen).length, 0);
+    parts.push(`<div class="bank-meta">${bank.total} question${bank.total === 1 ? '' : 's'} in ${bank.cats.length} column${bank.cats.length === 1 ? '' : 's'}${nOpen ? ` · ${nOpen} open (no options)` : ''}</div>`);
     parts.push(`<div class="cats-preview">${bank.cats.map(c => `<span>${esc(c.name)}<b>${c.qs.length}</b></span>`).join('')}</div>`);
+    const named = bank.cats.flatMap(c => c.qs.filter(q => q.img).map(q => q.img));
+    if (named.length) {
+      const missing = [...new Set(named.filter(n => !imgSrc(n)))];
+      const found = named.length - named.filter(n => !imgSrc(n)).length;
+      parts.push(`<div class="bank-meta">${found} of ${named.length} picture${named.length === 1 ? '' : 's'} ready</div>`);
+      if (missing.length) parts.push(`<ul class="notes err"><li>${missing.length === 1 ? 'This picture is' : 'These pictures are'} named in the file but ${bank.source === 'zip' ? 'not in the zip' : 'not loaded'}: ${esc(missing.slice(0, 6).join(', '))}${missing.length > 6 ? ` and ${missing.length - 6} more` : ''}.${bank.source === 'zip' ? ' Check the spelling matches the file name, including .png or .jpg.' : ' To use pictures, upload a zip file with the CSV and the pictures together.'} Those questions will still work without the picture.</li></ul>`);
+    }
   }
   if (bank.errors.length) parts.push(`<ul class="notes err">${bank.errors.slice(0, 8).map(e => `<li>${esc(e)}</li>`).join('')}${bank.errors.length > 8 ? `<li>…and ${bank.errors.length - 8} more rows with problems.</li>` : ''}</ul>`);
   if (bank.warnings.length) parts.push(`<ul class="notes warn">${bank.warnings.map(e => `<li>${esc(e)}</li>`).join('')}</ul>`);
@@ -811,18 +895,19 @@ function showEnd() {
 function renderKey() {
   const b = S ? S.bank : bank;
   $('keyList').innerHTML = !b || !b.cats.length ? '<p>No question set loaded.</p>' : b.cats.map(c => `<div class="key-cat"><h3>${esc(c.name)}</h3>${c.qs.map((q, r) =>
-    `<div class="key-item"><span class="val">${VALUES[r]}</span><div>${esc(q.p)}</div><div class="ans">${LETTERS[q.a]}: ${esc(q.o[q.a])}</div></div>`).join('')}</div>`).join('');
+    `<div class="key-item"><span class="val">${VALUES[r]}</span><div>${esc(q.p)}</div><div class="ans">${esc(answerText(q))}</div>${q.img ? `<div class="pic">Picture: ${esc(q.img)}</div>` : ''}</div>`).join('')}</div>`).join('');
 }
 
 /* ---------- file loading ---------- */
 function readFile(file) {
   if (!file) return;
+  if (/\.zip$/i.test(file.name) || /zip/.test(file.type)) { readZip(file); return; }
   if (!/\.csv$/i.test(file.name) && !/csv|text/.test(file.type)) {
-    bank = { errors: [`“${file.name}” isn't a CSV file. Save the spreadsheet as CSV and try again.`], warnings: [], cats: [], total: 0, source: 'file', fileName: file.name };
+    bank = { errors: [`“${file.name}” isn't a CSV or zip file. Save the spreadsheet as CSV, or zip it together with its pictures, and try again.`], warnings: [], cats: [], total: 0, source: 'file', fileName: file.name };
     renderBankInfo(); return;
   }
   const r = new FileReader();
-  r.onload = () => loadText(String(r.result), 'file', file.name);
+  r.onload = () => { setImages(new Map(), true); loadText(String(r.result), 'file', file.name); };
   r.onerror = () => { bank = { errors: ['The file could not be read. Try uploading it again.'], warnings: [], cats: [], total: 0, source: 'file', fileName: file.name }; renderBankInfo(); };
   r.readAsText(file);
 }
@@ -839,6 +924,8 @@ $('scores').addEventListener('click', e => {
 $('qOpts').addEventListener('click', e => { const b = e.target.closest('.opt'); if (b) pick(+b.dataset.i); });
 $('qWho').addEventListener('click', e => { const p = e.target.closest('.pill'); if (!p || p.disabled) return; Q.answering = +p.dataset.team; renderQ(); });
 $('qReveal').addEventListener('click', reveal);
+$('qRight').addEventListener('click', () => markOpen(true));
+$('qWrong').addEventListener('click', () => markOpen(false));
 $('qClose').addEventListener('click', closeQ);
 $('tBtn').addEventListener('click', () => {
   if (!Q) return;
@@ -849,7 +936,7 @@ $('tBtn').addEventListener('click', () => {
 $('teamCount').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; draftCount = +b.dataset.n; renderTeams(); });
 $('names').addEventListener('input', e => { if (e.target.dataset.i != null) draftNames[+e.target.dataset.i] = e.target.value; });
 $('fileIn').addEventListener('change', e => { readFile(e.target.files[0]); e.target.value = ''; });
-$('useSample').addEventListener('click', () => loadText(SAMPLE_CSV, 'sample', 'Year_7_Algebra_Showdown.csv'));
+$('useSample').addEventListener('click', () => { setImages(new Map(), true); loadText(SAMPLE_CSV, 'sample', 'Year_7_Algebra_Showdown.csv'); });
 const dz = $('dropZone');
 ['dragenter', 'dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.querySelector('.drop').classList.add('over'); }));
 ['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.querySelector('.drop').classList.remove('over'); }));
@@ -897,6 +984,100 @@ document.addEventListener('keydown', e => {
   if (k in map && !e.ctrlKey && !e.metaKey) { e.preventDefault(); pick(map[k]); }
   else if (e.key === 'Escape') closeQ();
 });
+
+/* ---------- question pictures (zip upload) ---------- */
+const JSZIP_URL = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+const IMG_RE = /\.(png|jpe?g|gif|webp|svg)$/i;
+const MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp', svg: 'image/svg+xml' };
+let IMG = {};
+const imgKey = n => String(n).split(/[\\/]/).pop().trim().toLowerCase();
+const imgSrc = n => (!n ? '' : /^https?:\/\//i.test(n.trim()) ? n.trim() : (IMG[imgKey(n)] || ''));
+const IDB = {
+  open() {
+    return new Promise((res, rej) => {
+      const r = indexedDB.open('classroom-showdown', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('images');
+      r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+    });
+  },
+  async replaceAll(map) {
+    const db = await this.open();
+    await new Promise((res, rej) => {
+      const tx = db.transaction('images', 'readwrite'), st = tx.objectStore('images');
+      st.clear(); map.forEach((blob, k) => st.put(blob, k));
+      tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+    });
+  },
+  async loadAll() {
+    const db = await this.open();
+    return new Promise((res, rej) => {
+      const out = new Map(), req = db.transaction('images').objectStore('images').openCursor();
+      req.onsuccess = () => { const c = req.result; if (c) { out.set(c.key, c.value); c.continue(); } else res(out); };
+      req.onerror = () => rej(req.error);
+    });
+  },
+};
+function setImages(map, persist) {
+  Object.values(IMG).forEach(u => { try { URL.revokeObjectURL(u); } catch (e) {} });
+  IMG = {};
+  map.forEach((blob, k) => { IMG[k] = URL.createObjectURL(blob); });
+  if (persist) IDB.replaceAll(map).catch(e => liveErr(e));
+}
+async function restoreImages() {
+  try { setImages(await IDB.loadAll(), false); } catch (e) { liveErr(e); }
+  renderBankInfo();
+  if (Q && !$('qView').hidden) renderQ();
+}
+async function shrink(blob) {
+  if (/svg|gif/.test(blob.type) || blob.size < 700000) return blob;
+  try {
+    const bmp = await createImageBitmap(blob), max = 1800;
+    const sc = Math.min(1, max / Math.max(bmp.width, bmp.height));
+    if (sc === 1 && blob.size < 2500000) return blob;
+    const c = document.createElement('canvas');
+    c.width = Math.round(bmp.width * sc); c.height = Math.round(bmp.height * sc);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    const type = blob.type === 'image/png' ? 'image/png' : 'image/jpeg';
+    return await new Promise(r => c.toBlob(b => r(b || blob), type, 0.88));
+  } catch (e) { return blob; }
+}
+async function readZip(file) {
+  const fail = msg => { bank = { errors: [msg], warnings: [], cats: [], total: 0, source: 'zip', fileName: file.name }; renderBankInfo(); };
+  $('bankInfo').innerHTML = `<div class="bank-meta">Opening ${esc(file.name)}…</div>`;
+  try {
+    if (!window.JSZip) await loadScript(JSZIP_URL);
+    const zip = await window.JSZip.loadAsync(file);
+    const entries = Object.values(zip.files).filter(f => !f.dir && !/(^|\/)(__MACOSX\/|\.)/.test(f.name));
+    const csvs = entries.filter(f => /\.csv$/i.test(f.name)).sort((a, b) => a.name.split('/').length - b.name.split('/').length || a.name.localeCompare(b.name));
+    if (!csvs.length) { fail(`There's no CSV file inside “${file.name}”. Put the question CSV and its pictures in one folder, then zip the folder.`); return; }
+    const text = await csvs[0].async('string');
+    const imgs = new Map();
+    for (const f of entries.filter(f => IMG_RE.test(f.name))) {
+      const ext = f.name.split('.').pop().toLowerCase();
+      const raw = await f.async('blob');
+      imgs.set(imgKey(f.name), await shrink(new Blob([raw], { type: MIME[ext] || 'application/octet-stream' })));
+    }
+    setImages(imgs, true);
+    loadText(text, 'zip', file.name);
+    if (csvs.length > 1 && bank) { bank.warnings.push(`The zip has ${csvs.length} CSV files. Only ${csvs[0].name.split('/').pop()} was used.`); renderBankInfo(); }
+  } catch (e) {
+    liveErr(e);
+    fail(`“${file.name}” couldn't be opened. Check it's a normal zip file (right-click the folder and choose Compress or Send to → Compressed folder), and that this computer is online the first time you load a zip.`);
+  }
+}
+function showQImg(q) {
+  const fig = $('qImg'), img = $('qImgEl'), miss = $('qImgMiss'), body = $('qBody');
+  const src = q.img ? imgSrc(q.img) : '';
+  fig.hidden = !q.img; body.classList.toggle('has-img', !!q.img);
+  if (!q.img) { img.removeAttribute('src'); return; }
+  img.hidden = !src; $('qImgHint').hidden = !src; miss.hidden = !!src;
+  if (src) { if (img.getAttribute('src') !== src) img.src = src; }
+  else { img.removeAttribute('src'); miss.textContent = `Picture not found: ${q.img}`; }
+}
+$('qImgEl').addEventListener('error', () => { const q = Q && info(Q.id).q; if (!q) return; $('qImgEl').hidden = true; $('qImgHint').hidden = true; $('qImgMiss').hidden = false; $('qImgMiss').textContent = `This picture couldn't be shown: ${q.img}`; });
+$('qImgEl').addEventListener('click', () => { const src = $('qImgEl').getAttribute('src'); if (!src) return; $('imgZoomEl').src = src; $('imgZoom').hidden = false; });
+$('imgZoom').addEventListener('click', () => { $('imgZoom').hidden = true; });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('imgZoom').hidden) { e.stopImmediatePropagation(); $('imgZoom').hidden = true; } }, true);
 
 /* ---------- live game (Firebase Realtime Database) ---------- */
 const FB_VER = '10.12.2';
@@ -1063,7 +1244,8 @@ function onLiveQ(v) {
   if (!Q || !Q.live || !v || v.n !== Q.n || Q.done) return;
   if (Q.phase === 'buzz' && v.buzz && v.buzz.qn === Q.n) {
     Q.phase = 'answer'; Q.buzz = v.buzz; Q.closed = false; Q.msg = ''; Q.msgKind = '';
-    L.update(roomPath('q'), { open: false, options: info(Q.id).q.o }).catch(liveErr);
+    const bq = info(Q.id).q;
+    L.update(roomPath('q'), isOpen(bq) ? { open: false, kind: 'say' } : { open: false, kind: 'mc', options: bq.o }).catch(liveErr);
     if (S.timer > 0) { Q.time = S.timer; Q.running = true; startTimer(); }
     renderQ();
   } else if (Q.phase === 'answer' && v.answer && Q.buzz && v.answer.uid === Q.buzz.uid) {
@@ -1086,14 +1268,16 @@ function judge(choice) {
 function liveFinish(by, msg, kind, correct) {
   const { q, val } = info(Q.id), b = Q.buzz;
   Q.phase = 'done';
-  L.update(roomPath('q'), { open: false, options: q.o, result: {
-    correctIndex: q.a, correct: !!correct, choice: Q.choice, uid: b ? b.uid : null, name: b ? b.name : null, team: b ? b.team : null, pts: val,
+  const op = isOpen(q);
+  L.update(roomPath('q'), { open: false, options: op ? null : q.o, result: {
+    correctIndex: op ? null : q.a, answer: op ? (q.ans || '') : null, correct: !!correct, choice: Q.choice, uid: b ? b.uid : null, name: b ? b.name : null, team: b ? b.team : null, pts: val,
   } }).catch(liveErr);
   finish(by, msg, kind);
 }
 function liveReveal() {
-  if (Q.phase === 'answer') { judge(null); return; }
-  liveFinish(null, `The answer is ${LETTERS[info(Q.id).q.a]}. No points this time.`, '', false);
+  const q = info(Q.id).q;
+  if (Q.phase === 'answer' && !isOpen(q)) { judge(null); return; }
+  liveFinish(null, isOpen(q) ? 'No points this time.' : `The answer is ${LETTERS[q.a]}. No points this time.`, '', false);
 }
 function liveTimeUp() {
   if (Q.phase === 'buzz') {
@@ -1101,7 +1285,19 @@ function liveTimeUp() {
     Q.msg = 'Buzzers closed. Nobody buzzed in. Reveal the answer, or press Restart to reopen the buzzers.';
     L.update(roomPath('q'), { open: false }).catch(liveErr);
     renderQ();
-  } else if (Q.phase === 'answer') judge(null);
+  } else if (Q.phase === 'answer') {
+    if (isOpen(info(Q.id).q)) { Q.msg = "Time's up! Mark the answer Correct or Incorrect, or reveal it."; Q.msgKind = 'bad'; renderQ(); }
+    else judge(null);
+  }
+}
+function liveMark(ok) {
+  if (Q.phase !== 'answer' || !Q.buzz) return;
+  const { val } = info(Q.id), b = Q.buzz;
+  const team = S.teams[b.team] ? b.team : null, tname = team == null ? 'their team' : S.teams[team].name;
+  if (ok && team != null) { S.teams[team].score += val; liveFinish(team, `Correct! ${b.name} wins ${val} points for ${tname}.`, 'good', true); return; }
+  let msg = `${b.name}'s answer wasn't right.`;
+  if (S.penalty && team != null) { S.teams[team].score -= val; msg += ` −${val} for ${tname}.`; }
+  liveFinish(null, msg, 'bad', false);
 }
 function liveCloseQ() {
   if (qUnsub) { qUnsub(); qUnsub = null; }
@@ -1111,7 +1307,7 @@ function renderLiveQ() {
   const { q } = info(Q.id), panel = $('qLive'), opts = $('qOpts');
   $('qWho').innerHTML = '';
   if (Q.phase === 'done') {
-    panel.hidden = true; opts.hidden = false;
+    panel.hidden = true; opts.hidden = isOpen(q);
     [...opts.children].forEach((b, i) => {
       b.classList.remove('wrong', 'faded', 'right');
       b.classList.add(i === q.a ? 'right' : (i === Q.choice ? 'wrong' : 'faded'));
@@ -1126,11 +1322,12 @@ function renderLiveQ() {
         : `<div class="live-big open">Buzzers open!</div><div class="live-sub">First to buzz answers for their team · ${online} connected</div>`;
     } else {
       const t = S.teams[Q.buzz.team];
-      panel.innerHTML = `<div class="live-big">${esc(Q.buzz.name)} buzzed in!</div><div class="live-sub">${t ? esc(t.name) + ' · ' : ''}choosing an answer on their device…</div>`;
+      panel.innerHTML = `<div class="live-big">${esc(Q.buzz.name)} buzzed in!</div><div class="live-sub">${t ? esc(t.name) + ' · ' : ''}${isOpen(q) ? 'say your answer out loud' : 'choosing an answer on their device…'}</div>`;
     }
   }
   $('qClose').hidden = Q.phase === 'answer';
-  $('qKeys').textContent = 'Students buzz in on their own devices. Only the first student to buzz sees the options.';
+  $('qJudge').hidden = !(isOpen(q) && Q.phase === 'answer');
+  $('qKeys').textContent = isOpen(q) ? 'Students buzz in on their own devices. The first to buzz says their answer out loud.' : 'Students buzz in on their own devices. Only the first student to buzz sees the options.';
 }
 
 /* ---- student device ---- */
@@ -1200,22 +1397,24 @@ function renderStu() {
   if (!q) { put('<div class="stu-big">Eyes on the board</div><div class="stu-sub">Get ready to buzz when your teacher opens a question.</div>'); return; }
   const head = `<div class="stu-sub">${esc(q.cat || '')}${q.val ? ' · ' + q.val : ''}</div>`;
   const ans = i => (q.options && q.options[i] != null ? `${LETTERS[i]}: ${esc(q.options[i])}` : LETTERS[i]);
+  const said = R => (R.correctIndex != null && R.correctIndex >= 0 ? `The answer was ${ans(R.correctIndex)}.` : (R.answer ? `The answer was ${esc(R.answer)}.` : ''));
   if (q.result) {
     const R = q.result;
     if (R.uid === myUid) {
       put(head + (R.correct
         ? `<div class="stu-big good">Correct!</div><div class="stu-sub">+${R.pts} points for ${esc(tname)}</div>`
-        : `<div class="stu-big bad">Not this time</div><div class="stu-sub">${R.choice == null ? 'No answer was given. ' : ''}The answer was ${ans(R.correctIndex)}.</div>`));
+        : `<div class="stu-big bad">Not this time</div><div class="stu-sub">${R.choice == null && R.correctIndex != null ? 'No answer was given. ' : ''}${said(R)}</div>`));
     } else if (R.uid) {
-      put(head + `<div class="stu-big">${esc(R.name)} ${R.correct ? 'got it!' : 'missed it'}</div><div class="stu-sub">${esc(teams[R.team] || '')}${R.correct ? ` wins ${R.pts} points.` : '.'} The answer was ${ans(R.correctIndex)}.</div>`);
+      put(head + `<div class="stu-big">${esc(R.name)} ${R.correct ? 'got it!' : 'missed it'}</div><div class="stu-sub">${esc(teams[R.team] || '')}${R.correct ? ` wins ${R.pts} points.` : '.'} ${said(R)}</div>`);
     } else {
-      put(head + `<div class="stu-big">No points</div><div class="stu-sub">The answer was ${ans(R.correctIndex)}.</div>`);
+      put(head + `<div class="stu-big">No points</div><div class="stu-sub">${said(R)}</div>`);
     }
     return;
   }
   if (q.buzz) {
     if (q.buzz.uid === myUid) {
       if (q.answer) put(head + `<div class="stu-big">Locked in</div><div class="stu-sub">You chose ${LETTERS[q.answer.choice] || ''}. Look at the board.</div>`);
+      else if (q.kind === 'say') put(head + '<div class="stu-big good">You buzzed first!</div><div class="stu-sub">Say your answer out loud. Your teacher will mark it.</div>');
       else if (q.options) put(head + `<div class="stu-big good">You buzzed first!</div><div class="stu-sub">Read the question on the board, then pick your answer.</div><div class="stu-opts">${q.options.map((o, i) => `<button type="button" class="opt" data-ans="${i}"><span class="k">${LETTERS[i]}</span><span class="t">${esc(o)}</span></button>`).join('')}</div>`);
       else put(head + '<div class="stu-big good">You buzzed first!</div><div class="stu-sub">Your options are on the way…</div>');
     } else {
@@ -1307,7 +1506,10 @@ function start(data) {
   data = data || {};
   const last = store.get(K_BANK);
   if (data.bank) bank = data.bank;
-  else if (last && last.text) loadText(last.text, 'file', last.name);
+  else if (last && last.text) {
+    loadText(last.text, last.zip ? 'zip' : 'file', last.name);
+    if (last.zip) restoreImages();
+  }
   else loadText(SAMPLE_CSV, 'sample', 'Year_7_Algebra_Showdown.csv');
   if (data.S) S = data.S;
   renderAll();
