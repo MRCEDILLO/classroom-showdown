@@ -182,6 +182,61 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 .key-item .ans { color: var(--good); font-weight: 700; }
 .warn-line { font-weight: 700; color: var(--margin); }
 
+/* live game: setup, lobby, projector */
+.join-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; background: var(--highlight); border: 2px solid var(--ink); border-radius: 10px; padding: 12px 16px; font-weight: 700; font-size: 18px; }
+.mode-note { margin: 0; color: var(--ink-2); line-height: 1.45; max-width: 62ch; }
+.seg button:disabled { opacity: .4; cursor: not-allowed; }
+.setup-msg { font-weight: 700; color: var(--ink-2); align-self: center; }
+.lobby { max-width: 1100px; text-align: center; justify-items: center; }
+.join-how { font-size: clamp(20px, 2.4vw, 32px); font-weight: 700; overflow-wrap: anywhere; }
+.join-how b { background: var(--highlight); padding: 0 .3em; }
+.room-code { font-family: var(--font-display); font-weight: 900; font-size: clamp(80px, 14vw, 200px); line-height: .9; letter-spacing: .06em; color: var(--tile); font-variant-numeric: tabular-nums; }
+.lobby-count { font-size: 20px; font-weight: 700; color: var(--ink-2); }
+.lobby-teams { width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; text-align: left; }
+.lteam { background: var(--card); border: 2px solid var(--ink); border-radius: 10px; padding: 12px; display: grid; gap: 8px; align-content: start; }
+.lteam h4 { margin: 0; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 22px; }
+.lteam .plist { display: flex; flex-wrap: wrap; gap: 6px; }
+.lteam .none { color: var(--ink-2); font-size: 14px; }
+.pchip { display: inline-flex; align-items: center; gap: 4px; background: var(--paper); border: 1.5px solid var(--grid-strong); border-radius: 999px; padding: 3px 4px 3px 10px; font-weight: 700; max-width: 100%; overflow-wrap: anywhere; }
+.pchip.off { opacity: .45; }
+.pchip button { border: 0; background: none; width: 22px; height: 22px; border-radius: 50%; font-weight: 700; color: var(--ink-2); padding: 0; flex: none; }
+.pchip button:hover { background: var(--bad); color: #fff; }
+.team .pc { font-size: 12px; font-weight: 700; color: var(--ink-2); }
+.live-panel { background: var(--card); border: 2.5px solid var(--ink); border-radius: 12px; padding: clamp(18px, 3vw, 36px); text-align: center; display: grid; gap: 8px; }
+.live-big { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(40px, 6vw, 88px); line-height: .95; overflow-wrap: anywhere; }
+.live-big.open { color: var(--margin); }
+.live-sub { font-size: clamp(18px, 2vw, 26px); font-weight: 700; color: var(--ink-2); }
+/* live game: student device */
+#joinView { z-index: 30; }
+.stu { max-width: 560px; }
+.stu-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.stu-who { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 30px; line-height: 1; overflow-wrap: anywhere; }
+.stu-score { font-weight: 700; color: var(--ink-2); font-size: 17px; }
+.join-form label { font-weight: 700; display: grid; gap: 6px; font-size: 17px; }
+.join-form input { font: inherit; font-size: 24px; padding: 10px 12px; border: 2px solid var(--grid-strong); border-radius: 8px; background: var(--paper); color: var(--ink); min-width: 0; width: 100%; box-sizing: border-box; }
+.join-form input:focus { border-color: var(--ink); }
+.join-form #jCode { font-family: var(--font-display); font-weight: 900; font-size: 42px; letter-spacing: .15em; }
+.err { color: var(--bad); font-weight: 700; min-height: 1.2em; margin: 0; }
+.linkbtn { border: 0; background: none; text-decoration: underline; color: var(--ink-2); padding: 0; justify-self: start; font-size: 15px; }
+.team-pick { display: grid; gap: 10px; }
+.team-pick button { border: 2.5px solid var(--ink); background: var(--card); border-radius: 10px; padding: 14px; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 26px; text-align: left; }
+.team-pick button:hover { background: var(--highlight); }
+.stu-stage { display: grid; gap: 14px; justify-items: center; text-align: center; padding-block: 12px; }
+.stu-big { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(34px, 9vw, 56px); line-height: .95; overflow-wrap: anywhere; }
+.stu-big.good { color: var(--good); }
+.stu-big.bad { color: var(--bad); }
+.stu-sub { font-size: 19px; font-weight: 700; color: var(--ink-2); line-height: 1.4; }
+.buzz { width: min(78vw, 320px); aspect-ratio: 1; max-width: 100%; border-radius: 50%; border: 6px solid var(--ink); background: var(--margin); color: #fff;
+  font-family: var(--font-display); font-weight: 900; font-size: clamp(56px, 16vw, 90px); text-transform: uppercase; box-shadow: 0 10px 0 var(--ink);
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; }
+.buzz:active { transform: translateY(8px); box-shadow: 0 2px 0 var(--ink); }
+.buzz:disabled { opacity: .6; }
+.stu-opts { width: 100%; display: grid; gap: 10px; }
+.stu-opts .opt { font-size: clamp(22px, 6vw, 30px); }
+.opt.chosen { background: var(--highlight); }
+.stu-rank { width: 100%; }
+.stu-rank li { font-size: 19px; }
+.stu-rank li.mine { outline: 4px solid var(--tile); }
 @media (max-width: 640px) {
   .opts { grid-template-columns: 1fr; }
   .field-row > .lab { min-width: 0; width: 100%; }
@@ -196,6 +251,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
       <h1 id="boardTitle"></h1>
     </div>
     <div class="tools">
+      <button class="btn primary" id="btnRoom" type="button" hidden>Room code</button>
       <button class="btn" id="btnKey" type="button">Answer list</button>
       <button class="btn" id="btnNew" type="button">New game</button>
       <button class="btn" id="btnEnd" type="button">End game</button>
@@ -221,6 +277,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
       </div>
     </div>
     <p class="prompt" id="qPrompt"></p>
+    <div class="live-panel" id="qLive" hidden aria-live="polite"></div>
     <div class="opts" id="qOpts"></div>
     <div class="feedback" id="qMsg" aria-live="polite"></div>
     <div class="explain" id="qExplain" hidden></div>
@@ -240,6 +297,10 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
     <div>
       <div class="eyebrow">Quiz board for the classroom</div>
       <h2>Classroom Showdown</h2>
+    </div>
+    <div class="join-strip" id="joinStrip" hidden>
+      <span>Student? Join your class's live game here.</span>
+      <button class="btn primary" id="goJoin" type="button">Join a game</button>
     </div>
     <p class="lead">Load a question file, set up your teams and play. Each topic in the file becomes a column on the board, and its questions go from 100 to 500 points in the order they appear.</p>
 
@@ -268,6 +329,14 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
     <div class="panel">
       <h3>Teams and rules</h3>
       <div class="field-row">
+        <span class="lab">Game mode</span>
+        <div class="seg" id="modeSeg">
+          <button type="button" data-mode="local" aria-pressed="true">One screen</button>
+          <button type="button" data-mode="live" aria-pressed="false">Live buzzers</button>
+        </div>
+      </div>
+      <p class="mode-note" id="modeNote"></p>
+      <div class="field-row">
         <span class="lab">Number of teams</span>
         <div class="seg" id="teamCount"></div>
       </div>
@@ -290,6 +359,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
       <button class="btn primary big" id="startBtn" type="button">Start game</button>
       <button class="btn big" id="resumeBtn" type="button" hidden>Resume saved game</button>
       <button class="btn big" id="cancelSetup" type="button" hidden>Back to current game</button>
+      <span class="setup-msg" id="setupMsg" aria-live="polite"></span>
     </div>
   </div>
 </div>
@@ -325,9 +395,66 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
   </div>
 </div>
 
+<!-- live game lobby (projector) -->
+<div class="overlay" id="lobby" hidden>
+  <div class="sheet lobby">
+    <div class="eyebrow">Live game · join on your own device</div>
+    <div class="join-how">Go to <b id="lobbyUrl"></b> and enter the code</div>
+    <div class="room-code" id="lobbyCode"></div>
+    <div class="lobby-count" id="lobbyCount"></div>
+    <div class="lobby-teams" id="lobbyTeams"></div>
+    <div class="actions">
+      <button class="btn primary big" id="lobbyGo" type="button">Start game</button>
+      <button class="btn primary big" id="lobbyClose" type="button" hidden>Back to board</button>
+    </div>
+  </div>
+</div>
+
+<!-- live game: student device -->
+<div class="overlay" id="joinView" hidden>
+  <div class="sheet stu">
+    <div class="stu-top">
+      <div style="min-width:0">
+        <div class="eyebrow">Classroom Showdown</div>
+        <div class="stu-who" id="stuWho">Join a game</div>
+      </div>
+      <button class="btn" id="stuLeave" type="button" hidden>Leave</button>
+    </div>
+    <form class="panel join-form" id="joinForm" novalidate>
+      <label for="jCode">Room code<input id="jCode" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="000 000"></label>
+      <label for="jName">Your first name or a nickname<input id="jName" autocomplete="off" maxlength="20"></label>
+      <p class="err" id="jErr" aria-live="polite"></p>
+      <button class="btn primary big" id="jGo" type="submit">Join</button>
+      <button class="linkbtn" id="jTeacher" type="button">I'm the teacher</button>
+    </form>
+    <div class="panel" id="teamPick" hidden>
+      <h3>Choose your team</h3>
+      <div class="team-pick" id="teamPickList"></div>
+    </div>
+    <div id="stuPlay" hidden>
+      <div class="stu-score" id="stuScore"></div>
+      <div class="stu-stage" id="stuStage" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 (function () {
 'use strict';
+/* ===== LIVE GAME SETUP =====================================================
+   Paste your Firebase config here, replacing the word null. It should look like
+   const FIREBASE_CONFIG = { apiKey: "...", authDomain: "...", databaseURL: "...", projectId: "...", ... };
+   ========================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCztQ9I3fSYngPe0TO-7oJu3yo2nyKf6DQ",
+  authDomain: "classroom-showdown-a6690.firebaseapp.com",
+  databaseURL: "https://classroom-showdown-a6690-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "classroom-showdown-a6690",
+  storageBucket: "classroom-showdown-a6690.firebasestorage.app",
+  messagingSenderId: "956835501837",
+  appId: "1:956835501837:web:0603a03c546011d6884244"
+};
+/* ===== END OF LIVE GAME SETUP ============================================ */
 const SAMPLE_CSV = "bank title,question,A,B,C,D,answer,explanation,topics\nYear 7 Algebra Showdown,What is the coefficient of y in 4x + 7y − 3?,4,7,−3,y,B,The coefficient is the number multiplying the variable. In 7y that number is 7.,Expressions\nYear 7 Algebra Showdown,Which expression means “8 more than n”?,8n,n − 8,n + 8,8 − n,C,\"“More than” means add, so start with n and add 8: n + 8.\",Expressions\nYear 7 Algebra Showdown,Simplify 6a + 3b − 2a + b,8ab,4a + 3b,8a + 4b,4a + 4b,D,Collect like terms: 6a − 2a = 4a and 3b + b = 4b. b on its own means 1b.,Expressions\nYear 7 Algebra Showdown,Which expression means “three times the sum of x and 4”?,3(x + 4),3x + 4,x + 12,3 + x + 4,A,\"Find the sum first (x + 4), then multiply all of it by 3. Brackets keep the sum together: 3(x + 4).\",Expressions\nYear 7 Algebra Showdown,Simplify 15pq ÷ 25p,3/5,3pq/5,3q/5,5q/3,C,\"Write it as the fraction 15pq/25p. Cancel p, then divide 15 and 25 by 5 to get 3q/5.\",Expressions\nYear 7 Algebra Showdown,\"If x = 7, what is the value of x + 9?\",63,16,2,79,B,Replace x with 7: 7 + 9 = 16.,Substitution\nYear 7 Algebra Showdown,\"If a = 5, what is the value of 4a − 6?\",39,26,14,4,C,\"4a means 4 × a, so 4 × 5 − 6 = 20 − 6 = 14. The answer 39 comes from reading 4a as 45.\",Substitution\nYear 7 Algebra Showdown,\"If p = 3 and q = 10, what is the value of 2q − 5p?\",5,35,15,1,A,2 × 10 − 5 × 3 = 20 − 15 = 5. Multiply before you subtract.,Substitution\nYear 7 Algebra Showdown,A taxi charges $4 to start plus $2 per kilometre: C = 4 + 2k. How much does a 9 km trip cost?,$15,$36,$54,$22,D,C = 4 + 2 × 9 = 4 + 18 = $22,Substitution\nYear 7 Algebra Showdown,\"In AFL, S = 6g + b. A team scored 59 points and kicked 11 behinds. How many goals did they kick?\",7,8,9,48,B,\"59 = 6g + 11, so 6g = 48 and g = 8. Check: 6 × 8 + 11 = 59.\",Substitution\nYear 7 Algebra Showdown,Solve x + 12 = 20,32,8,20,9,B,Subtract 12 from both sides: x = 20 − 12 = 8.,Equations\nYear 7 Algebra Showdown,Solve 6m = 42,36,48,7,252,C,Divide both sides by 6: m = 42 ÷ 6 = 7.,Equations\nYear 7 Algebra Showdown,Solve 4a − 5 = 23,7,4.5,28,112,A,Add 5 to both sides: 4a = 28. Divide both sides by 4: a = 7. Check: 4 × 7 − 5 = 23.,Equations\nYear 7 Algebra Showdown,Solve k/3 + 4 = 10,2,42,30,18,D,Subtract 4 from both sides: k/3 = 6. Multiply both sides by 3: k = 18.,Equations\nYear 7 Algebra Showdown,Solve 5x − 3 = 2x + 12,3,5,15,9,B,Subtract 2x from both sides: 3x − 3 = 12. Add 3: 3x = 15. Divide by 3: x = 5. Check: 5 × 5 − 3 = 22 and 2 × 5 + 12 = 22.,Equations\nYear 7 Algebra Showdown,\"What is the next number in the pattern 5, 9, 13, 17, …?\",20,21,22,25,B,The pattern goes up by 4 each time: 17 + 4 = 21.,Patterns\nYear 7 Algebra Showdown,\"Matchstick squares are made in a row. 1 square uses 4 matchsticks, 2 squares use 7 and 3 squares use 10. How many matchsticks are needed for 5 squares?\",20,15,16,13,C,\"The first square takes 4 and each new square adds 3: 4, 7, 10, 13, 16. The rule is 3 × squares + 1. 20 is wrong because neighbouring squares share a side.\",Patterns\nYear 7 Algebra Showdown,\"An input–output table has inputs 1, 2, 3, 4 and outputs 5, 8, 11, 14. Which rule matches the table?\",output = input + 4,output = 3 × input,output = 2 × input + 3,output = 3 × input + 2,D,\"The outputs go up by 3, so start with 3 × input. 3 × 1 = 3, and we need 5, so add 2. Check: 3 × 4 + 2 = 14. “input + 4” only works for the first column.\",Patterns\nYear 7 Algebra Showdown,\"A plus-shaped tile pattern uses 5 tiles in Figure 1, 9 tiles in Figure 2 and 13 tiles in Figure 3. Which figure number will use 41 tiles?\",10,8,9,11,A,\"The counts go up by 4, so the rule is 4n + 1. Solve 4n + 1 = 41: 4n = 40, so n = 10.\",Patterns\nYear 7 Algebra Showdown,\"What is the 100th term of the pattern 7, 11, 15, 19, …?\",400,407,403,700,C,\"The pattern goes up by 4, so the rule starts with 4n. For term 1, 4 × 1 = 4, and we need 7, so add 3: term = 4n + 3. Term 100: 4 × 100 + 3 = 403.\",Patterns\nYear 7 Algebra Showdown,\"Starting at the origin, point A is 4 units right and 2 units up. What are the coordinates of A?\",\"(2, 4)\",\"(4, 2)\",\"(4, 0)\",\"(2, 2)\",B,\"Write the across value (x) first, then the up value (y): (4, 2).\",Coordinates\nYear 7 Algebra Showdown,\"Which quadrant is the point (−4, 5) in?\",First,Second,Third,Fourth,B,\"x is negative, so go left. y is positive, so go up. Left and up is the second quadrant.\",Coordinates\nYear 7 Algebra Showdown,\"Starting at the origin, which moves take you to the point (−2, −3)?\",\"2 left, 3 down\",\"3 left, 2 down\",\"2 right, 3 down\",\"2 left, 3 up\",A,x = −2 means 2 to the left. y = −3 means 3 down.,Coordinates\nYear 7 Algebra Showdown,\"The points (0, 1), (1, 3), (2, 5) and (3, 7) lie on a straight line. Which rule do they follow?\",y = 2x + 3,y = x + 1,y = 3x + 1,y = 2x + 1,D,\"Each time x goes up by 1, y goes up by 2, so the rule starts with 2x. When x = 0, y = 1, so add 1: y = 2x + 1.\",Coordinates\nYear 7 Algebra Showdown,\"A(−3, 2), B(4, 2) and C(4, −1) are three corners of rectangle ABCD. What are the coordinates of D?\",\"(−3, −1)\",\"(−1, −3)\",\"(3, −1)\",\"(−3, 1)\",A,\"D is directly below A, so it has A's x-coordinate (−3). It is level with C, so it has C's y-coordinate (−1). D = (−3, −1).\",Coordinates\nYear 7 Algebra Showdown,Sam is x years old. His sister is 4 years older than him. Which expression gives his sister's age?,4x,x + 4,x − 4,4 − x,B,\"“Older than” means add, so his sister is x + 4 years old.\",Worded Problems\nYear 7 Algebra Showdown,I think of a number and multiply it by 5. The answer is 45. What was my number?,40,50,9,225,C,Write it as 5n = 45. Divide both sides by 5: n = 9.,Worded Problems\nYear 7 Algebra Showdown,Mia had s stickers. She bought 8 more and now has 35. Which equation matches this?,8s = 35,s − 8 = 35,s = 35 + 8,s + 8 = 35,D,\"She started with s and added 8, which gave 35: s + 8 = 35. Solving it gives s = 27.\",Worded Problems\nYear 7 Algebra Showdown,A phone plan has a $30 connection fee and then costs $15 per month. After how many months will the total cost be $120?,6,4,8,10,A,Write the rule: 15m + 30 = 120. Subtract 30: 15m = 90. Divide by 15: m = 6 months. 8 comes from forgetting the connection fee.,Worded Problems\nYear 7 Algebra Showdown,A rectangle's length is 3 cm more than twice its width. Its perimeter is 36 cm. How long is the rectangle?,5 cm,13 cm,11 cm,15 cm,B,\"Let the width be w, so the length is 2w + 3. Perimeter: 2w + 2(2w + 3) = 36, so 6w + 6 = 36 and w = 5. The length is 2 × 5 + 3 = 13 cm. 5 cm is the width.\",Worded Problems\n";
 const VALUES = [100, 200, 300, 400, 500];
 const LETTERS = ['A', 'B', 'C', 'D'];
@@ -419,10 +546,11 @@ function buildBank(text, source) {
 let bank = null;   // loaded question set (setup screen)
 let S = null;      // game in progress
 let Q = null;      // open question
+let draftMode = 'local';
 let draftCount = 4, draftNames = ['Team 1', 'Team 2', 'Team 3', 'Team 4', 'Team 5', 'Team 6'];
 let tick = null;
 
-const save = () => store.set(K_GAME, S);
+const save = () => { store.set(K_GAME, S); syncScores(); };
 const tileCount = st => st.bank.cats.reduce((s, c) => s + c.qs.length, 0);
 const isDone = st => !!(st && st.bank && Object.keys(st.used).length >= tileCount(st));
 const idOf = (c, r) => `${c}-${r}`;
@@ -468,6 +596,7 @@ function renderBoard() {
   });
 }
 function renderScores() {
+  updateRoomBtn();
   const box = $('scores'); box.innerHTML = '';
   if (!S) return;
   S.teams.forEach((t, i) => {
@@ -479,7 +608,13 @@ function renderScores() {
     adj.innerHTML = `<button type="button" data-adj="${i}" data-d="100" aria-label="Add 100 to ${esc(t.name)}">+</button><button type="button" data-adj="${i}" data-d="-100" aria-label="Take 100 from ${esc(t.name)}">−</button>`;
     const sc = document.createElement('div'); sc.className = 'sc'; sc.textContent = t.score;
     const tag = document.createElement('div'); tag.className = 'tag'; tag.textContent = 'Picking'; tag.hidden = i !== S.turn;
-    pb.append(nm, sc, tag); d.append(pb, adj); box.appendChild(d);
+    pb.append(nm, sc, tag);
+    if (S.live) {
+      const n = Object.values(players).filter(p => p && p.team === i).length;
+      const pc = document.createElement('div'); pc.className = 'pc'; pc.textContent = `${n} player${n === 1 ? '' : 's'}`;
+      pb.insertBefore(pc, sc);
+    }
+    d.append(pb, adj); box.appendChild(d);
   });
   const hint = document.createElement('div'); hint.className = 'score-hint'; hint.textContent = 'Click a team to choose who picks next.';
   box.prepend(hint);
@@ -489,6 +624,7 @@ function renderAll() { renderBoard(); renderScores(); }
 /* ---------- question ---------- */
 function openQ(id) {
   if (!S || S.used[id]) return;
+  if (S.live) { openLiveQ(id); return; }
   Q = { id, answering: S.turn, tried: [], wrong: [], done: false, msg: '', msgKind: '', time: S.timer, running: S.timer > 0 };
   $('qView').hidden = false; renderQ(); startTimer(); $('qView').scrollTop = 0;
 }
@@ -498,6 +634,7 @@ function renderQ() {
   $('qVal').textContent = val;
   $('qDouble').hidden = !dbl;
   $('qPrompt').textContent = q.p;
+  $('qLive').hidden = true; $('qOpts').hidden = false; $('qClose').hidden = false;
   const opts = $('qOpts'); opts.innerHTML = '';
   q.o.forEach((o, i) => {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'opt'; b.dataset.i = i;
@@ -523,9 +660,11 @@ function renderQ() {
   $('qClose').textContent = Q.done ? 'Back to board' : 'Back (keep this tile)';
   const n = q.o.length;
   $('qKeys').textContent = `Keys: A–${LETTERS[n - 1]} or 1–${n} to answer · Esc to go back`;
+  if (Q.live) renderLiveQ();
   renderTimer();
 }
 function pick(i) {
+  if (Q && Q.live) return;
   if (!Q || Q.done || Q.wrong.includes(i)) return;
   const { q, val } = info(Q.id);
   if (i >= q.o.length) return;
@@ -545,10 +684,11 @@ function finish(by, msg, kind) {
   Q.done = true; Q.msg = msg; Q.msgKind = kind; Q.running = false; stopTimer();
   S.used[Q.id] = { by }; save(); renderQ(); renderAll(); $('qClose').focus();
 }
-function reveal() { if (!Q || Q.done) return; finish(null, `The answer is ${LETTERS[info(Q.id).q.a]}. No points this time.`, ''); }
+function reveal() { if (!Q || Q.done) return; if (Q.live) { liveReveal(); return; } finish(null, `The answer is ${LETTERS[info(Q.id).q.a]}. No points this time.`, ''); }
 function closeQ() {
   if (!Q) return;
   stopTimer();
+  if (Q.live) liveCloseQ();
   const wasDone = Q.done; Q = null; $('qView').hidden = true;
   save(); renderAll();
   if (isDone(S)) showEnd();
@@ -561,7 +701,7 @@ function startTimer() {
   tick = setInterval(() => {
     if (!Q || !Q.running) return;
     Q.time = Math.max(0, Q.time - 1);
-    if (Q.time === 0) { Q.running = false; if (!Q.done) { Q.msg = `Time's up! Answer now, or let ${S.teams[Q.answering].name} pass.`; Q.msgKind = 'bad'; renderQ(); } }
+    if (Q.time === 0) { Q.running = false; if (Q.live) { if (!Q.done) liveTimeUp(); } else if (!Q.done) { Q.msg = `Time's up! Answer now, or let ${S.teams[Q.answering].name} pass.`; Q.msgKind = 'bad'; renderQ(); } }
     renderTimer();
   }, 1000);
   renderTimer();
@@ -621,24 +761,40 @@ function renderSetupButtons() {
 }
 function showSetup() {
   if (S) {
+    draftMode = S.live ? 'live' : 'local';
     draftCount = S.teams.length; S.teams.forEach((t, i) => { draftNames[i] = t.name; });
     $('timerSel').value = String(S.timer); $('penalty').checked = !!S.penalty;
   }
-  renderTeams(); renderBankInfo(); renderSetupButtons();
+  renderTeams(); renderBankInfo(); renderSetupButtons(); renderMode();
   $('setup').hidden = false;
 }
-function startGame() {
+async function startGame() {
   if (!bank || !bank.total) return;
+  const old = S;
   const names = draftNames.slice(0, draftCount).map((n, i) => (n || '').trim() || `Team ${i + 1}`);
   const gb = { title: bank.title, cats: bank.cats };
-  S = { bank: gb, teams: names.map(n => ({ name: n, score: 0 })), used: {}, turn: 0,
-        doubles: $('doubles').checked ? pickDoubles(gb) : [], timer: Number($('timerSel').value), penalty: $('penalty').checked };
+  const next = { bank: gb, teams: names.map(n => ({ name: n, score: 0 })), used: {}, turn: 0,
+        doubles: $('doubles').checked ? pickDoubles(gb) : [], timer: Number($('timerSel').value), penalty: $('penalty').checked,
+        live: draftMode === 'live' && liveAvailable() ? { code: null, n: 0, started: false } : null };
+  if (next.live) {
+    const btn = $('startBtn'), msg = $('setupMsg');
+    btn.disabled = true; msg.textContent = 'Creating a live room…';
+    try { next.live.code = await createRoom(next); }
+    catch (e) { liveErr(e); btn.disabled = false; msg.textContent = "Couldn't create a live room. Check the internet connection and the Firebase setup, then try again."; return; }
+    btn.disabled = false; msg.textContent = '';
+  }
+  if (old && old.live && old.live.code && L && myUid) L.remove('rooms/' + old.live.code).catch(liveErr);
+  hostUnsubs.forEach(u => u()); hostUnsubs = []; players = {};
+  S = next;
+  if (S.live) hostListen();
   save(); renderAll();
   $('setup').hidden = true; $('endView').hidden = true;
+  if (S.live) showLobby();
 }
 
 /* ---------- end ---------- */
 function showEnd() {
+  if (S.live && S.live.code && L && myUid) L.update(roomPath(), { status: 'ended', scores: S.teams.map(t => t.score) }).catch(liveErr);
   const ranked = S.teams.map(t => ({ ...t })).sort((a, b) => b.score - a.score);
   const top = ranked.filter(t => t.score === ranked[0].score);
   $('endTitle').textContent = top.length > 1 ? `It's a tie: ${top.map(t => t.name).join(' and ')}` : `${top[0].name} wins!`;
@@ -686,7 +842,8 @@ $('qReveal').addEventListener('click', reveal);
 $('qClose').addEventListener('click', closeQ);
 $('tBtn').addEventListener('click', () => {
   if (!Q) return;
-  if (Q.time === 0) { Q.time = S.timer; Q.running = true; if (Q.msg.startsWith("Time's up")) Q.msg = ''; renderQ(); startTimer(); }
+  if (Q.time === 0) { Q.time = S.timer; Q.running = true;
+    if (Q.live && Q.phase === 'buzz' && Q.closed) { Q.closed = false; Q.msg = ''; Q.msgKind = ''; L.update(roomPath('q'), { open: true }).catch(liveErr); } if (Q.msg.startsWith("Time's up")) Q.msg = ''; renderQ(); startTimer(); }
   else { Q.running = !Q.running; renderTimer(); }
 });
 $('teamCount').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; draftCount = +b.dataset.n; renderTeams(); });
@@ -716,12 +873,12 @@ $('dlSample').addEventListener('click', async () => {
   } catch (e) { msg.textContent = 'The download did not start. Try again in a different browser.'; }
 });
 $('startBtn').addEventListener('click', startGame);
-$('resumeBtn').addEventListener('click', () => { const s = store.get(K_GAME); if (s && s.bank) { S = s; renderAll(); $('setup').hidden = true; } });
+$('resumeBtn').addEventListener('click', () => { const s = store.get(K_GAME); if (s && s.bank) { S = s; renderAll(); $('setup').hidden = true; if (S.live && S.live.code) resumeLive(); } });
 $('cancelSetup').addEventListener('click', () => { $('setup').hidden = true; });
 $('btnNew').addEventListener('click', showSetup);
 $('btnEnd').addEventListener('click', () => { if (S) showEnd(); });
 $('endNew').addEventListener('click', () => { $('endView').hidden = true; showSetup(); });
-$('endBack').addEventListener('click', () => { $('endView').hidden = true; });
+$('endBack').addEventListener('click', () => { $('endView').hidden = true; if (S && S.live && S.live.code && L && myUid) L.update(roomPath(), { status: S.live.started ? 'playing' : 'lobby' }).catch(liveErr); });
 $('btnKey').addEventListener('click', () => { renderKey(); $('keyView').hidden = false; });
 $('keyClose').addEventListener('click', () => { $('keyView').hidden = true; });
 $('btnFull').addEventListener('click', () => {
@@ -733,10 +890,416 @@ $('btnFull').addEventListener('click', () => {
 document.addEventListener('keydown', e => {
   if (e.target.matches('input, select')) return;
   if (!$('keyView').hidden && e.key === 'Escape') { $('keyView').hidden = true; return; }
+  if (!$('joinView').hidden) { if ((e.key === ' ' || e.key === 'Enter') && !e.target.closest('button')) { e.preventDefault(); doBuzz(); } return; }
   if (!Q || $('qView').hidden) return;
+  if (Q.live) { if (e.key === 'Escape' && Q.phase !== 'answer') closeQ(); return; }
   const k = e.key.toLowerCase(), map = { a: 0, b: 1, c: 2, d: 3, '1': 0, '2': 1, '3': 2, '4': 3 };
   if (k in map && !e.ctrlKey && !e.metaKey) { e.preventDefault(); pick(map[k]); }
   else if (e.key === 'Escape') closeQ();
+});
+
+/* ---------- live game (Firebase Realtime Database) ---------- */
+const FB_VER = '10.12.2';
+const K_JOIN = 'classroom-showdown-join-v1';
+let L = null, myUid = null, players = {}, hostUnsubs = [], qUnsub = null;
+let J = null, stuUnsub = null, stuRoom = null, stuHtml = '', buzzing = false;
+
+const liveAvailable = () => !!(FIREBASE_CONFIG || window.__LIVE_MOCK__);
+const roomPath = sub => `rooms/${S.live.code}` + (sub ? '/' + sub : '');
+const fmtCode = c => String(c).replace(/^(\d{3})(\d{3})$/, '$1 $2');
+const liveErr = e => { try { console.warn('Live game:', e && e.message ? e.message : e); } catch (x) {} };
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    const el = document.createElement('script'); el.src = src; el.onload = res;
+    el.onerror = () => rej(new Error('Could not load ' + src)); document.head.appendChild(el);
+  });
+}
+
+/* The real database connection */
+const Real = {
+  async init() {
+    if (!(window.firebase && window.firebase.database)) {
+      for (const part of ['app', 'auth', 'database']) await loadScript(`https://cdn.jsdelivr.net/npm/firebase@${FB_VER}/firebase-${part}-compat.js`);
+    }
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    const cred = await firebase.auth().signInAnonymously();
+    this.db = firebase.database();
+    return cred.user.uid;
+  },
+  r(p) { return this.db.ref(p); },
+  async get(p) { return (await this.r(p).once('value')).val(); },
+  set(p, v) { return this.r(p).set(v); },
+  update(p, o) { return this.r(p).update(o); },
+  remove(p) { return this.r(p).remove(); },
+  on(p, cb) { const ref = this.r(p), h = snap => cb(snap.val()); ref.on('value', h, liveErr); return () => ref.off('value', h); },
+  async tx(p, fn) { try { const res = await this.r(p).transaction(fn, undefined, false); return !!res.committed; } catch (e) { liveErr(e); return false; } },
+  presence(p) {
+    const conn = this.db.ref('.info/connected');
+    const h = snap => { if (snap.val() === true) this.r(p).onDisconnect().set(false).then(() => this.r(p).set(true)).catch(liveErr); };
+    conn.on('value', h);
+    return () => conn.off('value', h);
+  },
+  now() { return firebase.database.ServerValue.TIMESTAMP; },
+};
+
+/* A stand-in database shared between tabs, used only for testing (window.__LIVE_MOCK__) */
+const Mock = {
+  key: '__showdown_mock_db__', subs: [], bound: false,
+  async init() {
+    let u = sessionStorage.getItem('__mock_uid');
+    if (!u) { u = 'u' + Math.random().toString(36).slice(2, 10); sessionStorage.setItem('__mock_uid', u); }
+    if (!this.bound) { this.bound = true; addEventListener('storage', e => { if (e.key === this.key) this.fire(); }); }
+    return u;
+  },
+  tree() { try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch (e) { return {}; } },
+  at(t, p) { return p.split('/').reduce((o, k) => (o == null || o[k] === undefined ? null : o[k]), t); },
+  clean(v) { return v === undefined ? null : JSON.parse(JSON.stringify(v, (k, x) => (x && typeof x === 'object' && x['.sv'] ? Date.now() : x))); },
+  put(t, p, v) {
+    const ks = p.split('/'); let o = t;
+    for (let i = 0; i < ks.length - 1; i++) { if (o[ks[i]] == null || typeof o[ks[i]] !== 'object') o[ks[i]] = {}; o = o[ks[i]]; }
+    if (v == null) delete o[ks[ks.length - 1]]; else o[ks[ks.length - 1]] = v;
+  },
+  commit(t) { localStorage.setItem(this.key, JSON.stringify(t)); this.fire(); },
+  fire() {
+    const t = this.tree();
+    this.subs.forEach(s => { const v = this.at(t, s.p), j = JSON.stringify(v); if (j !== s.j) { s.j = j; s.cb(v == null ? null : JSON.parse(j)); } });
+  },
+  async get(p) { return this.clean(this.at(this.tree(), p)); },
+  async set(p, v) { const t = this.tree(); this.put(t, p, this.clean(v)); this.commit(t); },
+  async update(p, o) { const t = this.tree(); for (const k in o) this.put(t, p + '/' + k, this.clean(o[k])); this.commit(t); },
+  async remove(p) { return this.set(p, null); },
+  on(p, cb) {
+    const s = { p, cb, j: undefined }; this.subs.push(s);
+    setTimeout(() => { if (!this.subs.includes(s)) return; const v = this.at(this.tree(), p); s.j = JSON.stringify(v); cb(v); }, 0);
+    return () => { this.subs = this.subs.filter(x => x !== s); };
+  },
+  async tx(p, fn) { const t = this.tree(); const r = fn(this.clean(this.at(t, p))); if (r === undefined) return false; this.put(t, p, this.clean(r)); this.commit(t); return true; },
+  presence() { return () => {}; },
+  now() { return { '.sv': 'timestamp' }; },
+};
+
+async function liveInit() {
+  if (!L) L = window.__LIVE_MOCK__ ? Mock : Real;
+  if (!myUid) myUid = await L.init();
+  return myUid;
+}
+function syncScores() {
+  if (S && S.live && S.live.code && L && myUid) L.set(roomPath('scores'), S.teams.map(t => t.score)).catch(liveErr);
+}
+
+/* ---- setup screen: game mode ---- */
+function renderMode() {
+  const ok = liveAvailable();
+  if (!ok && draftMode === 'live') draftMode = 'local';
+  $('modeSeg').querySelectorAll('button').forEach(b => {
+    b.setAttribute('aria-pressed', String(b.dataset.mode === draftMode));
+    if (b.dataset.mode === 'live') b.disabled = !ok;
+  });
+  $('modeNote').textContent = !ok
+    ? 'Live buzzers need a free Firebase project connected to this page. Until then, play in one-screen mode.'
+    : draftMode === 'live'
+      ? 'Students join on their own devices with a room code. When you open a question, everyone races to buzz in. Only the first student to buzz sees the options, and they answer for their team. A wrong answer ends the question, with no steals.'
+      : 'Everything happens on this screen. Teams call out their answer and you click it.';
+  $('joinStrip').hidden = !ok;
+}
+
+/* ---- host (projector) ---- */
+async function createRoom(game) {
+  await liveInit();
+  for (let i = 0; i < 8; i++) {
+    const code = String(100000 + Math.floor(Math.random() * 900000));
+    const ok = await L.tx('rooms/' + code, cur => (cur ? undefined : {
+      host: myUid, created: L.now(), status: 'lobby', title: game.bank.title,
+      teams: game.teams.map(t => t.name), scores: game.teams.map(() => 0),
+    }));
+    if (ok) return code;
+  }
+  throw new Error('Could not find a free room code');
+}
+function hostListen() {
+  hostUnsubs.forEach(u => u()); hostUnsubs = []; players = {};
+  hostUnsubs.push(L.on(roomPath('players'), v => { players = v || {}; renderScores(); renderLobby(); if (Q && Q.live && !Q.done) renderLiveQ(); }));
+}
+async function resumeLive() {
+  try { await liveInit(); hostListen(); L.set(roomPath('q'), null).catch(liveErr); }
+  catch (e) { liveErr(e); }
+  renderScores();
+}
+function updateRoomBtn() {
+  const b = $('btnRoom');
+  if (!S || !S.live || !S.live.code) { b.hidden = true; return; }
+  const n = Object.keys(players).length;
+  b.hidden = false; b.textContent = `Room ${fmtCode(S.live.code)} · ${n} joined`;
+}
+function joinUrl() { return (location.host + location.pathname).replace(/index\.html$/, ''); }
+function showLobby() { renderLobby(); $('lobby').hidden = false; }
+function renderLobby() {
+  if (!S || !S.live || !S.live.code) return;
+  $('lobbyCode').textContent = fmtCode(S.live.code);
+  $('lobbyUrl').textContent = joinUrl();
+  const list = Object.entries(players).filter(([, p]) => p && p.name != null);
+  $('lobbyCount').textContent = list.length ? `${list.length} student${list.length === 1 ? '' : 's'} joined` : 'Waiting for students to join…';
+  $('lobbyTeams').innerHTML = S.teams.map((t, i) => {
+    const ps = list.filter(([, p]) => p.team === i).sort((a, b) => String(a[1].name).localeCompare(String(b[1].name)));
+    const chips = ps.length ? ps.map(([uid, p]) => `<span class="pchip${p.online === false ? ' off' : ''}">${esc(p.name)}<button type="button" data-kick="${esc(uid)}" aria-label="Remove ${esc(p.name)}">×</button></span>`).join('') : '<span class="none">No one yet</span>';
+    return `<div class="lteam"><h4>${esc(t.name)}</h4><div class="plist">${chips}</div></div>`;
+  }).join('');
+  $('lobbyGo').hidden = !!S.live.started;
+  $('lobbyClose').hidden = !S.live.started;
+}
+
+function openLiveQ(id) {
+  if (!myUid) { liveInit().then(() => { hostListen(); openLiveQ(id); }).catch(liveErr); return; }
+  const { c, val } = info(id);
+  S.live.n = (S.live.n || 0) + 1; save();
+  Q = { id, live: true, n: S.live.n, phase: 'buzz', closed: false, buzz: null, choice: null, tried: [], wrong: [], answering: S.turn,
+        done: false, msg: '', msgKind: '', time: S.timer, running: S.timer > 0 };
+  $('qView').hidden = false; renderQ(); startTimer(); $('qView').scrollTop = 0;
+  L.set(roomPath('q'), { n: Q.n, cat: S.bank.cats[c].name, val, open: true }).catch(liveErr);
+  if (qUnsub) qUnsub();
+  qUnsub = L.on(roomPath('q'), onLiveQ);
+}
+function onLiveQ(v) {
+  if (!Q || !Q.live || !v || v.n !== Q.n || Q.done) return;
+  if (Q.phase === 'buzz' && v.buzz && v.buzz.qn === Q.n) {
+    Q.phase = 'answer'; Q.buzz = v.buzz; Q.closed = false; Q.msg = ''; Q.msgKind = '';
+    L.update(roomPath('q'), { open: false, options: info(Q.id).q.o }).catch(liveErr);
+    if (S.timer > 0) { Q.time = S.timer; Q.running = true; startTimer(); }
+    renderQ();
+  } else if (Q.phase === 'answer' && v.answer && Q.buzz && v.answer.uid === Q.buzz.uid) {
+    judge(v.answer.choice);
+  }
+}
+function judge(choice) {
+  const { q, val } = info(Q.id), b = Q.buzz;
+  const team = S.teams[b.team] ? b.team : null, tname = team == null ? 'their team' : S.teams[team].name;
+  Q.choice = Number.isInteger(choice) && choice >= 0 && choice < q.o.length ? choice : null;
+  if (Q.choice === q.a && team != null) {
+    S.teams[team].score += val;
+    liveFinish(team, `Correct! ${b.name} wins ${val} points for ${tname}.`, 'good', true);
+  } else {
+    let msg = Q.choice == null ? `${b.name} didn't answer in time.` : `${b.name} chose ${LETTERS[Q.choice]}. Not quite.`;
+    if (S.penalty && team != null) { S.teams[team].score -= val; msg += ` −${val} for ${tname}.`; }
+    liveFinish(null, `${msg} The answer is ${LETTERS[q.a]}.`, 'bad', false);
+  }
+}
+function liveFinish(by, msg, kind, correct) {
+  const { q, val } = info(Q.id), b = Q.buzz;
+  Q.phase = 'done';
+  L.update(roomPath('q'), { open: false, options: q.o, result: {
+    correctIndex: q.a, correct: !!correct, choice: Q.choice, uid: b ? b.uid : null, name: b ? b.name : null, team: b ? b.team : null, pts: val,
+  } }).catch(liveErr);
+  finish(by, msg, kind);
+}
+function liveReveal() {
+  if (Q.phase === 'answer') { judge(null); return; }
+  liveFinish(null, `The answer is ${LETTERS[info(Q.id).q.a]}. No points this time.`, '', false);
+}
+function liveTimeUp() {
+  if (Q.phase === 'buzz') {
+    Q.closed = true; Q.msgKind = 'bad';
+    Q.msg = 'Buzzers closed. Nobody buzzed in. Reveal the answer, or press Restart to reopen the buzzers.';
+    L.update(roomPath('q'), { open: false }).catch(liveErr);
+    renderQ();
+  } else if (Q.phase === 'answer') judge(null);
+}
+function liveCloseQ() {
+  if (qUnsub) { qUnsub(); qUnsub = null; }
+  L.set(roomPath('q'), null).catch(liveErr);
+}
+function renderLiveQ() {
+  const { q } = info(Q.id), panel = $('qLive'), opts = $('qOpts');
+  $('qWho').innerHTML = '';
+  if (Q.phase === 'done') {
+    panel.hidden = true; opts.hidden = false;
+    [...opts.children].forEach((b, i) => {
+      b.classList.remove('wrong', 'faded', 'right');
+      b.classList.add(i === q.a ? 'right' : (i === Q.choice ? 'wrong' : 'faded'));
+      b.disabled = true;
+    });
+  } else {
+    opts.hidden = true; panel.hidden = false;
+    const online = Object.values(players).filter(p => p && p.online !== false).length;
+    if (Q.phase === 'buzz') {
+      panel.innerHTML = Q.closed
+        ? '<div class="live-big">Buzzers closed</div>'
+        : `<div class="live-big open">Buzzers open!</div><div class="live-sub">First to buzz answers for their team · ${online} connected</div>`;
+    } else {
+      const t = S.teams[Q.buzz.team];
+      panel.innerHTML = `<div class="live-big">${esc(Q.buzz.name)} buzzed in!</div><div class="live-sub">${t ? esc(t.name) + ' · ' : ''}choosing an answer on their device…</div>`;
+    }
+  }
+  $('qClose').hidden = Q.phase === 'answer';
+  $('qKeys').textContent = 'Students buzz in on their own devices. Only the first student to buzz sees the options.';
+}
+
+/* ---- student device ---- */
+function stuShow(which) {
+  $('joinForm').hidden = which !== 'form';
+  $('teamPick').hidden = which !== 'team';
+  $('stuPlay').hidden = which !== 'play';
+  $('stuLeave').hidden = which === 'form';
+  if (which === 'form') $('stuWho').textContent = 'Join a game';
+}
+function showJoin() {
+  const saved = store.get(K_JOIN);
+  if (saved) { $('jCode').value = saved.code ? fmtCode(saved.code) : ''; $('jName').value = saved.name || ''; }
+  $('jErr').textContent = '';
+  stuShow('form');
+  $('joinView').hidden = false;
+  if (!liveAvailable()) { $('jErr').textContent = 'Live games aren’t set up on this page yet. Ask your teacher.'; $('jGo').disabled = true; return; }
+  if (saved && saved.code && saved.team != null) quickRejoin(saved);
+}
+async function quickRejoin(saved) {
+  try {
+    await liveInit();
+    const room = await L.get('rooms/' + saved.code);
+    const me = room && room.players && room.players[myUid];
+    if (room && room.host && room.status !== 'ended' && me) {
+      J = { code: saved.code, name: me.name, team: me.team };
+      await L.update(`rooms/${saved.code}/players/${myUid}`, { online: true });
+      enterPlay();
+    }
+  } catch (e) { liveErr(e); }
+}
+function renderTeamPick(teams) {
+  $('teamPickList').innerHTML = (teams || []).map((t, i) => `<button type="button" data-team="${i}">${esc(t)}</button>`).join('');
+}
+let presenceOff = null;
+function enterPlay() {
+  store.set(K_JOIN, J);
+  if (presenceOff) presenceOff();
+  presenceOff = L.presence(`rooms/${J.code}/players/${myUid}/online`);
+  stuShow('play'); stuHtml = '';
+  if (stuUnsub) stuUnsub();
+  stuUnsub = L.on('rooms/' + J.code, v => { stuRoom = v; renderStu(); });
+}
+function leaveLocal() {
+  if (stuUnsub) { stuUnsub(); stuUnsub = null; }
+  if (presenceOff) { presenceOff(); presenceOff = null; }
+  stuRoom = null; stuHtml = '';
+  const s = store.get(K_JOIN); if (s) store.set(K_JOIN, { code: s.code, name: s.name });
+  stuShow('form');
+}
+function renderStu() {
+  const r = stuRoom, stage = $('stuStage');
+  const put = h => { if (h !== stuHtml) { stuHtml = h; stage.innerHTML = h; } };
+  if (!r || !r.host) { $('stuScore').textContent = ''; put('<div class="stu-big">Game over</div><div class="stu-sub">Your teacher has closed this game.</div>'); return; }
+  const me = r.players && r.players[myUid];
+  if (!me) { J = null; leaveLocal(); $('jErr').textContent = 'You were removed from the game. You can join again with the code.'; return; }
+  const teams = r.teams || [], scores = r.scores || [], tname = teams[me.team] || 'your team';
+  $('stuWho').textContent = me.name;
+  $('stuScore').textContent = `${tname} · ${scores[me.team] || 0} points`;
+  if (r.status === 'ended') {
+    const rows = teams.map((t, i) => ({ t, s: scores[i] || 0, i })).sort((a, b) => b.s - a.s);
+    put(`<div class="stu-big">Final scores</div><ol class="rank stu-rank">${rows.map(x => `<li${x.i === me.team ? ' class="mine"' : ''}><span class="pos">${rows.findIndex(y => y.s === x.s) + 1}</span><span>${esc(x.t)}</span><span class="pts">${x.s}</span></li>`).join('')}</ol>`);
+    return;
+  }
+  if (r.status === 'lobby') { put(`<div class="stu-big">You're in!</div><div class="stu-sub">You're on ${esc(tname)}. Waiting for your teacher to start the game.</div>`); return; }
+  const q = r.q;
+  if (!q) { put('<div class="stu-big">Eyes on the board</div><div class="stu-sub">Get ready to buzz when your teacher opens a question.</div>'); return; }
+  const head = `<div class="stu-sub">${esc(q.cat || '')}${q.val ? ' · ' + q.val : ''}</div>`;
+  const ans = i => (q.options && q.options[i] != null ? `${LETTERS[i]}: ${esc(q.options[i])}` : LETTERS[i]);
+  if (q.result) {
+    const R = q.result;
+    if (R.uid === myUid) {
+      put(head + (R.correct
+        ? `<div class="stu-big good">Correct!</div><div class="stu-sub">+${R.pts} points for ${esc(tname)}</div>`
+        : `<div class="stu-big bad">Not this time</div><div class="stu-sub">${R.choice == null ? 'No answer was given. ' : ''}The answer was ${ans(R.correctIndex)}.</div>`));
+    } else if (R.uid) {
+      put(head + `<div class="stu-big">${esc(R.name)} ${R.correct ? 'got it!' : 'missed it'}</div><div class="stu-sub">${esc(teams[R.team] || '')}${R.correct ? ` wins ${R.pts} points.` : '.'} The answer was ${ans(R.correctIndex)}.</div>`);
+    } else {
+      put(head + `<div class="stu-big">No points</div><div class="stu-sub">The answer was ${ans(R.correctIndex)}.</div>`);
+    }
+    return;
+  }
+  if (q.buzz) {
+    if (q.buzz.uid === myUid) {
+      if (q.answer) put(head + `<div class="stu-big">Locked in</div><div class="stu-sub">You chose ${LETTERS[q.answer.choice] || ''}. Look at the board.</div>`);
+      else if (q.options) put(head + `<div class="stu-big good">You buzzed first!</div><div class="stu-sub">Read the question on the board, then pick your answer.</div><div class="stu-opts">${q.options.map((o, i) => `<button type="button" class="opt" data-ans="${i}"><span class="k">${LETTERS[i]}</span><span class="t">${esc(o)}</span></button>`).join('')}</div>`);
+      else put(head + '<div class="stu-big good">You buzzed first!</div><div class="stu-sub">Your options are on the way…</div>');
+    } else {
+      put(head + `<div class="stu-big">${esc(q.buzz.name)} buzzed first</div><div class="stu-sub">${esc(teams[q.buzz.team] || '')} is answering.</div>`);
+    }
+    return;
+  }
+  if (q.open) { put(head + '<button type="button" class="buzz" data-buzz>Buzz</button><div class="stu-sub">Tap as soon as you know the answer.</div>'); return; }
+  put(head + '<div class="stu-big">Buzzers closed</div><div class="stu-sub">Wait for your teacher.</div>');
+}
+async function doBuzz() {
+  const r = stuRoom, q = r && r.q, me = r && r.players && r.players[myUid];
+  if (!J || !q || !q.open || q.buzz || !me || buzzing) return;
+  buzzing = true;
+  const btn = $('stuStage').querySelector('[data-buzz]'); if (btn) btn.disabled = true;
+  const ok = await L.tx(`rooms/${J.code}/q/buzz`, cur => (cur ? undefined : { uid: myUid, name: me.name, team: me.team, qn: q.n }));
+  buzzing = false;
+  if (ok && navigator.vibrate) { try { navigator.vibrate(60); } catch (e) {} }
+  if (!ok && btn && btn.isConnected) btn.disabled = false;
+}
+async function doAnswer(i) {
+  const q = stuRoom && stuRoom.q;
+  if (!J || !q || !q.buzz || q.buzz.uid !== myUid || q.answer || q.result) return;
+  $('stuStage').querySelectorAll('[data-ans]').forEach(b => { b.disabled = true; if (+b.dataset.ans === i) b.classList.add('chosen'); });
+  try { await L.set(`rooms/${J.code}/q/answer`, { uid: myUid, choice: i }); } catch (e) { liveErr(e); }
+}
+
+/* ---- live events ---- */
+$('modeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b || b.disabled) return; draftMode = b.dataset.mode; renderMode(); });
+$('goJoin').addEventListener('click', showJoin);
+$('btnRoom').addEventListener('click', showLobby);
+$('lobbyGo').addEventListener('click', () => {
+  S.live.started = true; save();
+  L.update(roomPath(), { status: 'playing' }).catch(liveErr);
+  $('lobby').hidden = true;
+});
+$('lobbyClose').addEventListener('click', () => { $('lobby').hidden = true; });
+$('lobbyTeams').addEventListener('click', e => { const b = e.target.closest('[data-kick]'); if (b && L) L.remove(roomPath('players/' + b.dataset.kick)).catch(liveErr); });
+$('jCode').addEventListener('input', e => { const d = e.target.value.replace(/\D/g, '').slice(0, 6); e.target.value = d.length > 3 ? d.slice(0, 3) + ' ' + d.slice(3) : d; });
+$('joinForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const code = $('jCode').value.replace(/\D/g, ''), name = $('jName').value.trim().replace(/\s+/g, ' ');
+  const err = $('jErr'); err.textContent = '';
+  if (code.length !== 6) { err.textContent = 'The room code has 6 digits. Check the board.'; return; }
+  if (!name) { err.textContent = 'Type your first name or a nickname.'; return; }
+  const btn = $('jGo'); btn.disabled = true; btn.textContent = 'Joining…';
+  try {
+    await liveInit();
+    const room = await L.get('rooms/' + code);
+    if (!room || !room.host) err.textContent = `No game found with code ${fmtCode(code)}. Check the code on the board.`;
+    else if (room.status === 'ended') err.textContent = 'That game has finished.';
+    else {
+      J = { code, name };
+      const me = room.players && room.players[myUid];
+      if (me && room.teams && room.teams[me.team] != null) {
+        J.team = me.team;
+        await L.update(`rooms/${code}/players/${myUid}`, { name, online: true });
+        enterPlay();
+      } else {
+        renderTeamPick(room.teams); stuShow('team'); $('stuWho').textContent = name;
+      }
+    }
+  } catch (ex) { liveErr(ex); err.textContent = "Couldn't connect to the game. Check your internet connection and try again."; }
+  btn.disabled = false; btn.textContent = 'Join';
+});
+$('teamPickList').addEventListener('click', async e => {
+  const b = e.target.closest('[data-team]'); if (!b || !J) return;
+  J.team = +b.dataset.team;
+  try { await L.set(`rooms/${J.code}/players/${myUid}`, { name: J.name, team: J.team, online: true }); enterPlay(); }
+  catch (ex) { liveErr(ex); stuShow('form'); $('jErr').textContent = "Couldn't join that team. Try again."; }
+});
+$('stuStage').addEventListener('pointerdown', e => { if (e.target.closest('[data-buzz]')) { e.preventDefault(); doBuzz(); } });
+$('stuStage').addEventListener('click', e => {
+  if (e.target.closest('[data-buzz]')) { doBuzz(); return; }
+  const a = e.target.closest('[data-ans]'); if (a) doAnswer(+a.dataset.ans);
+});
+$('stuLeave').addEventListener('click', () => {
+  const code = J && J.code; J = null; leaveLocal(); $('jErr').textContent = '';
+  if (code && L && myUid) L.remove(`rooms/${code}/players/${myUid}`).catch(liveErr);
+});
+$('jTeacher').addEventListener('click', () => {
+  $('joinView').hidden = true;
+  if (location.hash === '#join') history.replaceState(null, '', location.pathname + location.search);
+  if (!S) showSetup();
 });
 
 /* ---------- boot ---------- */
@@ -750,7 +1313,10 @@ function start(data) {
   renderAll();
   if (data.Q && S) { Q = data.Q; $('qView').hidden = false; renderQ(); startTimer(); }
   else if (!S) showSetup();
+  if (S && S.live && S.live.code) resumeLive();
+  if (location.hash === '#join') showJoin();
 }
+window.addEventListener('hashchange', () => { if (location.hash === '#join') showJoin(); });
 try { window.claude?.hot?.snapshot?.(() => ({ S, Q, bank })); } catch (e) {}
 if (window.claude?.hot?.ready) window.claude.hot.ready(start); else start(window.claude?.hot?.data ?? {});
 })();
