@@ -848,7 +848,7 @@ function renderSetupButtons() {
 function showSetup() {
   if (S) {
     draftMode = S.live ? 'live' : 'local';
-    draftCount = S.teams.length; S.teams.forEach((t, i) => { draftNames[i] = t.name; });
+    draftCount = S.teams.length; S.teams.forEach((t, i) => { draftNames[i] = t.base || t.name; });
     $('timerSel').value = String(S.timer); $('penalty').checked = !!S.penalty;
   }
   renderTeams(); renderBankInfo(); renderSetupButtons(); renderMode();
@@ -859,7 +859,7 @@ async function startGame() {
   const old = S;
   const names = draftNames.slice(0, draftCount).map((n, i) => (n || '').trim() || `Team ${i + 1}`);
   const gb = { title: bank.title, cats: bank.cats };
-  const next = { bank: gb, teams: names.map(n => ({ name: n, score: 0 })), used: {}, turn: 0,
+  const next = { bank: gb, teams: names.map(n => (/^Team \d+$/i.test(n) ? { name: n, score: 0, auto: true, base: n, owner: null } : { name: n, score: 0 })), used: {}, turn: 0,
         doubles: $('doubles').checked ? pickDoubles(gb) : [], timer: Number($('timerSel').value), penalty: $('penalty').checked,
         live: draftMode === 'live' && liveAvailable() ? { code: null, n: 0, started: false } : null };
   if (next.live) {
@@ -1181,7 +1181,7 @@ function renderMode() {
   $('modeNote').textContent = !ok
     ? 'Live buzzers need a free Firebase project connected to this page. Until then, play in one-screen mode.'
     : draftMode === 'live'
-      ? 'Students join on their own devices with a room code. When you open a question, everyone races to buzz in. Only the first student to buzz sees the options, and they answer for their team. A wrong answer ends the question, with no steals.'
+      ? 'Students join on their own devices with a room code. When you open a question, everyone races to buzz in. Only the first student to buzz sees the options, and they answer for their team. On multiple-choice questions a wrong answer ends the question. On open questions a wrong answer opens the buzzers to everyone again, until someone gets it right or you reveal the answer.'
       : 'Everything happens on this screen. Teams call out their answer and you click it.';
   $('joinStrip').hidden = !ok;
 }
@@ -1201,7 +1201,32 @@ async function createRoom(game) {
 }
 function hostListen() {
   hostUnsubs.forEach(u => u()); hostUnsubs = []; players = {};
-  hostUnsubs.push(L.on(roomPath('players'), v => { players = v || {}; renderScores(); renderLobby(); if (Q && Q.live && !Q.done) renderLiveQ(); }));
+  hostUnsubs.push(L.on(roomPath('players'), v => { players = v || {}; autoNameTeams(); renderScores(); renderLobby(); if (Q && Q.live && !Q.done) renderLiveQ(); }));
+}
+/* Teams left with a default name ("Team 2") take the name of the first student to join them.
+   Before the game starts the name follows whoever joined first and is still there; once it starts, it stays. */
+const teamNameFor = n => `${n}'s Team`;
+function autoNameTeams() {
+  if (!S || !S.live || !S.live.code) return;
+  const joinedAt = p => (typeof p.joined === 'number' ? p.joined : Number.MAX_SAFE_INTEGER);
+  let changed = false;
+  S.teams.forEach((t, i) => {
+    if (!t.auto) return;
+    const cur = t.owner && players[t.owner];
+    let nm;
+    if (cur && cur.team === i && cur.name != null) nm = teamNameFor(cur.name);
+    else if (t.owner && S.live.started) return;
+    else {
+      const first = Object.entries(players).filter(([, p]) => p && p.name != null && p.team === i).sort((a, b) => joinedAt(a[1]) - joinedAt(b[1]))[0];
+      t.owner = first ? first[0] : null;
+      nm = first ? teamNameFor(first[1].name) : t.base;
+    }
+    if (t.name !== nm) { t.name = nm; changed = true; }
+  });
+  if (!changed) return;
+  save(); renderBoard();
+  L.set(roomPath('teams'), S.teams.map(t => t.name)).catch(liveErr);
+  if (Q && !$('qView').hidden) renderQ();
 }
 async function resumeLive() {
   try { await liveInit(); hostListen(); L.set(roomPath('q'), null).catch(liveErr); }
@@ -1299,7 +1324,16 @@ function liveMark(ok) {
   if (ok && team != null) { S.teams[team].score += val; liveFinish(team, `Correct! ${b.name} wins ${val} points for ${tname}.`, 'good', true); return; }
   let msg = `${b.name}'s answer wasn't right.`;
   if (S.penalty && team != null) { S.teams[team].score -= val; msg += ` −${val} for ${tname}.`; }
+  if (isOpen(info(Q.id).q)) { liveReopen(b, msg); return; }
   liveFinish(null, msg, 'bad', false);
+}
+/* Open questions: a wrong answer opens the buzzers to everyone again. The round only ends on a correct answer or Reveal. */
+function liveReopen(b, msg) {
+  Q.phase = 'buzz'; Q.buzz = null; Q.closed = false;
+  Q.msg = `${msg} Buzzers are open again.`; Q.msgKind = 'bad';
+  L.update(roomPath('q'), { open: true, buzz: null, answer: null, kind: null, miss: { name: b.name, team: b.team } }).catch(liveErr);
+  if (S.timer > 0) { Q.time = S.timer; Q.running = true; startTimer(); }
+  save(); renderQ(); renderScores();
 }
 function liveCloseQ() {
   if (qUnsub) { qUnsub(); qUnsub = null; }
@@ -1424,7 +1458,7 @@ function renderStu() {
     }
     return;
   }
-  if (q.open) { put(head + '<button type="button" class="buzz" data-buzz>Buzz</button><div class="stu-sub">Tap as soon as you know the answer.</div>'); return; }
+  if (q.open) { put(head + (q.miss ? `<div class="stu-sub">${q.miss.name === me.name && q.miss.team === me.team ? 'Not quite.' : esc(q.miss.name) + ' missed it.'} Buzzers are open again.</div>` : '') + '<button type="button" class="buzz" data-buzz>Buzz</button><div class="stu-sub">Tap as soon as you know the answer.</div>'); return; }
   put(head + '<div class="stu-big">Buzzers closed</div><div class="stu-sub">Wait for your teacher.</div>');
 }
 async function doBuzz() {
@@ -1485,7 +1519,7 @@ $('joinForm').addEventListener('submit', async e => {
 $('teamPickList').addEventListener('click', async e => {
   const b = e.target.closest('[data-team]'); if (!b || !J) return;
   J.team = +b.dataset.team;
-  try { await L.set(`rooms/${J.code}/players/${myUid}`, { name: J.name, team: J.team, online: true }); enterPlay(); }
+  try { await L.set(`rooms/${J.code}/players/${myUid}`, { name: J.name, team: J.team, online: true, joined: L.now() }); enterPlay(); }
   catch (ex) { liveErr(ex); stuShow('form'); $('jErr').textContent = "Couldn't join that team. Try again."; }
 });
 $('stuStage').addEventListener('pointerdown', e => { if (e.target.closest('[data-buzz]')) { e.preventDefault(); doBuzz(); } });
