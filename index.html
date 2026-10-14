@@ -98,6 +98,7 @@ h1 .hl { background: linear-gradient(transparent 55%, var(--highlight) 55%, var(
 .timer.low .fill { background: var(--margin); }
 .timer .secs { font-family: var(--font-display); font-weight: 900; font-size: 30px; min-width: 2ch; text-align: right; font-variant-numeric: tabular-nums; }
 .timer .btn { padding: 4px 10px; font-size: 14px; }
+.prompt strong { font-weight: 800; background: linear-gradient(transparent 60%, var(--highlight) 60%); padding: 0 .1em; }
 .prompt { margin: 0; font-size: clamp(26px, 3.4vw, 48px); font-weight: 700; line-height: 1.3; text-wrap: balance; max-width: 30em; overflow-wrap: anywhere; }
 .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .opt { display: flex; align-items: center; gap: 16px; text-align: left; min-width: 0; background: var(--card); border: 2.5px solid var(--ink); border-radius: 10px;
@@ -361,7 +362,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
             <tr><td>Year 7 Algebra</td><td>Solve 6m = 42</td><td>36</td><td>48</td><td>7</td><td>252</td><td>C</td><td>Divide both sides by 6.</td><td>Equations</td></tr>
           </table>
         </div>
-        <p>The easiest way to start is to download the sample set and edit it in Excel or Google Sheets, then save it as CSV. The first row holds the column names. For a multiple-choice question, fill in at least options A and B and put the letter of the right option in the answer column. For an open question, leave A to D empty and type the answer itself in the answer column: after a buzz you mark it Correct or Incorrect. Explanation and topics are optional.</p>
+        <p>The easiest way to start is to download the sample set and edit it in Excel or Google Sheets, then save it as CSV. The first row holds the column names. For a multiple-choice question, fill in at least options A and B and put the letter of the right option in the answer column. For an open question, leave A to D empty and type the answer itself in the answer column: after a buzz you mark it Correct or Incorrect. Explanation and topics are optional. To make words bold in a question, put two asterisks on each side, for example **LISTEN**.</p>
         <p><b>Adding pictures:</b> add an <b>image</b> column and type the picture's file name on that question's row, for example <i>q3.png</i>. Put the CSV and the pictures in one folder, compress the folder into a zip file, and upload the zip. PNG, JPG, GIF, WebP and SVG pictures work. You can also type a full web address (starting with https://) instead of a file name.</p>
         <p> Without a topics column, questions are put into columns of five in file order. The board holds up to 6 topics with 5 questions each.</p>
       </details>
@@ -506,6 +507,7 @@ const K_GAME = 'classroom-showdown-game-v1', K_BANK = 'classroom-showdown-bank-v
 
 const $ = id => document.getElementById(id);
 const isOpen = q => !q.o || !q.o.length;
+const fmt = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 const answerText = q => (isOpen(q) ? (q.ans || '(no answer in the file)') : `${LETTERS[q.a]}: ${q.o[q.a]}`);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const store = {
@@ -682,7 +684,7 @@ function renderQ() {
   $('qCat').textContent = S.bank.cats[c].name;
   $('qVal').textContent = val;
   $('qDouble').hidden = !dbl;
-  $('qPrompt').textContent = q.p;
+  $('qPrompt').innerHTML = fmt(q.p);
   showQImg(q);
   $('qLive').hidden = true; $('qOpts').hidden = false; $('qClose').hidden = false;
   const opts = $('qOpts'); opts.innerHTML = '';
@@ -895,7 +897,7 @@ function showEnd() {
 function renderKey() {
   const b = S ? S.bank : bank;
   $('keyList').innerHTML = !b || !b.cats.length ? '<p>No question set loaded.</p>' : b.cats.map(c => `<div class="key-cat"><h3>${esc(c.name)}</h3>${c.qs.map((q, r) =>
-    `<div class="key-item"><span class="val">${VALUES[r]}</span><div>${esc(q.p)}</div><div class="ans">${esc(answerText(q))}</div>${q.img ? `<div class="pic">Picture: ${esc(q.img)}</div>` : ''}</div>`).join('')}</div>`).join('');
+    `<div class="key-item"><span class="val">${VALUES[r]}</span><div>${fmt(q.p)}</div><div class="ans">${esc(answerText(q))}</div>${q.img ? `<div class="pic">Picture: ${esc(q.img)}</div>` : ''}</div>`).join('')}</div>`).join('');
 }
 
 /* ---------- file loading ---------- */
