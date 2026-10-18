@@ -1206,9 +1206,12 @@ function hostListen() {
 /* Teams left with a default name ("Team 2") take the name of the first student to join them.
    Before the game starts the name follows whoever joined first and is still there; once it starts, it stays. */
 const teamNameFor = n => `${n}'s Team`;
+const seenAt = {}; /* when this screen first saw each student, for when the database has no join time */
 function autoNameTeams() {
   if (!S || !S.live || !S.live.code) return;
-  const joinedAt = p => (typeof p.joined === 'number' ? p.joined : Number.MAX_SAFE_INTEGER);
+  const t0 = Date.now();
+  Object.keys(players).forEach(uid => { if (!(uid in seenAt)) seenAt[uid] = t0; });
+  const joinedAt = ([uid, p]) => (typeof p.joined === 'number' ? p.joined : seenAt[uid]);
   let changed = false;
   S.teams.forEach((t, i) => {
     if (!t.auto) return;
@@ -1217,7 +1220,7 @@ function autoNameTeams() {
     if (cur && cur.team === i && cur.name != null) nm = teamNameFor(cur.name);
     else if (t.owner && S.live.started) return;
     else {
-      const first = Object.entries(players).filter(([, p]) => p && p.name != null && p.team === i).sort((a, b) => joinedAt(a[1]) - joinedAt(b[1]))[0];
+      const first = Object.entries(players).filter(([, p]) => p && p.name != null && p.team === i).sort((a, b) => joinedAt(a) - joinedAt(b))[0];
       t.owner = first ? first[0] : null;
       nm = first ? teamNameFor(first[1].name) : t.base;
     }
@@ -1519,7 +1522,12 @@ $('joinForm').addEventListener('submit', async e => {
 $('teamPickList').addEventListener('click', async e => {
   const b = e.target.closest('[data-team]'); if (!b || !J) return;
   J.team = +b.dataset.team;
-  try { await L.set(`rooms/${J.code}/players/${myUid}`, { name: J.name, team: J.team, online: true, joined: L.now() }); enterPlay(); }
+  try {
+    await L.set(`rooms/${J.code}/players/${myUid}`, { name: J.name, team: J.team, online: true });
+    /* Join time is written separately: database rules that only allow name, team and online would reject the whole join otherwise */
+    L.update(`rooms/${J.code}/players/${myUid}`, { joined: L.now() }).catch(liveErr);
+    enterPlay();
+  }
   catch (ex) { liveErr(ex); stuShow('form'); $('jErr').textContent = "Couldn't join that team. Try again."; }
 });
 $('stuStage').addEventListener('pointerdown', e => { if (e.target.closest('[data-buzz]')) { e.preventDefault(); doBuzz(); } });
