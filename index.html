@@ -1,69 +1,91 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Classroom Showdown</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Big+Shoulders+Display:wght@700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Big+Shoulders+Display:wght@700;800;900&family=Kalam:wght@700&display=swap">
 <style>
-/* Layout: an exercise-book sheet of graph paper. Header, a board of ink tiles built from the loaded question set, team scores along the bottom. Questions take over the whole sheet. */
+/* Layout: an exercise-book sheet of graph paper. Header, a board of ink tiles built from the loaded question set, team scores along the bottom. A question opens as a ruled page laid on the sheet. Red pen (Kalam) is kept for the teacher's marks only: points, doubles, step numbers. */
 :root {
   --paper: #F5F8FD;
   --grid: #DFE7F4;
   --grid-strong: #B9C8E3;
+  --ruled: #E4ECF8;
   --ink: #17214D;
   --ink-2: #55608C;
   --tile: #20398A;
   --tile-hi: #2B4DB5;
   --highlight: #FFD94D;
   --margin: #E0475B;
+  --redpen: #D02A45;
   --card: #FFFFFF;
   --good: #1D8F5A;
   --bad: #D23F3F;
   --font-display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
   --font-body: "Atkinson Hyperlegible", "Segoe UI", Verdana, sans-serif;
+  --font-pen: "Kalam", "Segoe Print", "Comic Sans MS", cursive;
   color-scheme: light;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+*, *::before, *::after { box-sizing: border-box; }
+[hidden]:not([hidden=until-found i]) { display: none !important; }
 html, body { height: 100%; }
 body {
+  margin: 0;
   background-color: var(--paper);
   background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size: 24px 24px;
   color: var(--ink); font-family: var(--font-body); font-size: 16px;
 }
+img { max-width: 100%; }
 button { font: inherit; color: inherit; cursor: pointer; }
-button:focus-visible, input:focus-visible, select:focus-visible, .upload:focus-within { outline: 3px solid var(--margin); outline-offset: 3px; }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible, .upload:focus-within { outline: 3px solid var(--margin); outline-offset: 3px; }
 button:disabled { cursor: default; }
+.pen { font-family: var(--font-pen); font-weight: 700; color: var(--redpen); }
 
-/* board screen */
-.app { height: 100%; box-sizing: border-box; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 14px;
-  padding-block: 14px; padding-inline: clamp(16px, 2.5vw, 36px); }
-.app::before { content: ""; position: fixed; top: 0; bottom: 0; left: clamp(8px, 1.2vw, 18px); width: 2px; background: var(--margin); opacity: .55; pointer-events: none; }
-.top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 10px 20px; }
-.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
-h1 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: clamp(30px, 3.8vw, 56px); line-height: .95; text-transform: uppercase; text-wrap: balance; }
-h1 .hl { background: linear-gradient(transparent 55%, var(--highlight) 55%, var(--highlight) 92%, transparent 92%); padding: 0 .08em; }
-.tools { display: flex; flex-wrap: wrap; gap: 8px; }
-.btn { border: 2px solid var(--ink); background: var(--card); border-radius: 8px; padding: 8px 14px; font-weight: 700; font-size: 15px; }
+/* ---------- buttons ---------- */
+.btn { border: 2px solid var(--ink); background: var(--card); border-radius: 8px; padding: 8px 14px; font-weight: 700; font-size: 15px; transition: background .12s; }
 .btn:hover { background: var(--highlight); }
 .btn.primary { background: var(--tile); border-color: var(--tile); color: var(--highlight); }
 .btn.primary:hover { background: var(--tile-hi); }
 .btn.primary:disabled { opacity: .4; }
 .btn.big { font-size: 20px; padding: 12px 26px; }
+.eyebrow { font-size: 15px; font-weight: 700; color: var(--ink-2); }
+
+/* ---------- board screen ---------- */
+.app { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 14px;
+  padding-block: 14px; padding-inline: clamp(22px, 3vw, 44px) clamp(16px, 2.5vw, 36px); }
+.app::before { content: ""; position: fixed; top: 0; bottom: 0; left: clamp(8px, 1.2vw, 18px); width: 2px; background: var(--margin); opacity: .55; pointer-events: none; }
+.top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 10px 20px; }
+h1 { margin: 2px 0 0; font-family: var(--font-display); font-weight: 900; font-size: clamp(30px, 3.8vw, 56px); line-height: .95; text-transform: uppercase; text-wrap: balance; }
+h1 .hl { background: linear-gradient(transparent 55%, var(--highlight) 55%, var(--highlight) 92%, transparent 92%); padding: 0 .08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .board-wrap { min-height: 0; overflow: auto; }
-.board { height: 100%; box-sizing: border-box; padding-bottom: 4px; display: grid; gap: 10px; }
-.cat { display: flex; align-items: center; justify-content: center; text-align: center; background: var(--card); border: 2px solid var(--ink); border-radius: 6px; padding: 8px 6px;
-  font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: clamp(16px, 1.55vw, 26px); line-height: 1; letter-spacing: .02em; text-wrap: balance; overflow-wrap: anywhere; }
-.tile { border: 0; border-radius: 6px; background: var(--tile); color: var(--highlight); font-family: var(--font-display); font-weight: 900; font-size: clamp(30px, 3.6vw, 62px);
-  box-shadow: 0 5px 0 var(--ink); transition: transform .12s, background .12s; font-variant-numeric: tabular-nums; }
-.tile:hover { background: var(--tile-hi); transform: translateY(-2px); }
-.tile.used { background: transparent; box-shadow: none; border: 2px dashed var(--grid-strong); color: var(--ink-2); font-family: var(--font-body); font-weight: 700; font-size: clamp(12px, 1.1vw, 16px);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 4px; }
-.tile.used:hover { transform: none; }
-.tile.used .uv { font-family: var(--font-display); font-size: 1.5em; color: var(--grid-strong); text-decoration: line-through; }
+.board { height: 100%; padding-bottom: 6px; display: grid; gap: 10px; }
+.cat { display: flex; align-items: center; justify-content: center; text-align: center; background: var(--card); border: 2px solid var(--ink); border-radius: 8px; padding: 8px 8px 11px;
+  font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: clamp(16px, 1.55vw, 26px); line-height: 1; letter-spacing: .02em; text-wrap: balance; overflow-wrap: anywhere;
+  background-image: linear-gradient(var(--margin), var(--margin)); background-size: calc(100% - 20px) 2px; background-position: 50% calc(100% - 5px); background-repeat: no-repeat; }
+.tile { position: relative; border: 0; border-radius: 8px; background: var(--tile); color: var(--highlight); font-family: var(--font-display); font-weight: 900; font-size: clamp(30px, 3.6vw, 62px);
+  box-shadow: 0 5px 0 var(--ink); transition: transform .12s, background .12s, box-shadow .12s; font-variant-numeric: tabular-nums; }
+.tile::after { content: ""; position: absolute; inset: 6px; border: 1.5px solid rgba(255, 217, 77, .2); border-radius: 4px; pointer-events: none; }
+.tile:hover { background: var(--tile-hi); transform: translateY(-3px); box-shadow: 0 8px 0 var(--ink); }
+.tile:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
+.tile.used { background: rgba(255, 255, 255, .6); box-shadow: none; border: 2px dashed var(--grid-strong); color: var(--ink-2); font-family: var(--font-body); font-weight: 700; font-size: clamp(13px, 1.3vw, 20px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; padding: 4px; }
+.tile.used::after { display: none; }
+.tile.used:hover, .tile.used:active { transform: none; }
+.tile.used .uv { position: relative; font-family: var(--font-display); font-weight: 900; font-size: 1.6em; line-height: 1; color: var(--grid-strong); }
+.tile.used .uv::after { content: ""; position: absolute; left: -12%; right: -12%; top: 50%; height: 3px; border-radius: 2px; background: var(--redpen); opacity: .75; transform: rotate(-9deg); }
+.tile.used .ub { font-family: var(--font-pen); font-size: 1.2em; line-height: 1.15; color: var(--ink); text-align: center; overflow-wrap: anywhere; }
+.tile.used .ub.none { color: var(--ink-2); }
 
 .scores { display: flex; flex-wrap: wrap; gap: 10px; }
-.team { flex: 1 1 150px; min-width: 0; background: var(--card); border: 2px solid var(--ink); border-radius: 8px; padding: 8px 12px;
-  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 8px; }
+.team { position: relative; flex: 1 1 150px; min-width: 0; background: var(--card); border: 2px solid var(--ink); border-radius: 8px; padding: 8px 12px;
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 8px; cursor: pointer; }
 .team .pick { border: 0; background: none; padding: 0; text-align: left; min-width: 0; display: grid; gap: 2px; grid-column: 1; grid-row: 1 / span 2; border-radius: 4px; }
 .team:hover { border-color: var(--tile-hi); }
 .team .nm { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -71,27 +93,42 @@ h1 .hl { background: linear-gradient(transparent 55%, var(--highlight) 55%, var(
 .team .adj { grid-row: 1 / span 2; grid-column: 2; display: flex; flex-direction: column; gap: 4px; }
 .team .adj button { width: 30px; height: 26px; border: 1.5px solid var(--grid-strong); background: var(--paper); border-radius: 5px; font-weight: 700; line-height: 1; padding: 0; }
 .team .adj button:hover { border-color: var(--ink); }
-.team { cursor: pointer; }
 .team.turn { box-shadow: 0 0 0 4px var(--highlight); background: #FFFBEA; }
+.team .tag { font-size: 13px; font-weight: 700; background: var(--highlight); padding: 0 8px; border-radius: 999px; justify-self: start; }
+.team .delta { position: absolute; right: 48px; top: -14px; font-family: var(--font-pen); font-weight: 700; font-size: clamp(26px, 2.4vw, 38px); line-height: 1; pointer-events: none;
+  color: var(--good); animation: mark 1.8s ease-out both; }
+.team .delta.minus { color: var(--redpen); }
+@keyframes mark { 0% { opacity: 0; transform: translateY(8px) rotate(-6deg) scale(.6); } 15% { opacity: 1; transform: translateY(0) rotate(-6deg) scale(1.1); } 25% { transform: rotate(-6deg) scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-10px) rotate(-6deg); } }
 .score-hint { flex-basis: 100%; font-size: 13px; color: var(--ink-2); font-weight: 700; }
-.team .tag { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--highlight); padding: 1px 6px; border-radius: 3px; justify-self: start; }
+.team.nopick { cursor: default; }
+.team.nopick:hover { border-color: var(--ink); }
+.team .pc { font-size: 12px; font-weight: 700; color: var(--ink-2); }
 
-/* overlays */
-.overlay { position: fixed; inset: 0; z-index: 10; overflow: auto; box-sizing: border-box;
+/* ---------- overlays ---------- */
+.overlay { position: fixed; inset: 0; z-index: 10; overflow: auto;
   background-color: var(--paper);
   background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size: 24px 24px;
   padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-bottom, 0px));
   padding-inline: clamp(16px, 3vw, 48px); }
 .sheet { max-width: 1180px; margin: 0 auto; display: grid; gap: 18px; }
-
-/* question */
-.qtop { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
-.chip-cat { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 24px; letter-spacing: .03em; }
-.chip-val { font-family: var(--font-display); font-weight: 900; font-size: 24px; background: var(--tile); color: var(--highlight); padding: 2px 12px; border-radius: 5px; font-variant-numeric: tabular-nums; }
-.double { font-family: var(--font-display); font-weight: 900; font-size: 24px; text-transform: uppercase; background: var(--margin); color: #fff; padding: 2px 12px; border-radius: 5px; animation: pop .6s cubic-bezier(.3,1.6,.5,1) both; }
-@keyframes pop { from { transform: scale(.3) rotate(-8deg); opacity: 0; } to { transform: none; opacity: 1; } }
 .spacer { flex: 1; }
+
+/* ---------- question: a ruled page ---------- */
+#qView .sheet { max-width: 1240px; position: relative; background-color: var(--card);
+  background-image: linear-gradient(90deg, transparent 0 clamp(26px, 3.4vw, 50px), var(--margin) 0 calc(clamp(26px, 3.4vw, 50px) + 2px), transparent 0),
+    repeating-linear-gradient(transparent 0 35px, var(--ruled) 35px 36px);
+  border: 2px solid var(--ink); border-radius: 12px; box-shadow: 8px 8px 0 var(--grid-strong);
+  padding: clamp(16px, 2.2vw, 30px) clamp(16px, 2.6vw, 36px) clamp(14px, 1.8vw, 24px) clamp(42px, 5.4vw, 78px);
+  animation: lift .28s cubic-bezier(.2, .8, .3, 1) both; }
+@keyframes lift { from { opacity: 0; transform: translateY(22px) scale(.985); } to { opacity: 1; transform: none; } }
+.qtop { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.chip-cat { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: clamp(22px, 2vw, 30px); letter-spacing: .03em; line-height: 1; }
+.chip-val { font-family: var(--font-pen); font-weight: 700; font-size: clamp(28px, 2.6vw, 40px); line-height: 1.1; color: var(--redpen); border: 3px solid var(--redpen);
+  border-radius: 50% 46% 52% 48% / 55% 50% 50% 45%; padding: .05em .5em 0; transform: rotate(-5deg); font-variant-numeric: tabular-nums; }
+.double { font-family: var(--font-pen); font-weight: 700; font-size: clamp(24px, 2.2vw, 34px); line-height: 1.1; color: var(--card); background: var(--redpen); padding: .1em .5em 0; border-radius: 6px;
+  animation: pop .6s cubic-bezier(.3, 1.6, .5, 1) both; }
+@keyframes pop { from { transform: scale(.3) rotate(-12deg); opacity: 0; } to { transform: rotate(3deg); opacity: 1; } }
 .timer { display: flex; align-items: center; gap: 8px; }
 .timer .bar { width: clamp(80px, 14vw, 180px); height: 12px; border: 2px solid var(--ink); border-radius: 6px; overflow: hidden; background: var(--card); }
 .timer .fill { height: 100%; background: var(--tile); transition: width .9s linear; }
@@ -99,7 +136,7 @@ h1 .hl { background: linear-gradient(transparent 55%, var(--highlight) 55%, var(
 .timer .secs { font-family: var(--font-display); font-weight: 900; font-size: 30px; min-width: 2ch; text-align: right; font-variant-numeric: tabular-nums; }
 .timer .btn { padding: 4px 10px; font-size: 14px; }
 .prompt strong { font-weight: 800; background: linear-gradient(transparent 60%, var(--highlight) 60%); padding: 0 .1em; }
-.prompt { margin: 0; font-size: clamp(26px, 3.4vw, 48px); font-weight: 700; line-height: 1.3; text-wrap: balance; max-width: 30em; overflow-wrap: anywhere; }
+.prompt { margin: 0; font-size: clamp(26px, 3.4vw, 50px); font-weight: 700; line-height: 1.3; text-wrap: balance; max-width: 30em; overflow-wrap: anywhere; }
 .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .opt { display: flex; align-items: center; gap: 16px; text-align: left; min-width: 0; background: var(--card); border: 2.5px solid var(--ink); border-radius: 10px;
   padding: 14px 18px; font-size: clamp(22px, 2.6vw, 38px); min-height: 72px; box-shadow: 0 4px 0 var(--grid-strong); transition: background .12s, transform .12s; }
@@ -115,7 +152,7 @@ h1 .hl { background: linear-gradient(transparent 55%, var(--highlight) 55%, var(
 .feedback.good { color: var(--good); }
 .feedback.bad { color: var(--bad); }
 .explain { background: var(--card); border: 2px solid var(--ink); border-radius: 10px; padding: 14px 18px; font-size: clamp(18px, 1.9vw, 26px); line-height: 1.45; overflow-wrap: anywhere; }
-.explain .lbl { display: inline-block; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; letter-spacing: .04em; background: var(--highlight); padding: 0 .3em; margin-bottom: 4px; }
+.explain .lbl { display: inline-block; font-family: var(--font-pen); font-weight: 700; color: var(--redpen); font-size: 1.05em; margin-bottom: 2px; }
 .qfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; border-top: 2px solid var(--grid-strong); padding-top: 14px; }
 .who { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .who .lab { font-weight: 700; color: var(--ink-2); }
@@ -124,16 +161,54 @@ h1 .hl { background: linear-gradient(transparent 55%, var(--highlight) 55%, var(
 .pill:disabled { opacity: .35; text-decoration: line-through; }
 .keys { font-size: 13px; color: var(--ink-2); }
 
-/* setup */
-.setup { max-width: 820px; }
-.setup h2, .end h2 { margin: 0; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(40px, 6vw, 76px); line-height: .9; }
-.panel { background: var(--card); border: 2px solid var(--ink); border-radius: 10px; padding: 18px; display: grid; gap: 16px; }
-.panel h3 { margin: 0; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 24px; letter-spacing: .02em; }
+/* ---------- question and answer media ---------- */
+.qbody { display: grid; gap: 18px; }
+.qside { display: grid; gap: 18px; min-width: 0; align-content: start; }
+@media (min-width: 1000px) {
+  .qbody.has-media { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; }
+  .qbody.has-media .opts { grid-template-columns: 1fr; }
+  .qbody.has-media.wide { grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); }
+}
+.qmedia { margin: 0; background: var(--card); border: 2px solid var(--ink); border-radius: 10px; padding: 10px; display: grid; gap: 8px; justify-items: center; min-height: 120px; min-width: 0; }
+.qmedia.is-answer { border-color: var(--good); box-shadow: 0 0 0 3px var(--good); }
+.qmedia .mlabel { justify-self: start; font-family: var(--font-pen); font-weight: 700; font-size: 22px; line-height: 1; color: var(--good); }
+.qmedia .mbox { width: 100%; display: grid; place-items: center; }
+.qmedia img { display: block; max-width: 100%; max-height: 52vh; object-fit: contain; cursor: zoom-in; }
+.qmedia video { display: block; width: 100%; max-height: 56vh; background: var(--ink); border-radius: 6px; }
+.qmedia audio { width: 100%; }
+.qmedia .yt { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 6px; background: var(--ink); display: block; }
+.qmedia .sound { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(28px, 3vw, 44px); color: var(--tile); }
+.qmedia .miss { color: var(--bad); font-weight: 700; text-align: center; padding: 20px 8px; overflow-wrap: anywhere; }
+.qmedia .mfoot { width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
+.qmedia .hint { font-size: 14px; color: var(--ink-2); }
+.qmedia .hint a { color: inherit; }
+.qmedia .swap { padding: 4px 10px; font-size: 14px; }
+.zoom { position: fixed; inset: 0; z-index: 40; background: rgba(23, 33, 77, .92); display: grid; place-items: center; padding: 16px; cursor: zoom-out; }
+.zoom img { max-width: 100%; max-height: 100%; object-fit: contain; background: #fff; border-radius: 6px; }
+
+/* open (say-it) questions */
+.judge { display: flex; flex-wrap: wrap; gap: 14px; }
+.jbtn { font-size: clamp(22px, 2.6vw, 34px); padding: 14px 30px; border-width: 2.5px; color: #fff; }
+.jbtn.good { background: var(--good); border-color: var(--good); }
+.jbtn.good:hover { background: #177a4c; }
+.jbtn.bad { background: var(--bad); border-color: var(--bad); }
+.jbtn.bad:hover { background: #b33434; }
+.answer-box { background: var(--good); color: #fff; border-radius: 10px; padding: 14px 20px 16px; font-size: clamp(24px, 3vw, 44px); font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; box-shadow: 0 4px 0 #136341; }
+.answer-box .lbl { display: block; font-family: var(--font-pen); font-weight: 700; font-size: .55em; line-height: 1.2; opacity: .95; }
+
+/* ---------- setup ---------- */
+.setup { max-width: 840px; }
+.setup h2, .end h2 { margin: 0; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(44px, 7vw, 84px); line-height: .88; }
+.setup h2 span { background: linear-gradient(transparent 58%, var(--highlight) 58%, var(--highlight) 90%, transparent 90%); padding: 0 .06em; }
+.panel { background: var(--card); border: 2px solid var(--ink); border-radius: 10px; padding: 18px 20px; display: grid; gap: 16px; }
+.panel h3 { margin: 0; display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 26px; letter-spacing: .02em; line-height: 1; }
+.step { flex: none; display: inline-grid; place-items: center; width: 1.5em; height: 1.5em; padding-top: .12em; font-family: var(--font-pen); font-weight: 700; font-size: 24px; color: var(--redpen);
+  border: 2.5px solid var(--redpen); border-radius: 50% 45% 55% 48%; transform: rotate(-6deg); }
 .lead { font-size: 18px; line-height: 1.5; margin: 0; max-width: 62ch; }
 .bank { display: grid; gap: 10px; }
 .bank-title { font-size: 22px; font-weight: 700; overflow-wrap: anywhere; }
 .bank-meta { color: var(--ink-2); font-weight: 700; }
-.bank .src { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--highlight); padding: 1px 6px; border-radius: 3px; }
+.bank .src { display: inline-block; font-size: 13px; font-weight: 700; background: var(--highlight); padding: 1px 8px; border-radius: 999px; }
 .cats-preview { display: flex; flex-wrap: wrap; gap: 6px; }
 .cats-preview span { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 17px; border: 2px solid var(--ink); border-radius: 5px; padding: 2px 10px; background: var(--card); }
 .cats-preview span b { font-family: var(--font-body); font-size: 13px; color: var(--ink-2); margin-left: 6px; }
@@ -151,74 +226,54 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 .fmt-table { overflow-x: auto; margin-top: 10px; }
 .fmt-table table { border-collapse: collapse; font-size: 14px; }
 .fmt-table th, .fmt-table td { border: 1.5px solid var(--grid-strong); padding: 5px 8px; text-align: left; vertical-align: top; }
-.fmt-table th { background: var(--paper); font-family: ui-monospace, Menlo, Consolas, monospace; }
-.fmt p { margin: 8px 0 0; line-height: 1.5; }
+.fmt-table th { background: var(--paper); }
+.fmt p { margin: 8px 0 0; line-height: 1.5; max-width: 72ch; }
+.fmt code { font-family: inherit; font-weight: 700; background: var(--paper); border: 1px solid var(--grid-strong); border-radius: 4px; padding: 0 4px; }
 .field-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .field-row > .lab { font-weight: 700; min-width: 140px; }
 .seg { display: inline-flex; border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; }
 .seg button { border: 0; background: var(--card); padding: 8px 14px; font-weight: 700; font-family: var(--font-display); font-size: 20px; }
 .seg button + button { border-left: 2px solid var(--ink); }
 .seg button[aria-pressed="true"] { background: var(--tile); color: var(--highlight); }
+.seg button:disabled { opacity: .4; cursor: not-allowed; }
 .names { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
 .names input, select { font: inherit; font-size: 17px; padding: 8px 10px; border: 2px solid var(--grid-strong); border-radius: 6px; background: var(--paper); color: var(--ink); min-width: 0; }
 .names input:focus, select:focus { border-color: var(--ink); }
 .check { display: flex; align-items: center; gap: 10px; font-size: 17px; }
-.check input { width: 20px; height: 20px; accent-color: var(--tile); }
+.check input { width: 20px; height: 20px; accent-color: var(--tile); flex: none; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.setup-msg { font-weight: 700; color: var(--ink-2); align-self: center; }
+.join-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; background: var(--highlight); border: 2px solid var(--ink); border-radius: 10px; padding: 12px 16px; font-weight: 700; font-size: 18px; }
+.mode-note { margin: 0; color: var(--ink-2); line-height: 1.45; max-width: 62ch; }
 
-/* end */
+/* ---------- end ---------- */
 .end { max-width: 760px; }
 .rank { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .rank li { display: grid; grid-template-columns: 2.4em 1fr auto; align-items: center; gap: 12px; background: var(--card); border: 2px solid var(--ink); border-radius: 10px; padding: 10px 16px; font-size: 22px; font-weight: 700; }
 .rank li:first-child { background: var(--highlight); }
-.rank .pos { font-family: var(--font-display); font-weight: 900; font-size: 30px; }
+.rank .pos { font-family: var(--font-pen); font-weight: 700; font-size: 30px; color: var(--redpen); }
 .rank .pts { font-family: var(--font-display); font-weight: 900; font-size: 34px; font-variant-numeric: tabular-nums; }
 
-/* answer list */
+/* ---------- answer list ---------- */
 .key-cat { display: grid; gap: 8px; }
 .key-cat h3 { margin: 10px 0 0; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 26px; }
 .key-item { background: var(--card); border: 1.5px solid var(--grid-strong); border-radius: 8px; padding: 10px 14px; display: grid; grid-template-columns: 4em 1fr; gap: 4px 12px; font-size: 16px; line-height: 1.45; }
 .key-item > div { min-width: 0; overflow-wrap: anywhere; }
-.key-item .val { font-family: var(--font-display); font-weight: 900; font-size: 22px; color: var(--tile); grid-row: span 2; }
+.key-item .val { font-family: var(--font-display); font-weight: 900; font-size: 22px; color: var(--tile); }
+.key-item .kbody { display: grid; gap: 4px; }
 .key-item .ans { color: var(--good); font-weight: 700; }
-.warn-line { font-weight: 700; color: var(--margin); }
-
-/* question pictures */
-.qbody { display: grid; gap: 18px; }
-.qside { display: grid; gap: 18px; min-width: 0; align-content: start; }
-@media (min-width: 1000px) {
-  .qbody.has-img { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; }
-  .qbody.has-img .opts { grid-template-columns: 1fr; }
-}
-.qimg { margin: 0; background: var(--card); border: 2px solid var(--ink); border-radius: 10px; padding: 10px; display: grid; place-items: center; min-height: 120px; }
-.qimg img { display: block; max-width: 100%; max-height: 52vh; object-fit: contain; cursor: zoom-in; }
-.qimg .miss { color: var(--bad); font-weight: 700; text-align: center; }
-.qimg .hint { font-size: 13px; color: var(--ink-2); margin-top: 6px; }
-.zoom { position: fixed; inset: 0; z-index: 40; background: rgba(23, 33, 77, .92); display: grid; place-items: center; padding: 16px; cursor: zoom-out; }
-.zoom img { max-width: 100%; max-height: 100%; object-fit: contain; background: #fff; border-radius: 6px; }
 .key-item .pic { font-size: 14px; color: var(--ink-2); }
-/* open (say-it) questions */
-.judge { display: flex; flex-wrap: wrap; gap: 14px; }
-.jbtn { font-size: clamp(22px, 2.6vw, 34px); padding: 14px 30px; border-width: 2.5px; color: #fff; }
-.jbtn.good { background: var(--good); border-color: var(--good); }
-.jbtn.good:hover { background: #177a4c; }
-.jbtn.bad { background: var(--bad); border-color: var(--bad); }
-.jbtn.bad:hover { background: #b33434; }
-.answer-box { background: var(--good); color: #fff; border-radius: 10px; padding: 16px 20px; font-size: clamp(24px, 3vw, 42px); font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
-.answer-box .lbl { display: block; font-family: var(--font-display); font-weight: 800; font-size: .5em; text-transform: uppercase; letter-spacing: .06em; opacity: .9; }
-.team.nopick { cursor: default; }
-.team.nopick:hover { border-color: var(--ink); }
-/* live game: setup, lobby, projector */
-.join-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; background: var(--highlight); border: 2px solid var(--ink); border-radius: 10px; padding: 12px 16px; font-weight: 700; font-size: 18px; }
-.mode-note { margin: 0; color: var(--ink-2); line-height: 1.45; max-width: 62ch; }
-.seg button:disabled { opacity: .4; cursor: not-allowed; }
-.setup-msg { font-weight: 700; color: var(--ink-2); align-self: center; }
+.key-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.key-head h2 { margin: 0; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(32px, 4vw, 44px); line-height: .95; }
+.warn-line { font-weight: 700; color: var(--margin); margin: 0; }
+
+/* ---------- live game: lobby and projector ---------- */
 .lobby { max-width: 1100px; text-align: center; justify-items: center; }
 .join-how { font-size: clamp(20px, 2.4vw, 32px); font-weight: 700; overflow-wrap: anywhere; }
 .join-how b { background: var(--highlight); padding: 0 .3em; }
 .room-code { font-family: var(--font-display); font-weight: 900; font-size: clamp(80px, 14vw, 200px); line-height: .9; letter-spacing: .06em; color: var(--tile); font-variant-numeric: tabular-nums; }
-.join-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px 40px; }
-.join-qr { width: clamp(180px, 20vw, 300px); background: #fff; border: 2px solid var(--ink); border-radius: 10px; padding: 10px; }
+.join-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px 48px; }
+.join-qr { width: clamp(190px, 21vw, 320px); background: var(--highlight); border: 2px solid var(--ink); border-radius: 4px; padding: 14px; box-shadow: 6px 6px 0 var(--grid-strong); }
 .join-qr svg { display: block; width: 100%; height: auto; }
 .lobby-count { font-size: 20px; font-weight: 700; color: var(--ink-2); }
 .lobby-teams { width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; text-align: left; }
@@ -230,25 +285,26 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 .pchip.off { opacity: .45; }
 .pchip button { border: 0; background: none; width: 22px; height: 22px; border-radius: 50%; font-weight: 700; color: var(--ink-2); padding: 0; flex: none; }
 .pchip button:hover { background: var(--bad); color: #fff; }
-.team .pc { font-size: 12px; font-weight: 700; color: var(--ink-2); }
 .live-panel { background: var(--card); border: 2.5px solid var(--ink); border-radius: 12px; padding: clamp(18px, 3vw, 36px); text-align: center; display: grid; gap: 8px; }
 .live-big { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(40px, 6vw, 88px); line-height: .95; overflow-wrap: anywhere; }
 .live-big.open { color: var(--margin); }
+.qbody.wide .live-big { font-size: clamp(36px, 4.2vw, 64px); }
 .live-sub { font-size: clamp(18px, 2vw, 26px); font-weight: 700; color: var(--ink-2); }
-/* live game: student device */
+
+/* ---------- live game: student device ---------- */
 #joinView { z-index: 30; }
 .stu { max-width: 560px; }
 .stu-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.stu-who { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 30px; line-height: 1; overflow-wrap: anywhere; }
+.stu-who { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 32px; line-height: 1; overflow-wrap: anywhere; }
 .stu-score { font-weight: 700; color: var(--ink-2); font-size: 17px; }
 .join-form label { font-weight: 700; display: grid; gap: 6px; font-size: 17px; }
-.join-form input { font: inherit; font-size: 24px; padding: 10px 12px; border: 2px solid var(--grid-strong); border-radius: 8px; background: var(--paper); color: var(--ink); min-width: 0; width: 100%; box-sizing: border-box; }
+.join-form input { font: inherit; font-size: 24px; padding: 10px 12px; border: 2px solid var(--grid-strong); border-radius: 8px; background: var(--paper); color: var(--ink); min-width: 0; width: 100%; }
 .join-form input:focus { border-color: var(--ink); }
 .join-form #jCode { font-family: var(--font-display); font-weight: 900; font-size: 42px; letter-spacing: .15em; }
 .err { color: var(--bad); font-weight: 700; min-height: 1.2em; margin: 0; }
 .linkbtn { border: 0; background: none; text-decoration: underline; color: var(--ink-2); padding: 0; justify-self: start; font-size: 15px; }
 .team-pick { display: grid; gap: 10px; }
-.team-pick button { border: 2.5px solid var(--ink); background: var(--card); border-radius: 10px; padding: 14px; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 26px; text-align: left; }
+.team-pick button { border: 2.5px solid var(--ink); background: var(--card); border-radius: 10px; padding: 14px; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 26px; text-align: left; box-shadow: 0 4px 0 var(--grid-strong); }
 .team-pick button:hover { background: var(--highlight); }
 .stu-stage { display: grid; gap: 14px; justify-items: center; text-align: center; padding-block: 12px; }
 .stu-big { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(34px, 9vw, 56px); line-height: .95; overflow-wrap: anywhere; }
@@ -266,12 +322,16 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 .stu-rank { width: 100%; }
 .stu-rank li { font-size: 19px; }
 .stu-rank li.mine { outline: 4px solid var(--tile); }
+
 @media (max-width: 640px) {
   .opts { grid-template-columns: 1fr; }
   .field-row > .lab { min-width: 0; width: 100%; }
+  #qView .sheet { box-shadow: 4px 4px 0 var(--grid-strong); }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
+</head>
+<body>
 
 <div class="app" id="app">
   <div class="top">
@@ -297,7 +357,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
     <div class="qtop">
       <span class="chip-cat" id="qCat"></span>
       <span class="chip-val" id="qVal"></span>
-      <span class="double" id="qDouble" hidden>Double points</span>
+      <span class="double" id="qDouble" hidden>Double points!</span>
       <span class="spacer"></span>
       <div class="timer" id="timer" hidden>
         <div class="bar"><div class="fill" id="tFill"></div></div>
@@ -307,11 +367,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
     </div>
     <p class="prompt" id="qPrompt"></p>
     <div class="qbody" id="qBody">
-      <figure class="qimg" id="qImg" hidden>
-        <img id="qImgEl" alt="Picture for this question">
-        <div class="miss" id="qImgMiss" hidden></div>
-        <figcaption class="hint" id="qImgHint">Click the picture to make it bigger</figcaption>
-      </figure>
+      <figure class="qmedia" id="qMedia" hidden></figure>
       <div class="qside">
         <div class="live-panel" id="qLive" hidden aria-live="polite"></div>
         <div class="opts" id="qOpts"></div>
@@ -339,7 +395,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
   <div class="sheet setup">
     <div>
       <div class="eyebrow">Quiz board for the classroom</div>
-      <h2>Classroom Showdown</h2>
+      <h2>Classroom <span>Showdown</span></h2>
     </div>
     <div class="join-strip" id="joinStrip" hidden>
       <span>Student? Join your class's live game here.</span>
@@ -348,7 +404,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
     <p class="lead">Load a question file, set up your teams and play. Each topic in the file becomes a column on the board, and its questions go from 100 to 500 points in the order they appear.</p>
 
     <div class="panel" id="dropZone">
-      <h3>Question set</h3>
+      <h3><span class="step" aria-hidden="true">1</span>Question set</h3>
       <div class="bank" id="bankInfo"></div>
       <div class="drop">
         <label class="btn primary upload" for="fileIn">Upload a CSV or zip file<input type="file" id="fileIn" accept=".csv,.zip,text/csv,application/zip"></label>
@@ -366,13 +422,14 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
           </table>
         </div>
         <p>The easiest way to start is to download the sample set and edit it in Excel or Google Sheets, then save it as CSV. The first row holds the column names. For a multiple-choice question, fill in at least options A and B and put the letter of the right option in the answer column. For an open question, leave A to D empty and type the answer itself in the answer column: after a buzz you mark it Correct or Incorrect. Explanation and topics are optional. To make words bold in a question, put two asterisks on each side, for example **LISTEN**.</p>
-        <p><b>Adding pictures:</b> add an <b>image</b> column and type the picture's file name on that question's row, for example <i>q3.png</i>. Put the CSV and the pictures in one folder, compress the folder into a zip file, and upload the zip. PNG, JPG, GIF, WebP and SVG pictures work. You can also type a full web address (starting with https://) instead of a file name.</p>
-        <p> Without a topics column, questions are put into columns of five in file order. The board holds up to 6 topics with 5 questions each.</p>
+        <p><b>Pictures, videos and sound:</b> add an <code>image</code> column and type the file name on that question's row, for example <i>q3.png</i> or <i>clip.mp4</i>. It shows with the question. To show something when the answer is revealed, add an <code>answer image</code> column the same way. Put the CSV and the files in one folder, compress the folder into a zip file, and upload the zip.</p>
+        <p>Pictures can be PNG, JPG, GIF, WebP or SVG. Videos can be MP4 or WebM, and sound can be MP3, M4A or WAV. Keep video clips short so the zip stays small. You can also paste a YouTube link, or any web address starting with https://, instead of a file name. YouTube needs the internet in class and may be blocked on some school networks.</p>
+        <p>Without a topics column, questions are put into columns of five in file order. The board holds up to 6 topics with 5 questions each.</p>
       </details>
     </div>
 
     <div class="panel">
-      <h3>Teams and rules</h3>
+      <h3><span class="step" aria-hidden="true">2</span>Teams and rules</h3>
       <div class="field-row">
         <span class="lab">Game mode</span>
         <div class="seg" id="modeSeg">
@@ -427,10 +484,10 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 <!-- answer list -->
 <div class="overlay" id="keyView" hidden>
   <div class="sheet">
-    <div class="field-row">
+    <div class="key-head">
       <div>
         <div class="eyebrow">Teacher view</div>
-        <h2 style="margin:0;font-family:var(--font-display);font-weight:900;text-transform:uppercase;font-size:44px;line-height:.95">All questions and answers</h2>
+        <h2>All questions and answers</h2>
       </div>
       <span class="spacer"></span>
       <button class="btn primary" id="keyClose" type="button">Close</button>
@@ -445,7 +502,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 <!-- live game lobby (projector) -->
 <div class="overlay" id="lobby" hidden>
   <div class="sheet lobby">
-    <div class="eyebrow">Live game · join on your own device</div>
+    <div class="eyebrow">Live game</div>
     <div class="join-how">Scan the QR code, or go to <b id="lobbyUrl"></b> and enter the code</div>
     <div class="join-row">
       <div class="join-qr" id="lobbyQr" role="img" aria-label="QR code that opens the join page with this room code"></div>
@@ -550,7 +607,9 @@ function buildBank(text, source) {
   const head = rows[0].map(h => h.trim().toLowerCase());
   const col = (...names) => { for (const n of names) { const i = head.indexOf(n); if (i >= 0) return i; } return -1; };
   const ci = { title: col('bank title', 'title'), q: col('question'), ans: col('answer', 'correct', 'correct answer'),
-    ex: col('explanation'), topic: col('topics', 'topic', 'category'), img: col('image', 'picture', 'photo', 'img'),
+    ex: col('explanation'), topic: col('topics', 'topic', 'category'),
+    img: col('image', 'picture', 'photo', 'img', 'video', 'media', 'question image', 'question picture', 'question video', 'question media'),
+    amedia: col('answer image', 'answer picture', 'answer photo', 'answer img', 'answer video', 'answer media'),
     opt: LETTERS.map(L => col(L.toLowerCase(), 'option ' + L.toLowerCase(), 'choice ' + L.toLowerCase())) };
   const missing = [];
   if (ci.q < 0) missing.push('question');
@@ -565,13 +624,13 @@ function buildBank(text, source) {
     if (!p) { errors.push(`Row ${line}: the question is blank, so it was skipped.`); return; }
     const opts = [];
     LETTERS.forEach((L, j) => { const v = get(ci.opt[j]); if (v) opts.push({ L, v }); });
-    if (!opts.length) { qs.push({ p, o: [], a: -1, ans: get(ci.ans), e: get(ci.ex), topic: get(ci.topic), img: get(ci.img), line }); return; }
+    if (!opts.length) { qs.push({ p, o: [], a: -1, ans: get(ci.ans), e: get(ci.ex), topic: get(ci.topic), img: get(ci.img), amedia: get(ci.amedia), line }); return; }
     if (opts.length < 2) { errors.push(`Row ${line}: has only one option. Give at least two options, or leave A to D empty for an open question. The row was skipped.`); return; }
     const raw = get(ci.ans);
     let a = opts.findIndex(o => o.L === raw.toUpperCase().replace(/[^A-D]/g, '').slice(0, 1) && raw.replace(/[\s.)]/g, '').length === 1);
     if (a < 0) a = opts.findIndex(o => o.v.toLowerCase() === raw.toLowerCase());
     if (a < 0) { errors.push(`Row ${line}: the answer “${raw || 'blank'}” doesn't match an option, so it was skipped.`); return; }
-    qs.push({ p, o: opts.map(o => o.v), a, e: get(ci.ex), topic: get(ci.topic), img: get(ci.img), line });
+    qs.push({ p, o: opts.map(o => o.v), a, e: get(ci.ex), topic: get(ci.topic), img: get(ci.img), amedia: get(ci.amedia), line });
   });
 
   let cats = [];
@@ -590,7 +649,7 @@ function buildBank(text, source) {
   }
   cats.forEach(c => {
     if (c.qs.length > MAX_ROWS) { warnings.push(`“${c.name}” has ${c.qs.length} questions. The first 5 are used.`); c.qs = c.qs.slice(0, MAX_ROWS); }
-    c.qs = c.qs.map(({ p, o, a, e, ans, img }) => ({ p, o, a, e, ans: ans || '', img: img || '' }));
+    c.qs = c.qs.map(({ p, o, a, e, ans, img, amedia }) => ({ p, o, a, e, ans: ans || '', img: img || '', amedia: amedia || '' }));
   });
   const total = cats.reduce((s, c) => s + c.qs.length, 0);
   if (!total) errors.unshift('No usable questions were found in this file.');
@@ -604,6 +663,7 @@ let Q = null;      // open question
 let draftMode = 'local';
 let draftCount = 4, draftNames = ['Team 1', 'Team 2', 'Team 3', 'Team 4', 'Team 5', 'Team 6'];
 let tick = null;
+let lastScores = null;
 
 const save = () => { store.set(K_GAME, S); syncScores(); };
 const tileCount = st => st.bank.cats.reduce((s, c) => s + c.qs.length, 0);
@@ -643,7 +703,7 @@ function renderBoard() {
       if (u) {
         btn.classList.add('used'); btn.disabled = true;
         const v = document.createElement('span'); v.className = 'uv'; v.textContent = VALUES[r];
-        const w = document.createElement('span'); w.textContent = u.by == null ? 'No points' : S.teams[u.by].name;
+        const w = document.createElement('span'); w.className = 'ub' + (u.by == null ? ' none' : ''); w.textContent = u.by == null ? 'No points' : S.teams[u.by].name;
         btn.append(v, w); btn.setAttribute('aria-label', `${c.name} ${VALUES[r]}, answered`);
       } else { btn.textContent = VALUES[r]; btn.setAttribute('aria-label', `${c.name} for ${VALUES[r]}`); }
       b.appendChild(btn);
@@ -654,6 +714,7 @@ function renderScores() {
   updateRoomBtn();
   const box = $('scores'); box.innerHTML = '';
   if (!S) return;
+  const onBoard = $('qView').hidden;
   S.teams.forEach((t, i) => {
     const pickable = !S.live;
     const d = document.createElement('div'); d.className = 'team' + (pickable && i === S.turn ? ' turn' : '') + (pickable ? '' : ' nopick');
@@ -673,8 +734,16 @@ function renderScores() {
       const pc = document.createElement('div'); pc.className = 'pc'; pc.textContent = `${n} player${n === 1 ? '' : 's'}`;
       pb.insertBefore(pc, sc);
     }
-    d.append(pb, adj); box.appendChild(d);
+    d.append(pb, adj);
+    /* red-pen mark when a team's score changes */
+    const was = onBoard && lastScores && lastScores.code === S.bank ? lastScores.s[i] : null;
+    if (was != null && was !== t.score) {
+      const m = document.createElement('span'); m.className = 'delta' + (t.score < was ? ' minus' : ''); m.setAttribute('aria-hidden', 'true');
+      m.textContent = (t.score > was ? '+' : '−') + Math.abs(t.score - was); d.appendChild(m);
+    }
+    box.appendChild(d);
   });
+  if (onBoard) lastScores = { code: S.bank, s: S.teams.map(t => t.score) };
   if (!S.live) {
     const hint = document.createElement('div'); hint.className = 'score-hint'; hint.textContent = 'Click a team to choose who picks next.';
     box.prepend(hint);
@@ -686,7 +755,7 @@ function renderAll() { renderBoard(); renderScores(); }
 function openQ(id) {
   if (!S || S.used[id]) return;
   if (S.live) { openLiveQ(id); return; }
-  Q = { id, answering: S.turn, tried: [], wrong: [], done: false, msg: '', msgKind: '', time: S.timer, running: S.timer > 0 };
+  Q = { id, answering: S.turn, tried: [], wrong: [], done: false, msg: '', msgKind: '', time: S.timer, running: S.timer > 0 && !playsFirst(info(id).q) };
   $('qView').hidden = false; renderQ(); startTimer(); $('qView').scrollTop = 0;
 }
 function renderQ() {
@@ -695,7 +764,7 @@ function renderQ() {
   $('qVal').textContent = val;
   $('qDouble').hidden = !dbl;
   $('qPrompt').innerHTML = fmt(q.p);
-  showQImg(q);
+  renderMedia();
   $('qLive').hidden = true; $('qOpts').hidden = false; $('qClose').hidden = false;
   const opts = $('qOpts'); opts.innerHTML = '';
   q.o.forEach((o, i) => {
@@ -777,7 +846,7 @@ function closeQ() {
   if (!Q) return;
   stopTimer();
   if (Q.live) liveCloseQ();
-  const wasDone = Q.done; Q = null; $('qView').hidden = true;
+  Q = null; $('qView').hidden = true; clearMedia();
   save(); renderAll();
   if (isDone(S)) showEnd();
 }
@@ -824,12 +893,12 @@ function renderBankInfo() {
     const nOpen = bank.cats.reduce((n, c) => n + c.qs.filter(isOpen).length, 0);
     parts.push(`<div class="bank-meta">${bank.total} question${bank.total === 1 ? '' : 's'} in ${bank.cats.length} column${bank.cats.length === 1 ? '' : 's'}${nOpen ? ` · ${nOpen} open (no options)` : ''}</div>`);
     parts.push(`<div class="cats-preview">${bank.cats.map(c => `<span>${esc(c.name)}<b>${c.qs.length}</b></span>`).join('')}</div>`);
-    const named = bank.cats.flatMap(c => c.qs.filter(q => q.img).map(q => q.img));
+    const named = bank.cats.flatMap(c => c.qs.flatMap(q => [q.img, q.amedia].filter(Boolean)));
     if (named.length) {
-      const missing = [...new Set(named.filter(n => !imgSrc(n)))];
-      const found = named.length - named.filter(n => !imgSrc(n)).length;
-      parts.push(`<div class="bank-meta">${found} of ${named.length} picture${named.length === 1 ? '' : 's'} ready</div>`);
-      if (missing.length) parts.push(`<ul class="notes err"><li>${missing.length === 1 ? 'This picture is' : 'These pictures are'} named in the file but ${bank.source === 'zip' ? 'not in the zip' : 'not loaded'}: ${esc(missing.slice(0, 6).join(', '))}${missing.length > 6 ? ` and ${missing.length - 6} more` : ''}.${bank.source === 'zip' ? ' Check the spelling matches the file name, including .png or .jpg.' : ' To use pictures, upload a zip file with the CSV and the pictures together.'} Those questions will still work without the picture.</li></ul>`);
+      const missing = [...new Set(named.filter(n => !mediaOf(n)))];
+      const found = named.filter(n => mediaOf(n)).length;
+      parts.push(`<div class="bank-meta">${found} of ${named.length} picture and video file${named.length === 1 ? '' : 's'} ready</div>`);
+      if (missing.length) parts.push(`<ul class="notes err"><li>${missing.length === 1 ? 'This file is' : 'These files are'} named in the CSV but ${bank.source === 'zip' ? 'not in the zip' : 'not loaded'}: ${esc(missing.slice(0, 6).join(', '))}${missing.length > 6 ? ` and ${missing.length - 6} more` : ''}.${bank.source === 'zip' ? ' Check the spelling matches the file name, including the ending such as .png or .mp4.' : ' To use pictures or videos, upload a zip file with the CSV and the files together.'} Those questions will still work without them.</li></ul>`);
     }
   }
   if (bank.errors.length) parts.push(`<ul class="notes err">${bank.errors.slice(0, 8).map(e => `<li>${esc(e)}</li>`).join('')}${bank.errors.length > 8 ? `<li>…and ${bank.errors.length - 8} more rows with problems.</li>` : ''}</ul>`);
@@ -907,7 +976,7 @@ function showEnd() {
 function renderKey() {
   const b = S ? S.bank : bank;
   $('keyList').innerHTML = !b || !b.cats.length ? '<p>No question set loaded.</p>' : b.cats.map(c => `<div class="key-cat"><h3>${esc(c.name)}</h3>${c.qs.map((q, r) =>
-    `<div class="key-item"><span class="val">${VALUES[r]}</span><div>${fmt(q.p)}</div><div class="ans">${esc(answerText(q))}</div>${q.img ? `<div class="pic">Picture: ${esc(q.img)}</div>` : ''}</div>`).join('')}</div>`).join('');
+    `<div class="key-item"><span class="val">${VALUES[r]}</span><div class="kbody"><div>${fmt(q.p)}</div><div class="ans">${esc(answerText(q))}</div>${q.img ? `<div class="pic">With the question: ${esc(q.img)}</div>` : ''}${q.amedia ? `<div class="pic">With the answer: ${esc(q.amedia)}</div>` : ''}</div></div>`).join('')}</div>`).join('');
 }
 
 /* ---------- file loading ---------- */
@@ -997,13 +1066,36 @@ document.addEventListener('keydown', e => {
   else if (e.key === 'Escape') closeQ();
 });
 
-/* ---------- question pictures (zip upload) ---------- */
+/* ---------- question media: pictures, video and sound (zip upload or web links) ---------- */
 const JSZIP_URL = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-const IMG_RE = /\.(png|jpe?g|gif|webp|svg)$/i;
-const MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp', svg: 'image/svg+xml' };
-let IMG = {};
+const MEDIA_RE = /\.(png|jpe?g|gif|webp|svg|mp4|m4v|webm|mov|ogv|mp3|m4a|wav|oga|ogg)$/i;
+const MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp', svg: 'image/svg+xml',
+  mp4: 'video/mp4', m4v: 'video/mp4', webm: 'video/webm', mov: 'video/quicktime', ogv: 'video/ogg',
+  mp3: 'audio/mpeg', m4a: 'audio/mp4', wav: 'audio/wav', oga: 'audio/ogg', ogg: 'audio/ogg' };
+const kindOf = type => (/^video/.test(type) ? 'video' : /^audio/.test(type) ? 'audio' : 'image');
+let IMG = {};   // file name in the zip -> { url, kind }
 const imgKey = n => String(n).split(/[\\/]/).pop().trim().toLowerCase();
-const imgSrc = n => (!n ? '' : /^https?:\/\//i.test(n.trim()) ? n.trim() : (IMG[imgKey(n)] || ''));
+/* A YouTube link gives its 11-character video id, and a start time from t= or start= (e.g. t=90 or t=1m30s) */
+function youTube(s) {
+  const m = String(s).match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([\w-]{11})/i);
+  if (!m) return null;
+  const t = String(s).match(/[?&#](?:t|start)=(?:(\d+)h)?(?:(\d+)m)?(\d+)?s?(?:&|$)/i);
+  return { id: m[1], start: t ? (+t[1] || 0) * 3600 + (+t[2] || 0) * 60 + (+t[3] || 0) : 0 };
+}
+/* What a media cell points to: { kind: image | video | audio | youtube, src }, or null when the file isn't loaded */
+function mediaOf(n) {
+  n = String(n || '').trim();
+  if (!n) return null;
+  if (/^https?:\/\//i.test(n)) {
+    const yt = youTube(n);
+    if (yt) return { kind: 'youtube', src: n, ...yt };
+    return { kind: kindOf(MIME[n.split(/[?#]/)[0].split('.').pop().toLowerCase()] || ''), src: n };
+  }
+  const f = IMG[imgKey(n)];
+  return f ? { kind: f.kind, src: f.url } : null;
+}
+/* Questions with a video or sound clip hold the timer until the clip ends (or the teacher presses Start) */
+const playsFirst = q => { const m = q && mediaOf(q.img); return !!m && m.kind !== 'image'; };
 const IDB = {
   open() {
     return new Promise((res, rej) => {
@@ -1030,9 +1122,9 @@ const IDB = {
   },
 };
 function setImages(map, persist) {
-  Object.values(IMG).forEach(u => { try { URL.revokeObjectURL(u); } catch (e) {} });
+  Object.values(IMG).forEach(f => { try { URL.revokeObjectURL(f.url); } catch (e) {} });
   IMG = {};
-  map.forEach((blob, k) => { IMG[k] = URL.createObjectURL(blob); });
+  map.forEach((blob, k) => { IMG[k] = { url: URL.createObjectURL(blob), kind: kindOf(blob.type) }; });
   if (persist) IDB.replaceAll(map).catch(e => liveErr(e));
 }
 async function restoreImages() {
@@ -1061,13 +1153,15 @@ async function readZip(file) {
     const zip = await window.JSZip.loadAsync(file);
     const entries = Object.values(zip.files).filter(f => !f.dir && !/(^|\/)(__MACOSX\/|\.)/.test(f.name));
     const csvs = entries.filter(f => /\.csv$/i.test(f.name)).sort((a, b) => a.name.split('/').length - b.name.split('/').length || a.name.localeCompare(b.name));
-    if (!csvs.length) { fail(`There's no CSV file inside “${file.name}”. Put the question CSV and its pictures in one folder, then zip the folder.`); return; }
+    if (!csvs.length) { fail(`There's no CSV file inside “${file.name}”. Put the question CSV and its pictures or videos in one folder, then zip the folder.`); return; }
     const text = await csvs[0].async('string');
     const imgs = new Map();
-    for (const f of entries.filter(f => IMG_RE.test(f.name))) {
-      const ext = f.name.split('.').pop().toLowerCase();
-      const raw = await f.async('blob');
-      imgs.set(imgKey(f.name), await shrink(new Blob([raw], { type: MIME[ext] || 'application/octet-stream' })));
+    const files = entries.filter(f => MEDIA_RE.test(f.name));
+    for (const [k, f] of files.entries()) {
+      if (files.length > 8) $('bankInfo').innerHTML = `<div class="bank-meta">Opening ${esc(file.name)}… ${k + 1} of ${files.length} files</div>`;
+      const type = MIME[f.name.split('.').pop().toLowerCase()];
+      const blob = new Blob([await f.async('blob')], { type });
+      imgs.set(imgKey(f.name), kindOf(type) === 'image' ? await shrink(blob) : blob);
     }
     setImages(imgs, true);
     loadText(text, 'zip', file.name);
@@ -1077,17 +1171,69 @@ async function readZip(file) {
     fail(`“${file.name}” couldn't be opened. Check it's a normal zip file (right-click the folder and choose Compress or Send to → Compressed folder), and that this computer is online the first time you load a zip.`);
   }
 }
-function showQImg(q) {
-  const fig = $('qImg'), img = $('qImgEl'), miss = $('qImgMiss'), body = $('qBody');
-  const src = q.img ? imgSrc(q.img) : '';
-  fig.hidden = !q.img; body.classList.toggle('has-img', !!q.img);
-  if (!q.img) { img.removeAttribute('src'); return; }
-  img.hidden = !src; $('qImgHint').hidden = !src; miss.hidden = !!src;
-  if (src) { if (img.getAttribute('src') !== src) img.src = src; }
-  else { img.removeAttribute('src'); miss.textContent = `Picture not found: ${q.img}`; }
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+/* The media slot shows the question's file. Once the answer is revealed it switches to the answer's file, if there is one. */
+function renderMedia() {
+  const fig = $('qMedia'), q = info(Q.id).q;
+  const both = Q.done && !!q.amedia, side = both && Q.side !== 'q' ? 'a' : 'q';
+  const name = side === 'a' ? q.amedia : q.img;
+  $('qBody').classList.toggle('has-media', !!name);
+  $('qBody').classList.toggle('wide', !!name && /video|youtube/.test((mediaOf(name) || {}).kind));
+  if (!name) { clearMedia(); return; }
+  const key = [Q.id, side, name, both && q.img ? 1 : 0].join('|');
+  fig.hidden = false;
+  if (fig.dataset.key === key) return;
+  stopMedia(); fig.innerHTML = ''; fig.dataset.key = key;
+  fig.classList.toggle('is-answer', side === 'a');
+  if (side === 'a') fig.append(el('div', 'mlabel', 'Answer'));
+  const m = mediaOf(name), box = el('div', 'mbox'), foot = el('div', 'mfoot'), hint = el('span', 'hint');
+  const broken = what => () => { box.replaceChildren(el('div', 'miss', `This ${what} couldn't be played: ${name}`)); hint.textContent = ''; };
+  const waits = side === 'q' && S.timer > 0;
+  if (!m) box.append(el('div', 'miss', `File not found: ${name}`));
+  else if (m.kind === 'image') {
+    const img = el('img'); img.src = m.src; img.alt = side === 'a' ? 'Picture for the answer' : 'Picture for this question';
+    img.addEventListener('error', () => { box.replaceChildren(el('div', 'miss', `This picture couldn't be shown: ${name}`)); hint.textContent = ''; });
+    box.append(img); hint.textContent = 'Click the picture to make it bigger';
+  } else if (m.kind === 'video' || m.kind === 'audio') {
+    const v = el(m.kind); v.src = m.src; v.controls = true; v.preload = 'metadata'; v.playsInline = true;
+    v.addEventListener('error', broken(m.kind === 'video' ? 'video' : 'sound clip'));
+    if (side === 'q') v.addEventListener('ended', mediaEnded);
+    if (m.kind === 'audio') box.append(el('div', 'sound', 'Listen'));
+    box.append(v);
+    hint.textContent = waits ? `The timer starts when the ${m.kind === 'video' ? 'video' : 'clip'} ends.` : '';
+  } else {
+    const f = el('iframe', 'yt'); f.title = 'YouTube video';
+    f.src = `https://www.youtube.com/embed/${m.id}?rel=0&playsinline=1&enablejsapi=1${m.start ? '&start=' + m.start : ''}`;
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true; f.referrerPolicy = 'strict-origin-when-cross-origin';
+    box.append(f);
+    const a = el('a', '', 'open it on YouTube'); a.href = m.src; a.target = '_blank'; a.rel = 'noopener';
+    hint.append(waits ? 'Press Start on the timer when the clip ends. Not loading? ' : 'Not loading? ', a, '.');
+  }
+  foot.append(hint);
+  if (both && q.img) { const b = el('button', 'btn swap', side === 'a' ? 'Show the question again' : 'Show the answer'); b.type = 'button'; b.dataset.swap = side === 'a' ? 'q' : 'a'; foot.append(b); }
+  fig.append(box, foot);
 }
-$('qImgEl').addEventListener('error', () => { const q = Q && info(Q.id).q; if (!q) return; $('qImgEl').hidden = true; $('qImgHint').hidden = true; $('qImgMiss').hidden = false; $('qImgMiss').textContent = `This picture couldn't be shown: ${q.img}`; });
-$('qImgEl').addEventListener('click', () => { const src = $('qImgEl').getAttribute('src'); if (!src) return; $('imgZoomEl').src = src; $('imgZoom').hidden = false; });
+function mediaEnded() {
+  if (!Q || Q.done || Q.running || Q.closed || S.timer <= 0 || Q.time !== S.timer) return;
+  Q.running = true; renderTimer();
+}
+function pauseMedia() {
+  const fig = $('qMedia');
+  fig.querySelectorAll('video, audio').forEach(v => { try { v.pause(); } catch (e) {} });
+  fig.querySelectorAll('iframe.yt').forEach(f => { try { f.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }), '*'); } catch (e) {} });
+}
+function stopMedia() {
+  $('qMedia').querySelectorAll('video, audio').forEach(v => { try { v.pause(); v.removeAttribute('src'); v.load(); } catch (e) {} });
+}
+function clearMedia() {
+  const fig = $('qMedia'); stopMedia(); fig.innerHTML = ''; fig.hidden = true; delete fig.dataset.key;
+}
+$('qMedia').addEventListener('click', e => {
+  const sw = e.target.closest('[data-swap]');
+  if (sw) { Q.side = sw.dataset.swap; renderMedia(); return; }
+  const img = e.target.closest('img');
+  if (img) { $('imgZoomEl').src = img.src; $('imgZoom').hidden = false; }
+});
 $('imgZoom').addEventListener('click', () => { $('imgZoom').hidden = true; });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('imgZoom').hidden) { e.stopImmediatePropagation(); $('imgZoom').hidden = true; } }, true);
 
@@ -1284,7 +1430,7 @@ function openLiveQ(id) {
   const { c, val } = info(id);
   S.live.n = (S.live.n || 0) + 1; save();
   Q = { id, live: true, n: S.live.n, phase: 'buzz', closed: false, buzz: null, choice: null, tried: [], wrong: [], answering: S.turn,
-        done: false, msg: '', msgKind: '', time: S.timer, running: S.timer > 0 };
+        done: false, msg: '', msgKind: '', time: S.timer, running: S.timer > 0 && !playsFirst(info(id).q) };
   $('qView').hidden = false; renderQ(); startTimer(); $('qView').scrollTop = 0;
   L.set(roomPath('q'), { n: Q.n, cat: S.bank.cats[c].name, val, open: true }).catch(liveErr);
   if (qUnsub) qUnsub();
@@ -1294,6 +1440,7 @@ function onLiveQ(v) {
   if (!Q || !Q.live || !v || v.n !== Q.n || Q.done) return;
   if (Q.phase === 'buzz' && v.buzz && v.buzz.qn === Q.n) {
     Q.phase = 'answer'; Q.buzz = v.buzz; Q.closed = false; Q.msg = ''; Q.msgKind = '';
+    pauseMedia();
     const bq = info(Q.id).q;
     L.update(roomPath('q'), isOpen(bq) ? { open: false, kind: 'say' } : { open: false, kind: 'mc', options: bq.o }).catch(liveErr);
     if (S.timer > 0) { Q.time = S.timer; Q.running = true; startTimer(); }
