@@ -122,7 +122,10 @@ h1 .hl { background: linear-gradient(transparent 55%, var(--highlight) 55%, var(
   padding: clamp(16px, 2.2vw, 30px) clamp(16px, 2.6vw, 36px) clamp(14px, 1.8vw, 24px) clamp(42px, 5.4vw, 78px);
   animation: lift .28s cubic-bezier(.2, .8, .3, 1) both; }
 @keyframes lift { from { opacity: 0; transform: translateY(22px) scale(.985); } to { opacity: 1; transform: none; } }
-.qtop { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.qtop { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; position: sticky; top: calc(-16px - env(safe-area-inset-top, 0px)); z-index: 2; background: var(--card);
+  margin-top: calc(-1 * clamp(16px, 2.2vw, 30px)); padding-block: clamp(16px, 2.2vw, 30px) 10px; border-bottom: 2px solid var(--ruled); }
+.qactions { display: flex; flex-wrap: wrap; gap: 8px; }
+.qactions .btn { font-size: 17px; padding: 8px 16px; }
 .chip-cat { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: clamp(22px, 2vw, 30px); letter-spacing: .03em; line-height: 1; }
 .chip-val { font-family: var(--font-pen); font-weight: 700; font-size: clamp(28px, 2.6vw, 40px); line-height: 1.1; color: var(--redpen); border: 3px solid var(--redpen);
   border-radius: 50% 46% 52% 48% / 55% 50% 50% 45%; padding: .05em .5em 0; transform: rotate(-5deg); font-variant-numeric: tabular-nums; }
@@ -153,6 +156,7 @@ h1 .hl { background: linear-gradient(transparent 55%, var(--highlight) 55%, var(
 .feedback.bad { color: var(--bad); }
 .explain { background: var(--card); border: 2px solid var(--ink); border-radius: 10px; padding: 14px 18px; font-size: clamp(18px, 1.9vw, 26px); line-height: 1.45; overflow-wrap: anywhere; }
 .explain .lbl { display: inline-block; font-family: var(--font-pen); font-weight: 700; color: var(--redpen); font-size: 1.05em; margin-bottom: 2px; }
+.qfoot:has(> .who:empty) { display: none; }
 .qfoot { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; border-top: 2px solid var(--grid-strong); padding-top: 14px; }
 .who { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .who .lab { font-weight: 700; color: var(--ink-2); }
@@ -364,6 +368,10 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
         <span class="secs" id="tSecs"></span>
         <button class="btn" id="tBtn" type="button">Pause</button>
       </div>
+      <div class="qactions">
+        <button class="btn" id="qReveal" type="button">Reveal answer</button>
+        <button class="btn primary" id="qClose" type="button">Back to board</button>
+      </div>
     </div>
     <p class="prompt" id="qPrompt"></p>
     <div class="qbody" id="qBody">
@@ -382,9 +390,6 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
     <div class="explain" id="qExplain" hidden></div>
     <div class="qfoot">
       <div class="who" id="qWho"></div>
-      <span class="spacer"></span>
-      <button class="btn" id="qReveal" type="button">Reveal answer</button>
-      <button class="btn primary" id="qClose" type="button">Back to board</button>
     </div>
     <div class="keys" id="qKeys"></div>
   </div>
