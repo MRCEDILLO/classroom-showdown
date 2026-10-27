@@ -552,6 +552,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
       <div class="room-code" id="lobbyCode"></div>
     </div>
     <div class="lobby-count" id="lobbyCount"></div>
+    <p class="warn-line" id="lobbyWarn" hidden>Students' characters aren't being saved, so the board is choosing one for each student. To fix it, paste the rules from database.rules.json into Firebase (Realtime Database &gt; Rules).</p>
     <div class="lobby-teams" id="lobbyTeams"></div>
     <div class="actions">
       <button class="btn primary big" id="lobbyGo" type="button">Start game</button>
@@ -600,11 +601,10 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
    Paste your Firebase config here, replacing the word null. It should look like
    const FIREBASE_CONFIG = { apiKey: "...", authDomain: "...", databaseURL: "...", projectId: "...", ... };
 
-   Characters: each student's choice is saved as a number 0-15 in rooms/<code>/players/<uid>/sprite.
-   If your database rules only allow name, team and online there, joining still works but the
-   board shows a character picked for them instead. To keep their choice, allow "sprite" in your
-   rules (Realtime Database > Rules), next to name, team and online:
-     "sprite": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 16" }
+   Database rules: copy everything in database.rules.json (next to this file) into
+   Firebase > Realtime Database > Rules, replacing what is there, and press Publish.
+   Older rules that only allow name, team and online on a player drop each student's character
+   (saved as "sprite", a number 0-15): joining still works, but the board picks a character for them.
    ========================================================================== */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCztQ9I3fSYngPe0TO-7oJu3yo2nyKf6DQ",
@@ -1075,7 +1075,8 @@ const spriteSvgs = SPRITES.map(sp => {
 const spriteNo = i => (Number.isInteger(i) && i >= 0 && i < SPRITES.length ? i : null);
 /* label: an accessible name, or leave it out when the sprite sits next to a name that says who it is */
 const sprite = (i, label) => `<svg class="sprite" viewBox="-4 -4 110 110"${label ? ` role="img" aria-label="${esc(label)}"` : ' aria-hidden="true"'}>${spriteSvgs[spriteNo(i) ?? 0]}</svg>`;
-/* A student's character. If the database didn't keep their choice (see the Firebase rules note at the top), pick one from their id so it never changes. */
+/* A student's character, read from their database record so the board and their phone always agree.
+   If the database didn't keep their choice (see the Firebase rules note at the top), pick one from their id so it never changes. */
 const hashSprite = s => { let h = 7; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % SPRITES.length; };
 const spriteOf = (uid, p) => spriteNo(p && p.sprite) ?? hashSprite(uid);
 const teamSprite = i => (i * 5 + 1) % SPRITES.length;
@@ -1497,13 +1498,17 @@ async function createRoom(game) {
 }
 function hostListen() {
   hostUnsubs.forEach(u => u()); hostUnsubs = []; players = {};
-  hostUnsubs.push(L.on(roomPath('players'), v => { players = v || {}; autoNameTeams(); renderScores(); renderLobby(); if (Q && Q.live && !Q.done) renderLiveQ(); }));
+  hostUnsubs.push(L.on(roomPath('players'), v => {
+    players = v || {}; autoNameTeams(); renderScores(); renderLobby(); if (Q && Q.live && !Q.done) renderLiveQ();
+    setTimeout(renderLobby, SPRITE_WAIT + 100);
+  }));
 }
 /* A team with one student is just called by their name ("Sam"), whatever the teacher named it.
    Teams left with a default name ("Team 2") become "Sam's Team" once anyone else joins Sam's team.
    Before the game starts that name follows whoever joined first and is still there; once it starts, it stays.
    Teams the teacher named go back to that name when they have more than one student. */
 const teamNameFor = n => `${n}'s Team`;
+const SPRITE_WAIT = 4000;
 const seenAt = {}; /* when this screen first saw each student, for when the database has no join time */
 function autoNameTeams() {
   if (!S || !S.live || !S.live.code) return;
@@ -1564,6 +1569,8 @@ function renderLobby() {
   $('lobbyUrl').textContent = joinUrl();
   lobbyQr();
   const list = Object.entries(players).filter(([, p]) => p && p.name != null);
+  /* A student's character arrives in its own write just after they join. If it still hasn't come, the database rules are refusing it. */
+  $('lobbyWarn').hidden = !list.some(([uid, p]) => spriteNo(p.sprite) == null && Date.now() - (seenAt[uid] || Date.now()) > SPRITE_WAIT);
   $('lobbyCount').textContent = list.length ? `${list.length} student${list.length === 1 ? '' : 's'} joined` : 'Waiting for students to join…';
   $('lobbyTeams').innerHTML = S.teams.map((t, i) => {
     const ps = list.filter(([, p]) => p.team === i).sort((a, b) => String(a[1].name).localeCompare(String(b[1].name)));
@@ -1721,7 +1728,7 @@ async function quickRejoin(saved) {
     const room = await L.get('rooms/' + saved.code);
     const me = room && room.players && room.players[myUid];
     if (room && room.host && room.status !== 'ended' && me) {
-      J = { code: saved.code, name: me.name, team: me.team, sprite: spriteNo(saved.sprite) ?? spriteOf(myUid, me) };
+      J = { code: saved.code, name: me.name, team: me.team, sprite: spriteNo(me.sprite) ?? spriteNo(saved.sprite) };
       await L.update(`rooms/${saved.code}/players/${myUid}`, { online: true });
       enterPlay();
     }
@@ -1753,7 +1760,7 @@ function renderStu() {
   const me = r.players && r.players[myUid];
   if (!me) { J = null; leaveLocal(); $('jErr').textContent = 'You were removed from the game. You can join again with the code.'; return; }
   const teams = r.teams || [], scores = r.scores || [], tname = teams[me.team] || 'your team';
-  stuWho(me.name, J && spriteNo(J.sprite) != null ? J.sprite : spriteOf(myUid, me));
+  stuWho(me.name, spriteOf(myUid, me));
   $('stuScore').textContent = `${tname} · ${scores[me.team] || 0} points`;
   if (r.status === 'ended') {
     const rows = teams.map((t, i) => ({ t, s: scores[i] || 0, i })).sort((a, b) => b.s - a.s);
