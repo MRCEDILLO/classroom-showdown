@@ -1,0 +1,30 @@
+{
+  "rules": {
+    "rooms": {
+      "$code": {
+        ".read": "auth != null",
+        ".write": "auth != null && (data.exists() ? data.child('host').val() === auth.uid : newData.child('host').val() === auth.uid)",
+        "players": {
+          "$uid": {
+            ".write": "auth != null && (auth.uid === $uid || root.child('rooms').child($code).child('host').val() === auth.uid)",
+            ".validate": "newData.hasChildren(['name', 'team'])",
+            "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 30" },
+            "team": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 6" },
+            "online": { ".validate": "newData.isBoolean()" },
+            "joined": { ".validate": "newData.isNumber()" },
+            "sprite": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 16" },
+            "$other": { ".validate": false }
+          }
+        },
+        "q": {
+          "buzz": {
+            ".write": "auth != null && !data.exists() && root.child('rooms').child($code).child('q/open').val() === true && newData.child('uid').val() === auth.uid"
+          },
+          "answer": {
+            ".write": "auth != null && !data.exists() && root.child('rooms').child($code).child('q/buzz/uid').val() === auth.uid && newData.child('uid').val() === auth.uid"
+          }
+        }
+      }
+    }
+  }
+}
