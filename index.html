@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Big+Shoulders+Display:wght@700;800;900&family=Kalam:wght@700&display=swap">
 <style>
-/* Layout: an exercise-book sheet of graph paper. Header, a board of ink tiles built from the loaded question set, team scores along the bottom. A question opens as a ruled page laid on the sheet. Red pen (Kalam) is kept for the teacher's marks only: points, doubles, step numbers. */
+/* Layout: an exercise-book sheet of graph paper. Header, a board of ink tiles built from the loaded question set, team scores along the bottom. A question opens as a ruled page laid on the sheet. Red pen (Kalam) is kept for the host's marks only: points, doubles, step numbers. */
 :root {
   --paper: #F5F8FD;
   --grid: #DFE7F4;
@@ -332,13 +332,13 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 .qbody.wide .live-big { font-size: clamp(36px, 4.2vw, 64px); }
 .live-sub { font-size: clamp(18px, 2vw, 26px); font-weight: 700; color: var(--ink-2); }
 
-/* ---------- live game: student device ---------- */
+/* ---------- live game: player device ---------- */
 #joinView { z-index: 30; }
-.stu { max-width: 560px; }
-.stu-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.stu-who { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 32px; line-height: 1; overflow-wrap: anywhere; display: flex; align-items: center; gap: 8px; }
-.stu-who .sprite { width: 44px; height: 44px; }
-.stu-score { font-weight: 700; color: var(--ink-2); font-size: 17px; }
+.ply { max-width: 560px; }
+.ply-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.ply-who { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 32px; line-height: 1; overflow-wrap: anywhere; display: flex; align-items: center; gap: 8px; }
+.ply-who .sprite { width: 44px; height: 44px; }
+.ply-score { font-weight: 700; color: var(--ink-2); font-size: 17px; }
 .join-form label { font-weight: 700; display: grid; gap: 6px; font-size: 17px; }
 .join-form input { font: inherit; font-size: 24px; padding: 10px 12px; border: 2px solid var(--grid-strong); border-radius: 8px; background: var(--paper); color: var(--ink); min-width: 0; width: 100%; }
 .join-form input:focus { border-color: var(--ink); }
@@ -348,27 +348,138 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 .team-pick { display: grid; gap: 10px; }
 .team-pick button { border: 2.5px solid var(--ink); background: var(--card); border-radius: 10px; padding: 14px; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 26px; text-align: left; box-shadow: 0 4px 0 var(--grid-strong); }
 .team-pick button:hover { background: var(--highlight); }
-.stu-stage { display: grid; gap: 14px; justify-items: center; text-align: center; padding-block: 12px; }
-.stu-big { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(34px, 9vw, 56px); line-height: .95; overflow-wrap: anywhere; }
-.stu-big.good { color: var(--good); }
-.stu-big.bad { color: var(--bad); }
-.stu-sub { font-size: 19px; font-weight: 700; color: var(--ink-2); line-height: 1.4; }
+.ply-stage { display: grid; gap: 14px; justify-items: center; text-align: center; padding-block: 12px; }
+.ply-big { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(34px, 9vw, 56px); line-height: .95; overflow-wrap: anywhere; }
+.ply-big.good { color: var(--good); }
+.ply-big.bad { color: var(--bad); }
+.ply-sub { font-size: 19px; font-weight: 700; color: var(--ink-2); line-height: 1.4; }
 .buzz { width: min(78vw, 320px); aspect-ratio: 1; max-width: 100%; border-radius: 50%; border: 6px solid var(--ink); background: var(--margin); color: #fff;
   font-family: var(--font-display); font-weight: 900; font-size: clamp(56px, 16vw, 90px); text-transform: uppercase; box-shadow: 0 10px 0 var(--ink);
   touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; }
 .buzz:active { transform: translateY(8px); box-shadow: 0 2px 0 var(--ink); }
 .buzz:disabled { opacity: .6; }
-.stu-opts { width: 100%; display: grid; gap: 10px; }
-.stu-opts .opt { font-size: clamp(22px, 6vw, 30px); }
+.ply-opts { width: 100%; display: grid; gap: 10px; }
+.ply-opts .opt { font-size: clamp(22px, 6vw, 30px); }
 .opt.chosen { background: var(--highlight); }
-.stu-rank { width: 100%; }
-.stu-rank li { font-size: 19px; }
-.stu-rank li.mine { outline: 4px solid var(--tile); }
+.ply-rank { width: 100%; }
+.ply-rank li { font-size: 19px; }
+.ply-rank li.mine { outline: 4px solid var(--tile); }
+
+/* ---------- home: host, join, account and profiles ---------- */
+.home { max-width: 1120px; }
+.home-top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 20px; }
+.home h2, .prof h2, .fin h2 { margin: 0; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(44px, 7vw, 84px); line-height: .88; overflow-wrap: anywhere; }
+.home h2 span { background: linear-gradient(transparent 58%, var(--highlight) 58%, var(--highlight) 90%, transparent 90%); padding: 0 .06em; }
+.account { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px 10px; font-weight: 700; }
+.account .who-am { color: var(--ink-2); overflow-wrap: anywhere; }
+.account .who-am b { color: var(--ink); }
+.g-btn { display: inline-flex; align-items: center; gap: 10px; }
+.g-btn svg { width: 20px; height: 20px; flex: none; background: #fff; border-radius: 50%; padding: 2px; }
+.acct-err { flex-basis: 100%; text-align: right; }
+.home-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.home-card { display: grid; gap: 8px; align-content: start; text-align: left; border: 2.5px solid var(--ink); border-radius: 12px; padding: clamp(18px, 2.4vw, 28px); background: var(--card);
+  box-shadow: 0 6px 0 var(--ink); transition: transform .12s, box-shadow .12s, background .12s; }
+.home-card:hover { transform: translateY(-3px); box-shadow: 0 9px 0 var(--ink); background: var(--highlight); }
+.home-card:active { transform: translateY(3px); box-shadow: 0 3px 0 var(--ink); }
+.home-card.host { background: var(--tile); color: #fff; }
+.home-card.host:hover { background: var(--tile-hi); }
+.home-card .hc-t { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(36px, 4.4vw, 56px); line-height: .9; }
+.home-card.host .hc-t { color: var(--highlight); }
+.home-card .hc-s { font-size: 17px; line-height: 1.4; }
+.home-resume { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; background: var(--highlight); border: 2px solid var(--ink); border-radius: 10px; padding: 12px 16px; font-weight: 700; font-size: 18px; }
+.prof-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.pcard { display: grid; justify-items: center; gap: 4px; text-align: center; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper); padding: 12px 10px 14px; min-width: 0; box-shadow: 0 4px 0 var(--grid-strong); transition: transform .12s, background .12s; }
+.pcard:hover { background: #FFF3BF; transform: translateY(-2px); }
+.pcard .sprite { width: 72px; height: 72px; }
+.pcard .pc-name { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 24px; line-height: 1; overflow-wrap: anywhere; max-width: 100%; }
+.pcard .pc-meta { font-size: 14px; font-weight: 700; color: var(--ink-2); }
+.pcard.add { border-style: dashed; border-color: var(--grid-strong); background: var(--card); box-shadow: none; align-content: center; color: var(--ink-2); }
+.pcard.add .plus { font-family: var(--font-display); font-weight: 900; font-size: 56px; line-height: .9; color: var(--tile); }
+
+/* ---------- profile: stats and customising ---------- */
+#profileView { z-index: 35; }
+.prof { max-width: 760px; }
+.prof-head { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.prof-face .sprite { width: clamp(84px, 16vw, 128px); height: clamp(84px, 16vw, 128px); }
+.prof-head > div:last-child { min-width: 0; }
+.prof h2 { font-size: clamp(40px, 7vw, 72px); }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.stat { background: var(--tile); color: #fff; border-radius: 10px; padding: 12px 10px 10px; text-align: center; box-shadow: 0 5px 0 var(--ink); display: grid; gap: 2px; min-width: 0; }
+.stat .sv { font-family: var(--font-display); font-weight: 900; font-size: clamp(34px, 6vw, 56px); line-height: 1; color: var(--highlight); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.stat .sl { font-weight: 700; font-size: 15px; }
+.stat-note { margin: 0; font-size: 15px; color: var(--ink-2); line-height: 1.45; }
+.prof-edit label { font-weight: 700; display: grid; gap: 6px; font-size: 17px; }
+.prof-edit input { font: inherit; font-size: 22px; padding: 10px 12px; border: 2px solid var(--grid-strong); border-radius: 8px; background: var(--paper); color: var(--ink); min-width: 0; width: 100%; }
+.prof-edit input:focus { border-color: var(--ink); }
+.btn.danger { border-color: var(--bad); color: var(--bad); }
+.btn.danger:hover { background: var(--bad); color: #fff; }
+
+/* join screen: who is playing */
+.jwho { display: grid; gap: 8px; }
+.jwho .lab { font-weight: 700; font-size: 17px; }
+.jprofs { display: flex; flex-wrap: wrap; gap: 8px; }
+.jprofs button { display: inline-flex; align-items: center; gap: 6px; border: 2px solid var(--grid-strong); background: var(--paper); border-radius: 999px; padding: 4px 14px 4px 6px; font-weight: 700; font-size: 17px; max-width: 100%; overflow-wrap: anywhere; }
+.jprofs button .sprite { width: 34px; height: 34px; }
+.jprofs button[aria-pressed="true"] { border-color: var(--ink); background: var(--highlight); box-shadow: 0 3px 0 var(--ink); }
+.jprofs button.plain { padding-left: 14px; }
+.jwho-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; color: var(--ink-2); font-weight: 700; }
+.ply-tools { display: flex; gap: 8px; flex: none; }
+
+/* ---------- Final Showdown: an ink-blue sheet with a white card on top ---------- */
+#finalView { background-color: var(--tile); background-image: linear-gradient(rgba(255, 255, 255, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .07) 1px, transparent 1px); }
+.fin { max-width: 1240px; }
+.fin-head { text-align: center; color: #fff; display: grid; gap: 6px; justify-items: center; }
+.fin-kick { font-family: var(--font-pen); font-weight: 700; color: var(--highlight); font-size: clamp(30px, 3.4vw, 50px); line-height: 1; transform: rotate(-3deg); }
+.fin-cat { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(48px, 8vw, 120px); line-height: .9; color: #fff; overflow-wrap: anywhere; text-wrap: balance; }
+.fin-card { background: var(--card); border: 2px solid var(--ink); border-radius: 12px; box-shadow: 8px 8px 0 rgba(0, 0, 0, .25); padding: clamp(16px, 2.4vw, 32px); display: grid; gap: 18px; }
+.fin-step { margin: 0; font-size: clamp(20px, 2.2vw, 30px); font-weight: 700; line-height: 1.35; }
+.fin-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; }
+.fin-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.fin-p { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 10px; background: var(--paper); border: 2px solid var(--grid-strong); border-radius: 10px; padding: 10px 12px; min-width: 0; }
+.fin-p .sprite { width: 44px; height: 44px; grid-row: span 2; }
+.fin-p .fp-name { font-weight: 700; font-size: 19px; overflow-wrap: anywhere; line-height: 1.15; }
+.fin-p .fp-sub { font-size: 14px; font-weight: 700; color: var(--ink-2); overflow-wrap: anywhere; }
+.fin-p.in { border-color: var(--good); background: #EAF7F0; }
+.fin-p.in .fp-sub { color: var(--good); }
+.fin-p .fp-ans { grid-column: 1 / -1; font-size: clamp(20px, 2vw, 26px); font-weight: 700; background: var(--card); border: 1.5px solid var(--grid-strong); border-radius: 6px; padding: 6px 10px; overflow-wrap: anywhere; min-height: 1.6em; }
+.fin-p .fp-ans.none { color: var(--ink-2); font-weight: 400; font-style: italic; }
+.fin-p .fp-bet { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.fin-p .fp-bet b { font-family: var(--font-pen); color: var(--redpen); font-size: 24px; }
+.fin-p .fp-marks { display: flex; gap: 6px; }
+.fin-p .fp-marks button { border: 2px solid var(--ink); background: var(--card); border-radius: 8px; padding: 4px 12px; font-weight: 700; }
+.fin-p .fp-marks button[data-ok="1"][aria-pressed="true"] { background: var(--good); border-color: var(--good); color: #fff; }
+.fin-p .fp-marks button[data-ok="0"][aria-pressed="true"] { background: var(--bad); border-color: var(--bad); color: #fff; }
+.fin-p.right { border-color: var(--good); }
+.fin-p.wrong { border-color: var(--bad); }
+.fin-p input { font: inherit; font-family: var(--font-display); font-weight: 900; font-size: 28px; width: 100%; padding: 4px 10px; border: 2px solid var(--grid-strong); border-radius: 6px; background: var(--card); color: var(--ink); grid-column: 1 / -1; }
+.fin-p input:focus { border-color: var(--ink); }
+.fin-opts { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fin-opts li { display: flex; align-items: center; gap: 12px; border: 2px solid var(--ink); border-radius: 10px; padding: 10px 14px; font-size: clamp(20px, 2.2vw, 30px); min-width: 0; overflow-wrap: anywhere; }
+.fin-opts li.right { background: var(--good); border-color: var(--good); color: #fff; }
+.fin-opts .k { flex: none; width: 1.5em; height: 1.5em; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--card); font-family: var(--font-display); font-weight: 900; font-size: .8em; }
+.fin-q { display: grid; gap: 16px; }
+.fin-q.has-media { align-items: start; }
+@media (min-width: 1000px) { .fin-q.has-media { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); } .fin-q.has-media .fin-opts { grid-template-columns: 1fr; } }
+.fin-timer .bar { width: clamp(140px, 30vw, 420px); height: 16px; }
+.fin-timer .secs { font-size: 44px; }
+/* phone */
+.ply-q { margin: 0; font-size: 22px; font-weight: 700; line-height: 1.35; text-align: center; overflow-wrap: anywhere; }
+.ply-form { width: 100%; display: grid; gap: 10px; text-align: left; }
+.ply-form label { font-weight: 700; display: grid; gap: 6px; font-size: 18px; }
+.ply-form input { font: inherit; font-size: 26px; padding: 10px 12px; border: 2px solid var(--grid-strong); border-radius: 8px; background: var(--paper); color: var(--ink); min-width: 0; width: 100%; }
+.ply-form input[type="number"] { font-family: var(--font-display); font-weight: 900; font-size: 40px; }
+.ply-form input:focus { border-color: var(--ink); }
+.ply-count { font-family: var(--font-display); font-weight: 900; font-size: 40px; color: var(--tile); font-variant-numeric: tabular-nums; }
+.ply-fin { font-family: var(--font-pen); font-weight: 700; color: var(--redpen); font-size: 26px; line-height: 1; }
 
 @media (max-width: 640px) {
   .opts { grid-template-columns: 1fr; }
   .field-row > .lab { min-width: 0; width: 100%; }
   #qView .sheet { box-shadow: 4px 4px 0 var(--grid-strong); }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fin-opts { grid-template-columns: 1fr; }
+  .home-top .account { justify-content: flex-start; }
+  .acct-err { text-align: left; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
@@ -386,6 +497,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
       <button class="btn" id="btnNew" type="button">New game</button>
       <button class="btn" id="btnEnd" type="button">End game</button>
       <button class="btn" id="btnFull" type="button">Full screen</button>
+      <button class="btn" id="btnHome" type="button">Home</button>
     </div>
   </div>
   <div class="board-wrap"><div class="board" id="board"></div></div>
@@ -435,13 +547,12 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 <!-- setup -->
 <div class="overlay" id="setup" hidden>
   <div class="sheet setup">
-    <div>
-      <div class="eyebrow">Quiz board for the classroom</div>
-      <h2>Classroom <span>Showdown</span></h2>
-    </div>
-    <div class="join-strip" id="joinStrip" hidden>
-      <span>Student? Join your class's live game here.</span>
-      <button class="btn primary" id="goJoin" type="button">Join a game</button>
+    <div class="home-top">
+      <div>
+        <div class="eyebrow">Host a game</div>
+        <h2>Classroom <span>Showdown</span></h2>
+      </div>
+      <button class="btn" id="setupHome" type="button">Back to home</button>
     </div>
     <p class="lead">Load a question file, set up your teams and play. Each topic in the file becomes a column on the board, and its questions go from 100 to 500 points in the order they appear.</p>
 
@@ -468,6 +579,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
         <p><b>Pictures, videos and sound:</b> add an <code>image</code> column and type the file name on that question's row, for example <i>q3.png</i> or <i>clip.mp4</i>. It shows with the question. To show something when the answer is revealed, add an <code>answer image</code> column the same way. Put the CSV and the files in one folder, compress the folder into a zip file, and upload the zip.</p>
         <p>Pictures can be PNG, JPG, GIF, WebP or SVG. Videos can be MP4 or WebM, and sound can be MP3, M4A or WAV. Keep video clips short so the zip stays small. You can also paste a YouTube link, or any web address starting with https://, instead of a file name. YouTube needs the internet in class and may be blocked on some school networks. The sample set links to pictures and clips stored on this website, so it works as a plain CSV with no zip.</p>
         <p>Without a topics column, questions are put into columns of five in file order. The board holds up to 6 topics with 5 questions each.</p>
+        <p><b>Final Showdown:</b> to finish with one last question, add a row with <code>Final Showdown</code> in the topics column, or <code>Final Showdown: Space</code> to show players the category Space. It doesn't go on the board. Once every tile is done, players see the category, bet some of their points, then type their answer when the question appears. You mark each answer right or wrong, and each bet is won or lost before the podium. Give it an open answer (leave A to D empty). Only the first Final Showdown row is used, and files without one work as before.</p>
       </details>
     </div>
 
@@ -529,7 +641,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
   <div class="sheet">
     <div class="key-head">
       <div>
-        <div class="eyebrow">Teacher view</div>
+        <div class="eyebrow">Host view</div>
         <h2>All questions and answers</h2>
       </div>
       <span class="spacer"></span>
@@ -552,7 +664,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
       <div class="room-code" id="lobbyCode"></div>
     </div>
     <div class="lobby-count" id="lobbyCount"></div>
-    <p class="warn-line" id="lobbyWarn" hidden>Students' characters aren't being saved, so the board is choosing one for each student. To fix it, paste the rules from database.rules.json into Firebase (Realtime Database &gt; Rules).</p>
+    <p class="warn-line" id="lobbyWarn" hidden>Players' characters aren't being saved, so the board is choosing one for each player. To fix it, paste the rules from database.rules.json into Firebase (Realtime Database &gt; Rules).</p>
     <div class="lobby-teams" id="lobbyTeams"></div>
     <div class="actions">
       <button class="btn primary big" id="lobbyGo" type="button">Start game</button>
@@ -561,31 +673,121 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
   </div>
 </div>
 
-<!-- live game: student device -->
+<!-- home: host or join, sign in, profiles -->
+<div class="overlay" id="home" hidden>
+  <div class="sheet home">
+    <div class="home-top">
+      <div>
+        <div class="eyebrow">Quiz board game</div>
+        <h2>Classroom <span>Showdown</span></h2>
+      </div>
+      <div class="account" id="account" hidden></div>
+    </div>
+    <div class="home-resume" id="homeResume" hidden>
+      <span>A game is in progress.</span>
+      <button class="btn primary" id="homeBack" type="button">Back to the game</button>
+    </div>
+    <div class="home-cards">
+      <button class="home-card host" id="homeHost" type="button"><span class="hc-t">Host a game</span><span class="hc-s">Run the board on the big screen. Load a question set, set up teams and play.</span></button>
+      <button class="home-card" id="homeJoin" type="button"><span class="hc-t">Join a game</span><span class="hc-s">Got a room code? Join on your phone and buzz in.</span></button>
+    </div>
+    <section class="panel" id="profPanel" hidden>
+      <h3>Profiles</h3>
+      <p class="lead" id="profLead"></p>
+      <div class="prof-grid" id="profGrid"></div>
+    </section>
+  </div>
+</div>
+
+<!-- a profile: stats and customising -->
+<div class="overlay" id="profileView" hidden>
+  <div class="sheet prof">
+    <div class="home-top">
+      <div class="prof-head">
+        <div class="prof-face" id="profFace"></div>
+        <div><div class="eyebrow" id="profEyebrow">Profile</div><h2 id="profName"></h2></div>
+      </div>
+      <button class="btn" id="profBack" type="button">Back</button>
+    </div>
+    <div id="profStatsBox">
+      <div class="stats" id="profStats"></div>
+    </div>
+    <p class="stat-note" id="profNote"></p>
+    <form class="panel prof-edit" id="profForm" novalidate>
+      <h3 id="profEditTitle">Customise</h3>
+      <label for="pName">Name<input id="pName" autocomplete="off" maxlength="20"></label>
+      <fieldset class="char-pick"><legend>Character</legend><div class="chars" id="pChars"></div></fieldset>
+      <p class="err" id="pErr" aria-live="polite"></p>
+      <div class="actions">
+        <button class="btn primary big" id="pSave" type="submit">Save</button>
+        <button class="btn danger" id="pDelete" type="button">Delete profile</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Final Showdown (projector) -->
+<div class="overlay" id="finalView" hidden>
+  <div class="sheet fin">
+    <div class="fin-head">
+      <div class="fin-kick">Final Showdown</div>
+      <div class="fin-cat" id="finCat"></div>
+    </div>
+    <div class="fin-card">
+      <div class="fin-row">
+        <p class="fin-step" id="finStep" aria-live="polite"></p>
+        <div class="timer fin-timer" id="finTimer" hidden><div class="bar"><div class="fill" id="finFill"></div></div><span class="secs" id="finSecs"></span></div>
+      </div>
+      <div class="fin-q" id="finQ" hidden>
+        <div class="qside">
+          <p class="prompt" id="finPrompt"></p>
+          <ol class="fin-opts" id="finOpts" hidden></ol>
+        </div>
+        <figure class="qmedia" id="finMedia" hidden></figure>
+      </div>
+      <div class="answer-box" id="finAnswer" hidden></div>
+      <div class="explain" id="finExplain" hidden></div>
+      <div class="fin-list" id="finList"></div>
+      <div class="actions">
+        <button class="btn primary big" id="finGo" type="button"></button>
+        <button class="btn big" id="finBoard" type="button" hidden>Back to board</button>
+        <button class="btn big" id="finSkip" type="button">Skip to final scores</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- live game: player device -->
 <div class="overlay" id="joinView" hidden>
-  <div class="sheet stu">
-    <div class="stu-top">
+  <div class="sheet ply">
+    <div class="ply-top">
       <div style="min-width:0">
         <div class="eyebrow">Classroom Showdown</div>
-        <div class="stu-who" id="stuWho">Join a game</div>
+        <div class="ply-who" id="plyWho">Join a game</div>
       </div>
-      <button class="btn" id="stuLeave" type="button" hidden>Leave</button>
+      <div class="ply-tools">
+        <button class="btn" id="plyMe" type="button" hidden>My profile</button>
+        <button class="btn" id="plyLeave" type="button" hidden>Leave</button>
+      </div>
     </div>
     <form class="panel join-form" id="joinForm" novalidate>
       <label for="jCode">Room code<input id="jCode" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="000 000"></label>
-      <label for="jName">Your first name or a nickname<input id="jName" autocomplete="off" maxlength="20"></label>
-      <fieldset class="char-pick"><legend>Pick your character</legend><div class="chars" id="jChars"></div></fieldset>
+      <div class="jwho" id="jWho" hidden></div>
+      <div class="jwho" id="jGuest">
+        <label for="jName">Your first name or a nickname<input id="jName" autocomplete="off" maxlength="20"></label>
+        <fieldset class="char-pick"><legend>Pick your character</legend><div class="chars" id="jChars"></div></fieldset>
+      </div>
       <p class="err" id="jErr" aria-live="polite"></p>
       <button class="btn primary big" id="jGo" type="submit">Join</button>
-      <button class="linkbtn" id="jTeacher" type="button">I'm the teacher</button>
+      <button class="linkbtn" id="jHost" type="button">Back to home</button>
     </form>
     <div class="panel" id="teamPick" hidden>
       <h3>Choose your team</h3>
       <div class="team-pick" id="teamPickList"></div>
     </div>
-    <div id="stuPlay" hidden>
-      <div class="stu-score" id="stuScore"></div>
-      <div class="stu-stage" id="stuStage" aria-live="polite"></div>
+    <div id="plyPlay" hidden>
+      <div class="ply-score" id="plyScore"></div>
+      <div class="ply-stage" id="plyStage" aria-live="polite"></div>
     </div>
   </div>
 </div>
@@ -603,8 +805,13 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 
    Database rules: copy everything in database.rules.json (next to this file) into
    Firebase > Realtime Database > Rules, replacing what is there, and press Publish.
-   Older rules that only allow name, team and online on a player drop each student's character
-   (saved as "sprite", a number 0-15): joining still works, but the board picks a character for them.
+   Older rules drop each player's character, profile and Final Showdown bets: joining still works,
+   but the board picks a character for them and stats aren't saved.
+
+   Google sign-in (profiles and stats) needs two switches in the Firebase console:
+   1. Authentication > Sign-in method > Add new provider > Google > Enable > Save.
+      Leave Anonymous switched on too: guests and the host's screen still use it.
+   2. Authentication > Settings > Authorized domains > Add domain > mrcedillo.github.io
    ========================================================================== */
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyCztQ9I3fSYngPe0TO-7oJu3yo2nyKf6DQ",
@@ -616,10 +823,11 @@ const FIREBASE_CONFIG = {
   appId: "1:956835501837:web:0603a03c546011d6884244"
 };
 /* ===== END OF LIVE GAME SETUP ============================================ */
-const SAMPLE_CSV = "bank title,question,A,B,C,D,answer,explanation,topics,image,answer image\nGeneral Trivia Sample Showdown,Which is the largest ocean on Earth?,Atlantic,Indian,Pacific,Arctic,C,The Pacific covers about a third of the planet. That is more than all the land on Earth put together.,Geography,,\nGeneral Trivia Sample Showdown,Which country's flag is this?,Norway,Sweden,Denmark,Finland,B,\"Sweden's flag is a yellow cross on blue. Denmark's is a white cross on red, and Finland's is a blue cross on white.\",Geography,https://mrcedillo.github.io/classroom-showdown/sample/mystery-flag.png,\nGeneral Trivia Sample Showdown,What is the capital city of Canada?,,,,,Ottawa,\"Toronto is Canada's biggest city, but the capital is Ottawa.\",Geography,,\nGeneral Trivia Sample Showdown,Which country has the most people?,China,USA,Indonesia,India,D,India passed China in 2023. It has more than 1.4 billion people.,Geography,,\nGeneral Trivia Sample Showdown,In which Australian state or territory would you find Uluru?,,,,,Northern Territory,Uluru is in Uluru-Kata Tjuta National Park in the south of the Northern Territory. It is sacred to the Anangu people.,Geography,,https://mrcedillo.github.io/classroom-showdown/sample/uluru.jpg\nGeneral Trivia Sample Showdown,True or false: sound travels faster than light.,True,False,,,B,Light is almost a million times faster. That is why you see lightning before you hear the thunder.,Science,,\nGeneral Trivia Sample Showdown,Which gas do plants take in from the air to make their food?,Carbon dioxide,Oxygen,Nitrogen,Helium,A,Plants take in carbon dioxide and give out oxygen during photosynthesis.,Science,,\nGeneral Trivia Sample Showdown,About how many bones are in an adult human body?,106,156,206,306,C,\"Adults have 206 bones. Babies are born with about 300, and some join together as they grow.\",Science,,\nGeneral Trivia Sample Showdown,What is the chemical symbol for gold?,,,,,Au,\"Au comes from aurum, the Latin word for gold.\",Science,,\nGeneral Trivia Sample Showdown,Which planet has a giant storm called the Great Red Spot?,,,,,Jupiter,The Great Red Spot is a storm wider than Earth. It has been raging for hundreds of years.,Science,,\nGeneral Trivia Sample Showdown,What animal is this a close-up of?,,,,,A zebra,No two zebras have exactly the same stripes.,Picture This,https://mrcedillo.github.io/classroom-showdown/sample/zebra-closeup.jpg,https://mrcedillo.github.io/classroom-showdown/sample/zebra.jpg\nGeneral Trivia Sample Showdown,Which fruit is this a close-up of?,Pineapple,Durian,Jackfruit,Kiwi fruit,A,The scales on a pineapple's skin grow in spirals.,Picture This,https://mrcedillo.github.io/classroom-showdown/sample/pineapple-closeup.jpg,https://mrcedillo.github.io/classroom-showdown/sample/pineapple.jpg\nGeneral Trivia Sample Showdown,This photo looks straight up at a famous tower. Which city is it in?,London,Rome,Paris,Berlin,C,The Eiffel Tower in Paris opened in 1889. At night it sparkles with thousands of lights.,Picture This,https://mrcedillo.github.io/classroom-showdown/sample/eiffel-tower.jpg,\nGeneral Trivia Sample Showdown,This is part of a famous statue in New York Harbor. Which country gave it to the USA?,Britain,Spain,Italy,France,D,France gave the Statue of Liberty to the USA in 1886. It is green because its copper skin has weathered.,Picture This,https://mrcedillo.github.io/classroom-showdown/sample/statue-of-liberty.jpg,\nGeneral Trivia Sample Showdown,Name this famous Australian building.,,,,,Sydney Opera House,Its roof shells were designed by Danish architect Jørn Utzon. It opened in 1973.,Picture This,https://mrcedillo.github.io/classroom-showdown/sample/opera-house.jpg,\nGeneral Trivia Sample Showdown,This is a famous Morse code message. What does it spell?,,,,,SOS,\"Three short, three long, three short: ··· ––– ··· is SOS, the international distress signal.\",Sound & Video,https://mrcedillo.github.io/classroom-showdown/sample/morse-mystery.mp3,\nGeneral Trivia Sample Showdown,Name this tune.,Twinkle Twinkle Little Star,Jingle Bells,Happy Birthday,Old MacDonald,C,Happy Birthday was first written as a school song called Good Morning to All in 1893.,Sound & Video,https://mrcedillo.github.io/classroom-showdown/sample/mystery-tune.mp3,\nGeneral Trivia Sample Showdown,The camera zooms out from a famous bridge. Which city is it in?,,,,,San Francisco,The Golden Gate Bridge opened in 1937. Its colour is called International Orange.,Sound & Video,https://mrcedillo.github.io/classroom-showdown/sample/mystery-bridge.mp4,https://mrcedillo.github.io/classroom-showdown/sample/golden-gate-bridge.jpg\nGeneral Trivia Sample Showdown,\"This was the first video ever uploaded to YouTube, in 2005. What animals is he standing in front of?\",,,,,Elephants,Me at the Zoo was filmed at San Diego Zoo by YouTube co-founder Jawed Karim.,Sound & Video,https://www.youtube.com/watch?v=jNQXAC9IVRw,\nGeneral Trivia Sample Showdown,\"In 2012, which song became the first YouTube video to reach one billion views?\",Baby (Justin Bieber),Gangnam Style (PSY),Despacito,Call Me Maybe,B,PSY's Gangnam Style passed one billion views in December 2012. The reveal plays it.,Sound & Video,,https://www.youtube.com/watch?v=9bZkp7q19f0\nGeneral Trivia Sample Showdown,How many players does a netball team have on the court?,7,5,6,9,A,\"Each netball team has 7 players on the court, and each player wears a bib with their position.\",Sport,,\nGeneral Trivia Sample Showdown,How many points is a goal worth in AFL?,6,1,3,7,A,A goal is worth 6 points and a behind is worth 1.,Sport,,\nGeneral Trivia Sample Showdown,Which city hosted the 2000 Summer Olympics?,,,,,Sydney,Sydney hosted the 2000 Olympics. Cathy Freeman lit the cauldron and later won gold in the 400 m.,Sport,,\nGeneral Trivia Sample Showdown,\"In cricket, how many balls are in a standard over?\",4,5,8,6,D,\"An over is 6 legal balls. Wides and no-balls don't count, so they are bowled again.\",Sport,,\nGeneral Trivia Sample Showdown,Which Grand Slam tennis tournament is played on grass?,,,,,Wimbledon,\"Wimbledon in London is the only Grand Slam played on grass. The French Open is on clay, and the Australian and US Opens are on hard courts.\",Sport,,\nGeneral Trivia Sample Showdown,What is the plural of **mouse**?,,,,,Mice,\"Mouse is an irregular noun. Its plural is mice, not mouses.\",Words,,\nGeneral Trivia Sample Showdown,Which word means the same as **enormous**?,Tiny,Noisy,Ancient,Huge,D,\"Enormous and huge are synonyms. Tiny is an antonym, the opposite.\",Words,,\nGeneral Trivia Sample Showdown,Which word is spelled correctly?,Neccessary,Necesary,Necessary,Neccesary,C,\"Necessary has one C and two Ss. One way to remember: one collar, two sleeves.\",Words,,\nGeneral Trivia Sample Showdown,What does **ASAP** stand for?,,,,,As soon as possible,ASAP is an acronym made from the first letter of each word.,Words,,\nGeneral Trivia Sample Showdown,Rearrange the letters of **LISTEN** to make a word that means quiet.,,,,,Silent,\"LISTEN and SILENT use exactly the same six letters, so they are anagrams.\",Words,,\n";
+const SAMPLE_CSV = "bank title,question,A,B,C,D,answer,explanation,topics,image,answer image\nGeneral Trivia Sample Showdown,Which is the largest ocean on Earth?,Atlantic,Indian,Pacific,Arctic,C,The Pacific covers about a third of the planet. That is more than all the land on Earth put together.,Geography,,\nGeneral Trivia Sample Showdown,Which country's flag is this?,Norway,Sweden,Denmark,Finland,B,\"Sweden's flag is a yellow cross on blue. Denmark's is a white cross on red, and Finland's is a blue cross on white.\",Geography,https://mrcedillo.github.io/classroom-showdown/sample/mystery-flag.png,\nGeneral Trivia Sample Showdown,What is the capital city of Canada?,,,,,Ottawa,\"Toronto is Canada's biggest city, but the capital is Ottawa.\",Geography,,\nGeneral Trivia Sample Showdown,Which country has the most people?,China,USA,Indonesia,India,D,India passed China in 2023. It has more than 1.4 billion people.,Geography,,\nGeneral Trivia Sample Showdown,In which Australian state or territory would you find Uluru?,,,,,Northern Territory,Uluru is in Uluru-Kata Tjuta National Park in the south of the Northern Territory. It is sacred to the Anangu people.,Geography,,https://mrcedillo.github.io/classroom-showdown/sample/uluru.jpg\nGeneral Trivia Sample Showdown,True or false: sound travels faster than light.,True,False,,,B,Light is almost a million times faster. That is why you see lightning before you hear the thunder.,Science,,\nGeneral Trivia Sample Showdown,Which gas do plants take in from the air to make their food?,Carbon dioxide,Oxygen,Nitrogen,Helium,A,Plants take in carbon dioxide and give out oxygen during photosynthesis.,Science,,\nGeneral Trivia Sample Showdown,About how many bones are in an adult human body?,106,156,206,306,C,\"Adults have 206 bones. Babies are born with about 300, and some join together as they grow.\",Science,,\nGeneral Trivia Sample Showdown,What is the chemical symbol for gold?,,,,,Au,\"Au comes from aurum, the Latin word for gold.\",Science,,\nGeneral Trivia Sample Showdown,Which planet has a giant storm called the Great Red Spot?,,,,,Jupiter,The Great Red Spot is a storm wider than Earth. It has been raging for hundreds of years.,Science,,\nGeneral Trivia Sample Showdown,What animal is this a close-up of?,,,,,A zebra,No two zebras have exactly the same stripes.,Picture This,https://mrcedillo.github.io/classroom-showdown/sample/zebra-closeup.jpg,https://mrcedillo.github.io/classroom-showdown/sample/zebra.jpg\nGeneral Trivia Sample Showdown,Which fruit is this a close-up of?,Pineapple,Durian,Jackfruit,Kiwi fruit,A,The scales on a pineapple's skin grow in spirals.,Picture This,https://mrcedillo.github.io/classroom-showdown/sample/pineapple-closeup.jpg,https://mrcedillo.github.io/classroom-showdown/sample/pineapple.jpg\nGeneral Trivia Sample Showdown,This photo looks straight up at a famous tower. Which city is it in?,London,Rome,Paris,Berlin,C,The Eiffel Tower in Paris opened in 1889. At night it sparkles with thousands of lights.,Picture This,https://mrcedillo.github.io/classroom-showdown/sample/eiffel-tower.jpg,\nGeneral Trivia Sample Showdown,This is part of a famous statue in New York Harbor. Which country gave it to the USA?,Britain,Spain,Italy,France,D,France gave the Statue of Liberty to the USA in 1886. It is green because its copper skin has weathered.,Picture This,https://mrcedillo.github.io/classroom-showdown/sample/statue-of-liberty.jpg,\nGeneral Trivia Sample Showdown,Name this famous Australian building.,,,,,Sydney Opera House,Its roof shells were designed by Danish architect Jørn Utzon. It opened in 1973.,Picture This,https://mrcedillo.github.io/classroom-showdown/sample/opera-house.jpg,\nGeneral Trivia Sample Showdown,This is a famous Morse code message. What does it spell?,,,,,SOS,\"Three short, three long, three short: ··· ––– ··· is SOS, the international distress signal.\",Sound & Video,https://mrcedillo.github.io/classroom-showdown/sample/morse-mystery.mp3,\nGeneral Trivia Sample Showdown,Name this tune.,Twinkle Twinkle Little Star,Jingle Bells,Happy Birthday,Old MacDonald,C,Happy Birthday was first written as a school song called Good Morning to All in 1893.,Sound & Video,https://mrcedillo.github.io/classroom-showdown/sample/mystery-tune.mp3,\nGeneral Trivia Sample Showdown,The camera zooms out from a famous bridge. Which city is it in?,,,,,San Francisco,The Golden Gate Bridge opened in 1937. Its colour is called International Orange.,Sound & Video,https://mrcedillo.github.io/classroom-showdown/sample/mystery-bridge.mp4,https://mrcedillo.github.io/classroom-showdown/sample/golden-gate-bridge.jpg\nGeneral Trivia Sample Showdown,\"This was the first video ever uploaded to YouTube, in 2005. What animals is he standing in front of?\",,,,,Elephants,Me at the Zoo was filmed at San Diego Zoo by YouTube co-founder Jawed Karim.,Sound & Video,https://www.youtube.com/watch?v=jNQXAC9IVRw,\nGeneral Trivia Sample Showdown,\"In 2012, which song became the first YouTube video to reach one billion views?\",Baby (Justin Bieber),Gangnam Style (PSY),Despacito,Call Me Maybe,B,PSY's Gangnam Style passed one billion views in December 2012. The reveal plays it.,Sound & Video,,https://www.youtube.com/watch?v=9bZkp7q19f0\nGeneral Trivia Sample Showdown,How many players does a netball team have on the court?,7,5,6,9,A,\"Each netball team has 7 players on the court, and each player wears a bib with their position.\",Sport,,\nGeneral Trivia Sample Showdown,How many points is a goal worth in AFL?,6,1,3,7,A,A goal is worth 6 points and a behind is worth 1.,Sport,,\nGeneral Trivia Sample Showdown,Which city hosted the 2000 Summer Olympics?,,,,,Sydney,Sydney hosted the 2000 Olympics. Cathy Freeman lit the cauldron and later won gold in the 400 m.,Sport,,\nGeneral Trivia Sample Showdown,\"In cricket, how many balls are in a standard over?\",4,5,8,6,D,\"An over is 6 legal balls. Wides and no-balls don't count, so they are bowled again.\",Sport,,\nGeneral Trivia Sample Showdown,Which Grand Slam tennis tournament is played on grass?,,,,,Wimbledon,\"Wimbledon in London is the only Grand Slam played on grass. The French Open is on clay, and the Australian and US Opens are on hard courts.\",Sport,,\nGeneral Trivia Sample Showdown,What is the plural of **mouse**?,,,,,Mice,\"Mouse is an irregular noun. Its plural is mice, not mouses.\",Words,,\nGeneral Trivia Sample Showdown,Which word means the same as **enormous**?,Tiny,Noisy,Ancient,Huge,D,\"Enormous and huge are synonyms. Tiny is an antonym, the opposite.\",Words,,\nGeneral Trivia Sample Showdown,Which word is spelled correctly?,Neccessary,Necesary,Necessary,Neccesary,C,\"Necessary has one C and two Ss. One way to remember: one collar, two sleeves.\",Words,,\nGeneral Trivia Sample Showdown,What does **ASAP** stand for?,,,,,As soon as possible,ASAP is an acronym made from the first letter of each word.,Words,,\nGeneral Trivia Sample Showdown,Rearrange the letters of **LISTEN** to make a word that means quiet.,,,,,Silent,\"LISTEN and SILENT use exactly the same six letters, so they are anagrams.\",Words,,\nGeneral Trivia Sample Showdown,In what year did the six Australian colonies join together to become one nation?,,,,,1901,\"On 1 January 1901 the six colonies federated as the Commonwealth of Australia. Edmund Barton was the first prime minister.\",Final Showdown: Australian History,,\n";
 const VALUES = [100, 200, 300, 400, 500];
 const LETTERS = ['A', 'B', 'C', 'D'];
 const MAX_CATS = 6, MAX_ROWS = 5;
+const FINAL_RE = /^final\s*showdown\b\s*[:\-–—]?\s*(.*)$/i;
 const K_GAME = 'classroom-showdown-game-v1', K_BANK = 'classroom-showdown-bank-v1';
 
 const $ = id => document.getElementById(id);
@@ -683,6 +891,16 @@ function buildBank(text, source) {
     qs.push({ p, o: opts.map(o => o.v), a, e: get(ci.ex), topic: get(ci.topic), img: get(ci.img), amedia: get(ci.amedia), line });
   });
 
+  /* Rows whose topic is "Final Showdown" (or "Final Showdown: Space") hold the last question, played after the board */
+  const isFinal = q => FINAL_RE.test(q.topic || '');
+  const finals = qs.filter(isFinal);
+  let final = null;
+  if (finals.length) {
+    const f = finals[0];
+    final = { p: f.p, o: f.o, a: f.a, e: f.e, ans: f.ans || '', img: f.img || '', amedia: f.amedia || '', cat: (f.topic.match(FINAL_RE)[1] || '').trim() };
+    if (finals.length > 1) warnings.push(`The file has ${finals.length} Final Showdown questions. Only the first one (row ${f.line}) is used.`);
+    for (let i = qs.length - 1; i >= 0; i--) if (isFinal(qs[i])) qs.splice(i, 1);
+  }
   let cats = [];
   const hasTopics = qs.some(q => q.topic);
   if (hasTopics) {
@@ -703,7 +921,7 @@ function buildBank(text, source) {
   });
   const total = cats.reduce((s, c) => s + c.qs.length, 0);
   if (!total) errors.unshift('No usable questions were found in this file.');
-  return { title: title || 'Quiz Showdown', cats, total, errors, warnings, source };
+  return { title: title || 'Quiz Showdown', cats, final, total, errors, warnings, source };
 }
 
 /* ---------- state ---------- */
@@ -869,7 +1087,7 @@ function pick(i) {
 }
 function finish(by, msg, kind) {
   Q.done = true; Q.msg = msg; Q.msgKind = kind; Q.running = false; stopTimer();
-  S.used[Q.id] = { by }; save(); renderQ(); renderAll(); $('qClose').focus();
+  S.used[Q.id] = Q.winUid ? { by, uid: Q.winUid } : { by }; save(); renderQ(); renderAll(); $('qClose').focus();
 }
 function reveal() {
   if (!Q || Q.done) return;
@@ -898,7 +1116,7 @@ function closeQ() {
   if (Q.live) liveCloseQ();
   Q = null; $('qView').hidden = true; clearMedia();
   save(); renderAll();
-  if (isDone(S)) showEnd();
+  if (isDone(S)) endOrFinal();
 }
 
 /* ---------- timer ---------- */
@@ -943,7 +1161,8 @@ function renderBankInfo() {
     const nOpen = bank.cats.reduce((n, c) => n + c.qs.filter(isOpen).length, 0);
     parts.push(`<div class="bank-meta">${bank.total} question${bank.total === 1 ? '' : 's'} in ${bank.cats.length} column${bank.cats.length === 1 ? '' : 's'}${nOpen ? ` · ${nOpen} open (no options)` : ''}</div>`);
     parts.push(`<div class="cats-preview">${bank.cats.map(c => `<span>${esc(c.name)}<b>${c.qs.length}</b></span>`).join('')}</div>`);
-    const named = bank.cats.flatMap(c => c.qs.flatMap(q => [q.img, q.amedia].filter(Boolean)));
+    if (bank.final) parts.push(`<div class="bank-meta">Plus a Final Showdown question${bank.final.cat ? ` in ${esc(bank.final.cat)}` : ''}, played after the board.</div>`);
+    const named = bank.cats.flatMap(c => c.qs).concat(bank.final ? [bank.final] : []).flatMap(q => [q.img, q.amedia].filter(Boolean));
     if (named.length) {
       const missing = [...new Set(named.filter(n => !mediaOf(n)))];
       const found = named.filter(n => mediaOf(n)).length;
@@ -987,7 +1206,7 @@ async function startGame() {
   if (!bank || !bank.total) return;
   const old = S;
   const names = draftNames.slice(0, draftCount).map((n, i) => (n || '').trim() || `Team ${i + 1}`);
-  const gb = { title: bank.title, cats: bank.cats };
+  const gb = { title: bank.title, cats: bank.cats, final: bank.final || null };
   const next = { bank: gb, teams: names.map(n => (/^Team \d+$/i.test(n) ? { name: n, score: 0, auto: true, base: n, owner: null } : { name: n, score: 0 })), used: {}, turn: 0,
         doubles: $('doubles').checked ? pickDoubles(gb) : [], timer: Number($('timerSel').value), penalty: $('penalty').checked,
         live: draftMode === 'live' && liveAvailable() ? { code: null, n: 0, started: false } : null };
@@ -1000,6 +1219,7 @@ async function startGame() {
   }
   if (old && old.live && old.live.code && L && myUid) L.remove('rooms/' + old.live.code).catch(liveErr);
   hostUnsubs.forEach(u => u()); hostUnsubs = []; players = {};
+  closeFinal();
   S = next;
   if (S.live) hostListen();
   save(); renderAll();
@@ -1007,7 +1227,7 @@ async function startGame() {
   if (S.live) showLobby();
 }
 
-/* ---------- characters: little clay-blob sprites students pick when they join ---------- */
+/* ---------- characters: little clay-blob sprites players pick when they join ---------- */
 /* Shapes are drawn in a 100x100 box. A thick stroke in the fill colour rounds every corner; f is where the face sits [x, y, scale]. */
 const SHAPES = {
   box: { d: '<path d="M20 20 L80 17 L84 82 L16 84 Z"/>', f: [50, 50, 1] },
@@ -1075,7 +1295,7 @@ const spriteSvgs = SPRITES.map(sp => {
 const spriteNo = i => (Number.isInteger(i) && i >= 0 && i < SPRITES.length ? i : null);
 /* label: an accessible name, or leave it out when the sprite sits next to a name that says who it is */
 const sprite = (i, label) => `<svg class="sprite" viewBox="-4 -4 110 110"${label ? ` role="img" aria-label="${esc(label)}"` : ' aria-hidden="true"'}>${spriteSvgs[spriteNo(i) ?? 0]}</svg>`;
-/* A student's character, read from their database record so the board and their phone always agree.
+/* A player's character, read from their database record so the board and their phone always agree.
    If the database didn't keep their choice (see the Firebase rules note at the top), pick one from their id so it never changes. */
 const hashSprite = s => { let h = 7; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % SPRITES.length; };
 const spriteOf = (uid, p) => spriteNo(p && p.sprite) ?? hashSprite(uid);
@@ -1100,14 +1320,15 @@ function podiumHtml(rows) {
 
 /* ---------- end ---------- */
 function showEnd() {
-  if (S.live && S.live.code && L && myUid) L.update(roomPath(), { status: 'ended', scores: S.teams.map(t => t.score) }).catch(liveErr);
+  closeFinal();
+  if (S.live && S.live.code && L && myUid) { L.update(roomPath(), { status: 'ended', scores: S.teams.map(t => t.score) }).catch(liveErr); recordStats(); }
   const ranked = S.teams.map(t => ({ ...t })).sort((a, b) => b.score - a.score);
   const top = ranked.filter(t => t.score === ranked[0].score);
   $('endTitle').textContent = top.length > 1 ? `It's a tie: ${top.map(t => t.name).join(' and ')}` : `${top[0].name} wins!`;
   $('rank').innerHTML = podiumHtml(S.teams.map((t, i) => ({ name: t.name, score: t.score, sprites: teamCrew(i) })));
   $('endView').hidden = false;
 }
-/* Live games: the team's students, in the order they joined. One-screen games: a mascot per team. */
+/* Live games: the team's players, in the order they joined. One-screen games: a mascot per team. */
 function teamCrew(i) {
   if (!S.live) return [teamSprite(i)];
   const ps = Object.entries(players).filter(([, p]) => p && p.name != null && p.team === i)
@@ -1117,7 +1338,8 @@ function teamCrew(i) {
 function renderKey() {
   const b = S ? S.bank : bank;
   $('keyList').innerHTML = !b || !b.cats.length ? '<p>No question set loaded.</p>' : b.cats.map(c => `<div class="key-cat"><h3>${esc(c.name)}</h3>${c.qs.map((q, r) =>
-    `<div class="key-item"><span class="val">${VALUES[r]}</span><div class="kbody"><div>${fmt(q.p)}</div><div class="ans">${esc(answerText(q))}</div>${q.img ? `<div class="pic">With the question: ${esc(q.img)}</div>` : ''}${q.amedia ? `<div class="pic">With the answer: ${esc(q.amedia)}</div>` : ''}</div></div>`).join('')}</div>`).join('');
+    `<div class="key-item"><span class="val">${VALUES[r]}</span><div class="kbody"><div>${fmt(q.p)}</div><div class="ans">${esc(answerText(q))}</div>${q.img ? `<div class="pic">With the question: ${esc(q.img)}</div>` : ''}${q.amedia ? `<div class="pic">With the answer: ${esc(q.amedia)}</div>` : ''}</div></div>`).join('')}</div>`).join('')
+    + (b && b.final ? `<div class="key-cat"><h3>Final Showdown${b.final.cat ? ': ' + esc(b.final.cat) : ''}</h3><div class="key-item"><span class="val">Bet</span><div class="kbody"><div>${fmt(b.final.p)}</div><div class="ans">${esc(answerText(b.final))}</div></div></div></div>` : '');
 }
 
 /* ---------- file loading ---------- */
@@ -1182,10 +1404,17 @@ $('dlSample').addEventListener('click', async () => {
   } catch (e) { msg.textContent = 'The download did not start. Try again in a different browser.'; }
 });
 $('startBtn').addEventListener('click', startGame);
-$('resumeBtn').addEventListener('click', () => { const s = store.get(K_GAME); if (s && s.bank) { S = s; renderAll(); $('setup').hidden = true; if (S.live && S.live.code) resumeLive(); } });
+$('resumeBtn').addEventListener('click', () => {
+  const s = store.get(K_GAME); if (!s || !s.bank) return;
+  S = s; renderAll(); $('setup').hidden = true;
+  if (S.live && S.live.code) resumeLive();
+  if (S.fin && S.fin.phase !== 'done') startFinal();
+});
 $('cancelSetup').addEventListener('click', () => { $('setup').hidden = true; });
 $('btnNew').addEventListener('click', showSetup);
-$('btnEnd').addEventListener('click', () => { if (S) showEnd(); });
+$('btnEnd').addEventListener('click', () => { if (S) endOrFinal(); });
+$('btnHome').addEventListener('click', showHome);
+$('setupHome').addEventListener('click', showHome);
 $('endNew').addEventListener('click', () => { $('endView').hidden = true; showSetup(); });
 $('endBack').addEventListener('click', () => { $('endView').hidden = true; if (S && S.live && S.live.code && L && myUid) L.update(roomPath(), { status: S.live.started ? 'playing' : 'lobby' }).catch(liveErr); });
 $('btnKey').addEventListener('click', () => { renderKey(); $('keyView').hidden = false; });
@@ -1197,7 +1426,8 @@ $('btnFull').addEventListener('click', () => {
   } catch (e) {}
 });
 document.addEventListener('keydown', e => {
-  if (e.target.matches('input, select')) return;
+  if (e.target.matches('input, select, textarea')) return;
+  if (!$('profileView').hidden || !$('home').hidden || !$('finalView').hidden) return;
   if (!$('keyView').hidden && e.key === 'Escape') { $('keyView').hidden = true; return; }
   if (!$('joinView').hidden) { if ((e.key === ' ' || e.key === 'Enter') && !e.target.closest('button')) { e.preventDefault(); doBuzz(); } return; }
   if (!Q || $('qView').hidden) return;
@@ -1235,7 +1465,7 @@ function mediaOf(n) {
   const f = IMG[imgKey(n)];
   return f ? { kind: f.kind, src: f.url } : null;
 }
-/* Questions with a video or sound clip hold the timer until the clip ends (or the teacher presses Start) */
+/* Questions with a video or sound clip hold the timer until the clip ends (or the host presses Start) */
 const playsFirst = q => { const m = q && mediaOf(q.img); return !!m && m.kind !== 'image'; };
 const IDB = {
   open() {
@@ -1382,7 +1612,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('imgZoo
 const FB_VER = '10.12.2';
 const K_JOIN = 'classroom-showdown-join-v1';
 let L = null, myUid = null, players = {}, hostUnsubs = [], qUnsub = null;
-let J = null, stuUnsub = null, stuRoom = null, stuHtml = '', buzzing = false;
+let J = null, plyUnsub = null, plyRoom = null, plyHtml = '', buzzing = false;
 
 const liveAvailable = () => !!(FIREBASE_CONFIG || window.__LIVE_MOCK__);
 const roomPath = sub => `rooms/${S.live.code}` + (sub ? '/' + sub : '');
@@ -1395,23 +1625,55 @@ function loadScript(src) {
   });
 }
 
-/* The real database connection */
+/* The real database connection. Everyone is signed in: guests and the host's screen anonymously, profile owners with Google. */
 const Real = {
-  async init() {
-    if (!(window.firebase && window.firebase.database)) {
-      for (const part of ['app', 'auth', 'database']) await loadScript(`https://cdn.jsdelivr.net/npm/firebase@${FB_VER}/firebase-${part}-compat.js`);
+  ready: null, cb: null,
+  boot() {
+    if (!this.ready) {
+      this.ready = (async () => {
+        if (!(window.firebase && window.firebase.database)) {
+          for (const part of ['app', 'auth', 'database']) await loadScript(`https://cdn.jsdelivr.net/npm/firebase@${FB_VER}/firebase-${part}-compat.js`);
+        }
+        if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+        this.auth = firebase.auth(); this.db = firebase.database();
+        await new Promise(res => this.auth.onAuthStateChanged(() => { res(); this.emit(); }));
+      })();
+      this.ready.catch(() => { this.ready = null; });
     }
-    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
-    const cred = await firebase.auth().signInAnonymously();
-    this.db = firebase.database();
-    return cred.user.uid;
+    return this.ready;
   },
+  emit() { if (this.cb) this.cb(this.user()); },
+  user() {
+    const u = this.auth && this.auth.currentUser; if (!u) return null;
+    const g = (u.providerData || []).find(x => x && x.providerId === 'google.com');
+    return { uid: u.uid, google: !!g, name: (g && g.displayName) || u.displayName || '', email: (g && g.email) || u.email || '' };
+  },
+  async init() {
+    await this.boot();
+    if (!this.auth.currentUser) await this.auth.signInAnonymously();
+    return this.auth.currentUser.uid;
+  },
+  /* A guest who signs in keeps the same id (their anonymous account is linked to Google), unless that Google account was used before. */
+  async signIn() {
+    const p = new firebase.auth.GoogleAuthProvider(); p.setCustomParameters({ prompt: 'select_account' });
+    const u = this.auth.currentUser;
+    if (u && u.isAnonymous) {
+      try { await u.linkWithPopup(p); this.emit(); return; }
+      catch (e) {
+        const cred = e && (e.credential || (firebase.auth.GoogleAuthProvider.credentialFromError && firebase.auth.GoogleAuthProvider.credentialFromError(e)));
+        if (e && /credential-already-in-use|email-already-in-use/.test(e.code || '') && cred) { await this.auth.signInWithCredential(cred); return; }
+        throw e;
+      }
+    }
+    await this.auth.signInWithPopup(p);
+  },
+  signOut() { return this.auth.signOut(); },
   r(p) { return this.db.ref(p); },
   async get(p) { return (await this.r(p).once('value')).val(); },
   set(p, v) { return this.r(p).set(v); },
   update(p, o) { return this.r(p).update(o); },
   remove(p) { return this.r(p).remove(); },
-  on(p, cb) { const ref = this.r(p), h = snap => cb(snap.val()); ref.on('value', h, liveErr); return () => ref.off('value', h); },
+  on(p, cb, onErr) { const ref = this.r(p), h = snap => cb(snap.val()); ref.on('value', h, e => { liveErr(e); if (onErr) onErr(e); }); return () => ref.off('value', h); },
   async tx(p, fn) { try { const res = await this.r(p).transaction(fn, undefined, false); return !!res.committed; } catch (e) { liveErr(e); return false; } },
   presence(p) {
     const conn = this.db.ref('.info/connected');
@@ -1424,13 +1686,27 @@ const Real = {
 
 /* A stand-in database shared between tabs, used only for testing (window.__LIVE_MOCK__) */
 const Mock = {
-  key: '__showdown_mock_db__', subs: [], bound: false,
-  async init() {
-    let u = sessionStorage.getItem('__mock_uid');
-    if (!u) { u = 'u' + Math.random().toString(36).slice(2, 10); sessionStorage.setItem('__mock_uid', u); }
+  key: '__showdown_mock_db__', subs: [], bound: false, cb: null,
+  async boot() {
     if (!this.bound) { this.bound = true; addEventListener('storage', e => { if (e.key === this.key) this.fire(); }); }
+    setTimeout(() => this.emit(), 0);
+  },
+  emit() { if (this.cb) this.cb(this.user()); },
+  user() {
+    const u = sessionStorage.getItem('__mock_uid'), g = sessionStorage.getItem('__mock_google');
+    return u ? { uid: u, google: !!g, name: g || '', email: g ? 'test@example.com' : '' } : null;
+  },
+  async init() {
+    await this.boot();
+    let u = sessionStorage.getItem('__mock_uid');
+    if (!u) { u = 'u' + Math.random().toString(36).slice(2, 10); sessionStorage.setItem('__mock_uid', u); this.emit(); }
     return u;
   },
+  async signIn() {
+    if (!sessionStorage.getItem('__mock_uid')) sessionStorage.setItem('__mock_uid', 'g' + Math.random().toString(36).slice(2, 10));
+    sessionStorage.setItem('__mock_google', window.__MOCK_GOOGLE_NAME__ || 'Test Player'); this.emit();
+  },
+  async signOut() { sessionStorage.removeItem('__mock_google'); sessionStorage.removeItem('__mock_uid'); this.emit(); },
   tree() { try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch (e) { return {}; } },
   at(t, p) { return p.split('/').reduce((o, k) => (o == null || o[k] === undefined ? null : o[k]), t); },
   clean(v) { return v === undefined ? null : JSON.parse(JSON.stringify(v, (k, x) => (x && typeof x === 'object' && x['.sv'] ? Date.now() : x))); },
@@ -1458,14 +1734,21 @@ const Mock = {
   now() { return { '.sv': 'timestamp' }; },
 };
 
+function liveLayer() { if (!L) { L = window.__LIVE_MOCK__ ? Mock : Real; L.cb = onAuth; } return L; }
 async function liveInit() {
-  if (!L) L = window.__LIVE_MOCK__ ? Mock : Real;
+  liveLayer();
   if (!myUid) myUid = await L.init();
   return myUid;
 }
 function syncScores() {
-  if (S && S.live && S.live.code && L && myUid) L.set(roomPath('scores'), S.teams.map(t => t.score)).catch(liveErr);
+  if (!(S && S.live && S.live.code && L && myUid)) return;
+  L.set(roomPath('scores'), S.teams.map(t => t.score)).catch(liveErr);
+  L.set(roomPath('pp'), S.live.pp || null).catch(liveErr);
 }
+/* Each player's own points: what they won by buzzing in (and lost, with penalties on), plus their Final Showdown bet.
+   These are what a player can bet, and what goes into their profile's total points. */
+const ppOf = uid => (S && S.live && S.live.pp && +S.live.pp[uid]) || 0;
+function addPP(uid, d) { if (!uid || !S.live) return; S.live.pp = S.live.pp || {}; S.live.pp[uid] = ppOf(uid) + d; }
 
 /* ---- setup screen: game mode ---- */
 function renderMode() {
@@ -1478,9 +1761,8 @@ function renderMode() {
   $('modeNote').textContent = !ok
     ? 'Live buzzers need a free Firebase project connected to this page. Until then, play in one-screen mode.'
     : draftMode === 'live'
-      ? 'Students join on their own devices with a room code. When you open a question, everyone races to buzz in. Only the first student to buzz sees the options, and they answer for their team. On multiple-choice questions a wrong answer ends the question. On open questions a wrong answer opens the buzzers to everyone again, until someone gets it right or you reveal the answer.'
+      ? 'Players join on their own devices with a room code. When you open a question, everyone races to buzz in. Only the first player to buzz sees the options, and they answer for their team. On multiple-choice questions a wrong answer ends the question. On open questions a wrong answer opens the buzzers to everyone again, until someone gets it right or you reveal the answer.'
       : 'Everything happens on this screen. Teams call out their answer and you click it.';
-  $('joinStrip').hidden = !ok;
 }
 
 /* ---- host (projector) ---- */
@@ -1503,13 +1785,13 @@ function hostListen() {
     setTimeout(renderLobby, SPRITE_WAIT + 100);
   }));
 }
-/* A team with one student is just called by their name ("Sam"), whatever the teacher named it.
+/* A team with one player is just called by their name ("Sam"), whatever the host named it.
    Teams left with a default name ("Team 2") become "Sam's Team" once anyone else joins Sam's team.
    Before the game starts that name follows whoever joined first and is still there; once it starts, it stays.
-   Teams the teacher named go back to that name when they have more than one student. */
+   Teams the host named go back to that name when they have more than one player. */
 const teamNameFor = n => `${n}'s Team`;
 const SPRITE_WAIT = 4000;
-const seenAt = {}; /* when this screen first saw each student, for when the database has no join time */
+const seenAt = {}; /* when this screen first saw each player, for when the database has no join time */
 function autoNameTeams() {
   if (!S || !S.live || !S.live.code) return;
   const t0 = Date.now();
@@ -1569,9 +1851,9 @@ function renderLobby() {
   $('lobbyUrl').textContent = joinUrl();
   lobbyQr();
   const list = Object.entries(players).filter(([, p]) => p && p.name != null);
-  /* A student's character arrives in its own write just after they join. If it still hasn't come, the database rules are refusing it. */
+  /* A player's character arrives in its own write just after they join. If it still hasn't come, the database rules are refusing it. */
   $('lobbyWarn').hidden = !list.some(([uid, p]) => spriteNo(p.sprite) == null && Date.now() - (seenAt[uid] || Date.now()) > SPRITE_WAIT);
-  $('lobbyCount').textContent = list.length ? `${list.length} student${list.length === 1 ? '' : 's'} joined` : 'Waiting for students to join…';
+  $('lobbyCount').textContent = list.length ? `${list.length} player${list.length === 1 ? '' : 's'} joined` : 'Waiting for players to join…';
   $('lobbyTeams').innerHTML = S.teams.map((t, i) => {
     const ps = list.filter(([, p]) => p.team === i).sort((a, b) => String(a[1].name).localeCompare(String(b[1].name)));
     const chips = ps.length ? ps.map(([uid, p]) => `<span class="pchip${p.online === false ? ' off' : ''}">${sprite(spriteOf(uid, p))}${esc(p.name)}<button type="button" data-kick="${esc(uid)}" aria-label="Remove ${esc(p.name)}">×</button></span>`).join('') : '<span class="none">No one yet</span>';
@@ -1610,17 +1892,17 @@ function judge(choice) {
   const team = S.teams[b.team] ? b.team : null, tname = team == null ? 'their team' : S.teams[team].name;
   Q.choice = Number.isInteger(choice) && choice >= 0 && choice < q.o.length ? choice : null;
   if (Q.choice === q.a && team != null) {
-    S.teams[team].score += val;
+    S.teams[team].score += val; addPP(b.uid, val);
     liveFinish(team, `Correct! ${b.name} wins ${val} points for ${tname}.`, 'good', true);
   } else {
     let msg = Q.choice == null ? `${b.name} didn't answer in time.` : `${b.name} chose ${LETTERS[Q.choice]}. Not quite.`;
-    if (S.penalty && team != null) { S.teams[team].score -= val; msg += ` −${val} for ${tname}.`; }
+    if (S.penalty && team != null) { S.teams[team].score -= val; addPP(b.uid, -val); msg += ` −${val} for ${tname}.`; }
     liveFinish(null, `${msg} The answer is ${LETTERS[q.a]}.`, 'bad', false);
   }
 }
 function liveFinish(by, msg, kind, correct) {
   const { q, val } = info(Q.id), b = Q.buzz;
-  Q.phase = 'done';
+  Q.phase = 'done'; Q.winUid = correct && b ? b.uid : null;
   const op = isOpen(q);
   L.update(roomPath('q'), { open: false, options: op ? null : q.o, result: {
     correctIndex: op ? null : q.a, answer: op ? (q.ans || '') : null, correct: !!correct, choice: Q.choice, uid: b ? b.uid : null, name: b ? b.name : null, team: b ? b.team : null, pts: val,
@@ -1647,9 +1929,9 @@ function liveMark(ok) {
   if (Q.phase !== 'answer' || !Q.buzz) return;
   const { val } = info(Q.id), b = Q.buzz;
   const team = S.teams[b.team] ? b.team : null, tname = team == null ? 'their team' : S.teams[team].name;
-  if (ok && team != null) { S.teams[team].score += val; liveFinish(team, `Correct! ${b.name} wins ${val} points for ${tname}.`, 'good', true); return; }
+  if (ok && team != null) { S.teams[team].score += val; addPP(b.uid, val); liveFinish(team, `Correct! ${b.name} wins ${val} points for ${tname}.`, 'good', true); return; }
   let msg = `${b.name}'s answer wasn't right.`;
-  if (S.penalty && team != null) { S.teams[team].score -= val; msg += ` −${val} for ${tname}.`; }
+  if (S.penalty && team != null) { S.teams[team].score -= val; addPP(b.uid, -val); msg += ` −${val} for ${tname}.`; }
   if (isOpen(info(Q.id).q)) { liveReopen(b, msg); return; }
   liveFinish(null, msg, 'bad', false);
 }
@@ -1689,36 +1971,37 @@ function renderLiveQ() {
   }
   $('qClose').hidden = Q.phase === 'answer';
   $('qJudge').hidden = !(isOpen(q) && Q.phase === 'answer');
-  $('qKeys').textContent = isOpen(q) ? 'Students buzz in on their own devices. The first to buzz says their answer out loud.' : 'Students buzz in on their own devices. Only the first student to buzz sees the options.';
+  $('qKeys').textContent = isOpen(q) ? 'Players buzz in on their own devices. The first to buzz says their answer out loud.' : 'Players buzz in on their own devices. Only the first player to buzz sees the options.';
 }
 
-/* ---- student device ---- */
-function stuWho(name, n) {
-  const h = name == null ? 'Join a game' : sprite(n) + `<span>${esc(name)}</span>`, el = $('stuWho');
+/* ---- player device ---- */
+function plyWho(name, n) {
+  const h = name == null ? 'Join a game' : sprite(n) + `<span>${esc(name)}</span>`, el = $('plyWho');
   if (el.innerHTML !== h) el.innerHTML = h;
 }
 let pickedSprite = 0;
-function renderChars() {
-  $('jChars').innerHTML = SPRITES.map((sp, i) => `<button type="button" data-char="${i}" aria-pressed="${i === pickedSprite}" aria-label="${esc(sp.n)}" title="${esc(sp.n)}">${sprite(i)}</button>`).join('');
-}
-function stuShow(which) {
+function renderChars() { renderCharPick($('jChars'), pickedSprite); }
+function plyShow(which) {
   $('joinForm').hidden = which !== 'form';
   $('teamPick').hidden = which !== 'team';
-  $('stuPlay').hidden = which !== 'play';
-  $('stuLeave').hidden = which === 'form';
-  if (which === 'form') stuWho(null);
+  $('plyPlay').hidden = which !== 'play';
+  $('plyLeave').hidden = which === 'form';
+  $('plyMe').hidden = which !== 'play';
+  if (which === 'form') { plyWho(null); renderJoinWho(); }
 }
 function showJoin() {
   const saved = store.get(K_JOIN);
-  if (saved) { $('jCode').value = saved.code ? fmtCode(saved.code) : ''; $('jName').value = saved.name || ''; }
+  if (saved) { $('jCode').value = saved.code ? fmtCode(saved.code) : ''; $('jName').value = saved.guest || (saved.profile ? '' : saved.name) || ''; }
   pickedSprite = spriteNo(saved && saved.sprite) ?? Math.floor(Math.random() * SPRITES.length);
+  jProf = saved && saved.profile ? saved.profile : jProf;
+  $('home').hidden = true;
   renderChars();
   const code = linkCode();
   if (code) $('jCode').value = fmtCode(code);
   $('jErr').textContent = '';
-  stuShow('form');
+  plyShow('form');
   $('joinView').hidden = false;
-  if (!liveAvailable()) { $('jErr').textContent = 'Live games aren’t set up on this page yet. Ask your teacher.'; $('jGo').disabled = true; return; }
+  if (!liveAvailable()) { $('jErr').textContent = 'Live games aren’t set up on this page yet. Ask your host.'; $('jGo').disabled = true; return; }
   if (saved && saved.code && saved.team != null && (!code || code === saved.code)) quickRejoin(saved);
   else if (code) $('jName').focus();
 }
@@ -1728,7 +2011,7 @@ async function quickRejoin(saved) {
     const room = await L.get('rooms/' + saved.code);
     const me = room && room.players && room.players[myUid];
     if (room && room.host && room.status !== 'ended' && me) {
-      J = { code: saved.code, name: me.name, team: me.team, sprite: spriteNo(me.sprite) ?? spriteNo(saved.sprite) };
+      J = { code: saved.code, name: me.name, team: me.team, sprite: spriteNo(me.sprite) ?? spriteNo(saved.sprite), profile: me.profile || null };
       await L.update(`rooms/${saved.code}/players/${myUid}`, { online: true });
       enterPlay();
     }
@@ -1742,84 +2025,88 @@ function enterPlay() {
   store.set(K_JOIN, J);
   if (presenceOff) presenceOff();
   presenceOff = L.presence(`rooms/${J.code}/players/${myUid}/online`);
-  stuShow('play'); stuHtml = '';
-  if (stuUnsub) stuUnsub();
-  stuUnsub = L.on('rooms/' + J.code, v => { stuRoom = v; renderStu(); });
+  plyShow('play'); plyHtml = '';
+  if (plyUnsub) plyUnsub();
+  plyUnsub = L.on('rooms/' + J.code, v => { plyRoom = v; renderPly(); });
 }
 function leaveLocal() {
-  if (stuUnsub) { stuUnsub(); stuUnsub = null; }
+  if (plyUnsub) { plyUnsub(); plyUnsub = null; }
   if (presenceOff) { presenceOff(); presenceOff = null; }
-  stuRoom = null; stuHtml = '';
-  const s = store.get(K_JOIN); if (s) store.set(K_JOIN, { code: s.code, name: s.name, sprite: s.sprite });
-  stuShow('form');
+  plyRoom = null; plyHtml = '';
+  const s = store.get(K_JOIN); if (s) store.set(K_JOIN, { code: s.code, name: s.name, sprite: s.sprite, profile: s.profile || null, guest: s.guest || '' });
+  if (!$('profileView').hidden && profCtx && profCtx.room) $('profileView').hidden = true;
+  plyShow('form');
 }
-function renderStu() {
-  const r = stuRoom, stage = $('stuStage');
-  const put = h => { if (h !== stuHtml) { stuHtml = h; stage.innerHTML = h; } };
-  if (!r || !r.host) { $('stuScore').textContent = ''; put('<div class="stu-big">Game over</div><div class="stu-sub">Your teacher has closed this game.</div>'); return; }
+function renderPly() {
+  const r = plyRoom, stage = $('plyStage');
+  const put = h => { if (h !== plyHtml) { plyHtml = h; stage.innerHTML = h; } };
+  if (!r || !r.host) { $('plyScore').textContent = ''; put('<div class="ply-big">Game over</div><div class="ply-sub">The host has closed this game.</div>'); return; }
   const me = r.players && r.players[myUid];
   if (!me) { J = null; leaveLocal(); $('jErr').textContent = 'You were removed from the game. You can join again with the code.'; return; }
   const teams = r.teams || [], scores = r.scores || [], tname = teams[me.team] || 'your team';
-  stuWho(me.name, spriteOf(myUid, me));
-  $('stuScore').textContent = `${tname} · ${scores[me.team] || 0} points`;
+  plyWho(me.name, spriteOf(myUid, me));
+  if (J) { J.name = me.name; J.sprite = spriteNo(me.sprite) ?? J.sprite; }
+  const mine = (r.pp && +r.pp[myUid]) || 0;
+  $('plyScore').textContent = `${tname} · ${scores[me.team] || 0} points · You: ${mine}`;
+  if (r.final && r.status !== 'ended') { renderPlyFinal(r, put); return; }
   if (r.status === 'ended') {
     const rows = teams.map((t, i) => ({ t, s: scores[i] || 0, i })).sort((a, b) => b.s - a.s);
-    put(`<div class="stu-big">Final scores</div><ol class="rank stu-rank">${rows.map(x => `<li${x.i === me.team ? ' class="mine"' : ''}><span class="pos">${rows.findIndex(y => y.s === x.s) + 1}</span><span>${esc(x.t)}</span><span class="pts">${x.s}</span></li>`).join('')}</ol>`);
+    const fd = r.final && r.final.res && r.final.res[myUid];
+    put(`${fd != null ? `<div class="ply-fin">Final Showdown: ${fd > 0 ? '+' + fd : fd < 0 ? '−' + -fd : 'no change'}</div>` : ''}<div class="ply-big">Final scores</div><ol class="rank ply-rank">${rows.map(x => `<li${x.i === me.team ? ' class="mine"' : ''}><span class="pos">${rows.findIndex(y => y.s === x.s) + 1}</span><span>${esc(x.t)}</span><span class="pts">${x.s}</span></li>`).join('')}</ol>`);
     return;
   }
-  if (r.status === 'lobby') { put(`<div class="stu-big">You're in!</div><div class="stu-sub">You're on ${esc(tname)}. Waiting for your teacher to start the game.</div>`); return; }
+  if (r.status === 'lobby') { put(`<div class="ply-big">You're in!</div><div class="ply-sub">You're on ${esc(tname)}. Waiting for the host to start the game.</div>`); return; }
   const q = r.q;
-  if (!q) { put('<div class="stu-big">Eyes on the board</div><div class="stu-sub">Get ready to buzz when your teacher opens a question.</div>'); return; }
-  const head = `<div class="stu-sub">${esc(q.cat || '')}${q.val ? ' · ' + q.val : ''}</div>`;
+  if (!q) { put('<div class="ply-big">Eyes on the board</div><div class="ply-sub">Get ready to buzz when the host opens a question.</div>'); return; }
+  const head = `<div class="ply-sub">${esc(q.cat || '')}${q.val ? ' · ' + q.val : ''}</div>`;
   const ans = i => (q.options && q.options[i] != null ? `${LETTERS[i]}: ${esc(q.options[i])}` : LETTERS[i]);
   const said = R => (R.correctIndex != null && R.correctIndex >= 0 ? `The answer was ${ans(R.correctIndex)}.` : (R.answer ? `The answer was ${esc(R.answer)}.` : ''));
   if (q.result) {
     const R = q.result;
     if (R.uid === myUid) {
       put(head + (R.correct
-        ? `<div class="stu-big good">Correct!</div><div class="stu-sub">+${R.pts} points for ${esc(tname)}</div>`
-        : `<div class="stu-big bad">Not this time</div><div class="stu-sub">${R.choice == null && R.correctIndex != null ? 'No answer was given. ' : ''}${said(R)}</div>`));
+        ? `<div class="ply-big good">Correct!</div><div class="ply-sub">+${R.pts} points for ${esc(tname)}</div>`
+        : `<div class="ply-big bad">Not this time</div><div class="ply-sub">${R.choice == null && R.correctIndex != null ? 'No answer was given. ' : ''}${said(R)}</div>`));
     } else if (R.uid) {
-      put(head + `<div class="stu-big">${esc(R.name)} ${R.correct ? 'got it!' : 'missed it'}</div><div class="stu-sub">${esc(teams[R.team] || '')}${R.correct ? ` wins ${R.pts} points.` : '.'} ${said(R)}</div>`);
+      put(head + `<div class="ply-big">${esc(R.name)} ${R.correct ? 'got it!' : 'missed it'}</div><div class="ply-sub">${esc(teams[R.team] || '')}${R.correct ? ` wins ${R.pts} points.` : '.'} ${said(R)}</div>`);
     } else {
-      put(head + `<div class="stu-big">No points</div><div class="stu-sub">${said(R)}</div>`);
+      put(head + `<div class="ply-big">No points</div><div class="ply-sub">${said(R)}</div>`);
     }
     return;
   }
   if (q.buzz) {
     if (q.buzz.uid === myUid) {
-      if (q.answer) put(head + `<div class="stu-big">Locked in</div><div class="stu-sub">You chose ${LETTERS[q.answer.choice] || ''}. Look at the board.</div>`);
-      else if (q.kind === 'say') put(head + '<div class="stu-big good">You buzzed first!</div><div class="stu-sub">Say your answer out loud. Your teacher will mark it.</div>');
-      else if (q.options) put(head + `<div class="stu-big good">You buzzed first!</div><div class="stu-sub">Read the question on the board, then pick your answer.</div><div class="stu-opts">${q.options.map((o, i) => `<button type="button" class="opt" data-ans="${i}"><span class="k">${LETTERS[i]}</span><span class="t">${esc(o)}</span></button>`).join('')}</div>`);
-      else put(head + '<div class="stu-big good">You buzzed first!</div><div class="stu-sub">Your options are on the way…</div>');
+      if (q.answer) put(head + `<div class="ply-big">Locked in</div><div class="ply-sub">You chose ${LETTERS[q.answer.choice] || ''}. Look at the board.</div>`);
+      else if (q.kind === 'say') put(head + '<div class="ply-big good">You buzzed first!</div><div class="ply-sub">Say your answer out loud. The host will mark it.</div>');
+      else if (q.options) put(head + `<div class="ply-big good">You buzzed first!</div><div class="ply-sub">Read the question on the board, then pick your answer.</div><div class="ply-opts">${q.options.map((o, i) => `<button type="button" class="opt" data-ans="${i}"><span class="k">${LETTERS[i]}</span><span class="t">${esc(o)}</span></button>`).join('')}</div>`);
+      else put(head + '<div class="ply-big good">You buzzed first!</div><div class="ply-sub">Your options are on the way…</div>');
     } else {
-      put(head + `<div class="stu-big">${esc(q.buzz.name)} buzzed first</div><div class="stu-sub">${esc(teams[q.buzz.team] || '')} is answering.</div>`);
+      put(head + `<div class="ply-big">${esc(q.buzz.name)} buzzed first</div><div class="ply-sub">${esc(teams[q.buzz.team] || '')} is answering.</div>`);
     }
     return;
   }
-  if (q.open) { put(head + (q.miss ? `<div class="stu-sub">${q.miss.name === me.name && q.miss.team === me.team ? 'Not quite.' : esc(q.miss.name) + ' missed it.'} Buzzers are open again.</div>` : '') + '<button type="button" class="buzz" data-buzz>Buzz</button><div class="stu-sub">Tap as soon as you know the answer.</div>'); return; }
-  put(head + '<div class="stu-big">Buzzers closed</div><div class="stu-sub">Wait for your teacher.</div>');
+  if (q.open) { put(head + (q.miss ? `<div class="ply-sub">${q.miss.name === me.name && q.miss.team === me.team ? 'Not quite.' : esc(q.miss.name) + ' missed it.'} Buzzers are open again.</div>` : '') + '<button type="button" class="buzz" data-buzz>Buzz</button><div class="ply-sub">Tap as soon as you know the answer.</div>'); return; }
+  put(head + '<div class="ply-big">Buzzers closed</div><div class="ply-sub">Wait for the host.</div>');
 }
 async function doBuzz() {
-  const r = stuRoom, q = r && r.q, me = r && r.players && r.players[myUid];
+  const r = plyRoom, q = r && r.q, me = r && r.players && r.players[myUid];
   if (!J || !q || !q.open || q.buzz || !me || buzzing) return;
   buzzing = true;
-  const btn = $('stuStage').querySelector('[data-buzz]'); if (btn) btn.disabled = true;
+  const btn = $('plyStage').querySelector('[data-buzz]'); if (btn) btn.disabled = true;
   const ok = await L.tx(`rooms/${J.code}/q/buzz`, cur => (cur ? undefined : { uid: myUid, name: me.name, team: me.team, qn: q.n }));
   buzzing = false;
   if (ok && navigator.vibrate) { try { navigator.vibrate(60); } catch (e) {} }
   if (!ok && btn && btn.isConnected) btn.disabled = false;
 }
 async function doAnswer(i) {
-  const q = stuRoom && stuRoom.q;
+  const q = plyRoom && plyRoom.q;
   if (!J || !q || !q.buzz || q.buzz.uid !== myUid || q.answer || q.result) return;
-  $('stuStage').querySelectorAll('[data-ans]').forEach(b => { b.disabled = true; if (+b.dataset.ans === i) b.classList.add('chosen'); });
+  $('plyStage').querySelectorAll('[data-ans]').forEach(b => { b.disabled = true; if (+b.dataset.ans === i) b.classList.add('chosen'); });
   try { await L.set(`rooms/${J.code}/q/answer`, { uid: myUid, choice: i }); } catch (e) { liveErr(e); }
 }
 
 /* ---- live events ---- */
 $('modeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b || b.disabled) return; draftMode = b.dataset.mode; renderMode(); });
-$('goJoin').addEventListener('click', showJoin);
 $('btnRoom').addEventListener('click', showLobby);
 $('lobbyGo').addEventListener('click', () => {
   S.live.started = true; save();
@@ -1831,7 +2118,9 @@ $('lobbyTeams').addEventListener('click', e => { const b = e.target.closest('[da
 $('jCode').addEventListener('input', e => { const d = e.target.value.replace(/\D/g, '').slice(0, 6); e.target.value = d.length > 3 ? d.slice(0, 3) + ' ' + d.slice(3) : d; });
 $('joinForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const code = $('jCode').value.replace(/\D/g, ''), name = $('jName').value.trim().replace(/\s+/g, ' ');
+  const prof = jProfile();
+  const code = $('jCode').value.replace(/\D/g, ''), guest = $('jName').value.trim().replace(/\s+/g, ' ');
+  const name = prof ? String(prof.name) : guest;
   const err = $('jErr'); err.textContent = '';
   if (code.length !== 6) { err.textContent = 'The room code has 6 digits. Check the board.'; return; }
   if (!name) { err.textContent = 'Type your first name or a nickname.'; return; }
@@ -1842,27 +2131,28 @@ $('joinForm').addEventListener('submit', async e => {
     if (!room || !room.host) err.textContent = `No game found with code ${fmtCode(code)}. Check the code on the board.`;
     else if (room.status === 'ended') err.textContent = 'That game has finished.';
     else {
-      J = { code, name, sprite: pickedSprite };
+      J = { code, name, sprite: prof ? spriteNo(prof.sprite) ?? 0 : pickedSprite, profile: prof ? jProf : null, guest };
       const me = room.players && room.players[myUid];
       if (me && room.teams && room.teams[me.team] != null) {
         J.team = me.team;
         await L.update(`rooms/${code}/players/${myUid}`, { name, online: true });
-        saveSprite();
+        saveSprite(); saveProfileTag();
         enterPlay();
       } else {
-        renderTeamPick(room.teams); stuShow('team'); stuWho(name, J.sprite);
+        renderTeamPick(room.teams); plyShow('team'); plyWho(name, J.sprite);
       }
     }
   } catch (ex) { liveErr(ex); err.textContent = "Couldn't connect to the game. Check your internet connection and try again."; }
   btn.disabled = false; btn.textContent = 'Join';
 });
-/* The character goes in its own write too, so rules that don't allow it can't stop the join */
+/* The character and the profile tag go in their own writes too, so rules that don't allow them can't stop the join */
 function saveSprite() { if (J && spriteNo(J.sprite) != null) L.update(`rooms/${J.code}/players/${myUid}`, { sprite: J.sprite }).catch(liveErr); }
-$('jChars').addEventListener('click', e => {
-  const b = e.target.closest('[data-char]'); if (!b) return;
-  pickedSprite = +b.dataset.char;
-  $('jChars').querySelectorAll('[data-char]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-});
+function saveProfileTag() {
+  if (!J) return;
+  if (J.profile) L.update(`rooms/${J.code}/players/${myUid}`, { profile: J.profile }).catch(liveErr);
+  else L.remove(`rooms/${J.code}/players/${myUid}/profile`).catch(() => {});
+}
+$('jChars').addEventListener('click', e => { const n = charClick($('jChars'), e); if (n != null) pickedSprite = n; });
 $('teamPickList').addEventListener('click', async e => {
   const b = e.target.closest('[data-team]'); if (!b || !J) return;
   J.team = +b.dataset.team;
@@ -1870,24 +2160,517 @@ $('teamPickList').addEventListener('click', async e => {
     await L.set(`rooms/${J.code}/players/${myUid}`, { name: J.name, team: J.team, online: true });
     /* Join time is written separately: database rules that only allow name, team and online would reject the whole join otherwise */
     L.update(`rooms/${J.code}/players/${myUid}`, { joined: L.now() }).catch(liveErr);
-    saveSprite();
+    saveSprite(); saveProfileTag();
     enterPlay();
   }
-  catch (ex) { liveErr(ex); stuShow('form'); $('jErr').textContent = "Couldn't join that team. Try again."; }
+  catch (ex) { liveErr(ex); plyShow('form'); $('jErr').textContent = "Couldn't join that team. Try again."; }
 });
-$('stuStage').addEventListener('pointerdown', e => { if (e.target.closest('[data-buzz]')) { e.preventDefault(); doBuzz(); } });
-$('stuStage').addEventListener('click', e => {
+$('plyStage').addEventListener('pointerdown', e => { if (e.target.closest('[data-buzz]')) { e.preventDefault(); doBuzz(); } });
+$('plyStage').addEventListener('click', e => {
   if (e.target.closest('[data-buzz]')) { doBuzz(); return; }
+  if (e.target.closest('[data-rebet]')) { plyRebet = true; plyHtml = ''; renderPly(); const i = $('fWager'); if (i) i.focus(); return; }
   const a = e.target.closest('[data-ans]'); if (a) doAnswer(+a.dataset.ans);
 });
-$('stuLeave').addEventListener('click', () => {
+$('plyLeave').addEventListener('click', () => {
   const code = J && J.code; J = null; leaveLocal(); $('jErr').textContent = '';
   if (code && L && myUid) L.remove(`rooms/${code}/players/${myUid}`).catch(liveErr);
 });
-$('jTeacher').addEventListener('click', () => {
+$('jHost').addEventListener('click', () => {
   $('joinView').hidden = true;
   if (linkCode() !== null) history.replaceState(null, '', location.pathname + location.search);
-  if (!S) showSetup();
+  showHome();
+});
+$('plyMe').addEventListener('click', () => { if (J) openProfile(J.profile || 'guest', { room: true }); });
+
+/* ---------- home screen ---------- */
+function showHome() {
+  ['setup', 'joinView', 'endView', 'lobby', 'keyView'].forEach(id => { $(id).hidden = true; });
+  $('homeResume').hidden = !S;
+  renderAccount(); renderProfiles();
+  $('home').hidden = false; $('home').scrollTop = 0;
+}
+$('homeHost').addEventListener('click', () => { $('home').hidden = true; showSetup(); });
+$('homeJoin').addEventListener('click', () => showJoin());
+$('homeBack').addEventListener('click', () => { $('home').hidden = true; });
+
+/* ---------- accounts and profiles (Google sign-in) ---------- */
+/* Profiles live at users/<uid>/profiles/<id>: { name, sprite, created, games: { <game id>: { room, won, pts, aces, at } } }.
+   A player picks one when they join. When a live game ends, the host's screen adds a game record to each profile in the room,
+   and the stats are worked out from those records, so a game can never be counted twice. */
+const MAX_PROFILES = 8;
+const G_ICON = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17.1z"/><path fill="#FBBC05" d="M10.6 28.6c-.5-1.4-.8-2.9-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.8 2.3-8.5 2.3-6.2 0-11.5-4.1-13.4-9.8l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>';
+let me = null;               // who is signed in: { uid, google, name, email }, or null
+let profiles = {};           // this Google account's profiles, by id
+let profUnsub = null, profState = 'out';   // out | loading | ready | error
+let authState = 'off';       // off | loading | ready | failed
+let acctErr = '';
+let jProf = null;            // profile picked on the join screen, or 'guest'
+let profCtx = null;          // profile on screen: { id: <id> | 'new' | 'guest', room: opened from inside a game }
+let profPick = 0;
+const accountsOn = () => liveAvailable();
+const profList = () => Object.entries(profiles).filter(([, p]) => p && typeof p === 'object' && p.name != null).sort((a, b) => (a[1].created || 0) - (b[1].created || 0));
+const jProfile = () => (me && me.google && jProf && jProf !== 'guest' && profiles[jProf] ? profiles[jProf] : null);
+function statsOf(p) {
+  const g = Object.values((p && p.games) || {}).filter(x => x && typeof x === 'object');
+  const wins = g.filter(x => x.won === true).length, losses = g.length - wins;
+  return { games: g.length, wins, losses, ratio: (wins / Math.max(losses, 1)).toFixed(2),
+    pts: g.reduce((n, x) => n + (Number(x.pts) || 0), 0), aces: g.reduce((n, x) => n + (Number(x.aces) || 0), 0) };
+}
+function authBoot() {
+  if (!accountsOn()) return;
+  authState = 'loading'; renderAccount();
+  liveLayer().boot().then(() => { authState = 'ready'; renderAccount(); profilesChanged(); })
+    .catch(e => { liveErr(e); authState = 'failed'; renderAccount(); profilesChanged(); });
+}
+function onAuth(u) {
+  const was = me && me.google ? me.uid : null, now = u && u.google ? u.uid : null;
+  me = u; myUid = u ? u.uid : null;
+  if (now !== was) {
+    if (profUnsub) { profUnsub(); profUnsub = null; }
+    profiles = {}; profState = now ? 'loading' : 'out';
+    if (now) profUnsub = L.on(`users/${now}/profiles`, v => { profiles = v && typeof v === 'object' ? v : {}; profState = 'ready'; profilesChanged(); },
+      () => { profState = 'error'; profilesChanged(); });
+  }
+  if (authState === 'loading' || authState === 'off') authState = 'ready';
+  renderAccount(); profilesChanged();
+}
+function profilesChanged() {
+  renderProfiles(); renderJoinWho();
+  if (!$('profileView').hidden) renderProfile();
+}
+const signInMsg = e => {
+  const c = (e && e.code) || '';
+  if (/popup-closed-by-user|cancelled-popup-request|user-cancelled/.test(c)) return '';
+  if (/popup-blocked/.test(c)) return 'The sign-in window was blocked. Allow pop-ups for this site, then try again.';
+  if (/unauthorized-domain/.test(c)) return 'This website isn’t allowed to use Google sign-in yet. The host needs to add it in Firebase (Authentication > Settings > Authorized domains).';
+  if (/operation-not-allowed/.test(c)) return 'Google sign-in isn’t switched on yet. The host needs to turn it on in Firebase (Authentication > Sign-in method).';
+  if (/network/.test(c)) return 'Couldn’t reach Google. Check the internet connection and try again.';
+  return 'Sign-in didn’t work. Some school accounts don’t allow it. Try again, or play as a guest.';
+};
+function doSignIn(show) {
+  show('');
+  if (authState !== 'ready') return;
+  /* No awaits before the pop-up opens, or the browser may block it */
+  L.signIn().catch(e => { liveErr(e); show(signInMsg(e)); });
+}
+async function doSignOut() {
+  if (S && S.live && S.live.code && !isDone(S) && !confirm('Signing out disconnects the live game this screen is hosting. Sign out anyway?')) return;
+  try { await L.signOut(); } catch (e) { liveErr(e); }
+}
+document.addEventListener('click', e => {
+  const si = e.target.closest('[data-signin]');
+  if (si) { const inJoin = !!si.closest('#joinView'); doSignIn(m => { if (inJoin) $('jErr').textContent = m; else { acctErr = m; renderAccount(); } }); return; }
+  if (e.target.closest('[data-signout]')) doSignOut();
+});
+const signInBtn = cls => `<button class="btn ${cls} g-btn" type="button" data-signin${authState !== 'ready' ? ' disabled' : ''}>${G_ICON}Sign in with Google</button>`;
+function renderAccount() {
+  const box = $('account');
+  box.hidden = !accountsOn();
+  if (box.hidden) return;
+  let h;
+  if (authState === 'failed') h = '<span class="who-am">Sign-in isn’t available right now. Check the internet connection.</span>';
+  else if (me && me.google) h = `<span class="who-am">Signed in as <b>${esc(me.name || me.email || 'Google user')}</b></span><button class="btn" type="button" data-signout>Sign out</button>`;
+  else h = signInBtn('primary');
+  if (acctErr && !(me && me.google)) h += `<p class="err acct-err">${esc(acctErr)}</p>`;
+  if (box.innerHTML !== h) box.innerHTML = h;
+}
+function renderProfiles() {
+  const panel = $('profPanel');
+  panel.hidden = !accountsOn();
+  if (panel.hidden) return;
+  const lead = $('profLead'), grid = $('profGrid');
+  if (authState === 'failed') { lead.textContent = 'Profiles need the internet. Check the connection and reload the page.'; grid.innerHTML = ''; return; }
+  if (!(me && me.google)) {
+    lead.textContent = 'Sign in with Google to make a profile. It keeps your name, your character and your stats: wins, points and Aces.';
+    grid.innerHTML = `<div style="grid-column: 1 / -1">${signInBtn('primary')}</div>`; return;
+  }
+  if (profState === 'error') { lead.textContent = 'Your profiles couldn’t be loaded. The Firebase database rules may need updating (see database.rules.json).'; grid.innerHTML = ''; return; }
+  if (profState !== 'ready') { lead.textContent = 'Loading your profiles…'; grid.innerHTML = ''; return; }
+  const list = profList();
+  lead.textContent = list.length
+    ? 'Tap a profile to see its stats or change it. Pick it when you join a game and your results are saved to it.'
+    : 'Make a profile, then pick it when you join a game. Your wins, points and Aces are saved to it.';
+  grid.innerHTML = list.map(([id, p]) => {
+    const st = statsOf(p);
+    return `<button class="pcard" type="button" data-open="${esc(id)}">${sprite(spriteNo(p.sprite) ?? 0)}<span class="pc-name">${esc(p.name)}</span><span class="pc-meta">${st.wins} win${st.wins === 1 ? '' : 's'} · ${st.pts} points</span></button>`;
+  }).join('') + (list.length < MAX_PROFILES ? '<button class="pcard add" type="button" data-open="new"><span class="plus" aria-hidden="true">+</span><span>New profile</span></button>' : '');
+}
+$('profGrid').addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) openProfile(b.dataset.open, {}); });
+
+/* the character grid, shared by the join screen and the profile screen */
+function renderCharPick(box, sel) {
+  box.innerHTML = SPRITES.map((sp, i) => `<button type="button" data-char="${i}" aria-pressed="${i === sel}" aria-label="${esc(sp.n)}" title="${esc(sp.n)}">${sprite(i)}</button>`).join('');
+}
+function charClick(box, e) {
+  const b = e.target.closest('[data-char]'); if (!b) return null;
+  box.querySelectorAll('[data-char]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  return +b.dataset.char;
+}
+
+/* ---- profile screen: stats, name and character ---- */
+function openProfile(id, ctx) {
+  profCtx = { id, room: !!(ctx && ctx.room) };
+  const p = profiles[id];
+  $('pName').value = id === 'new' ? '' : id === 'guest' ? (J ? J.name : '') : (p ? String(p.name) : (J && J.profile === id ? J.name : ''));
+  profPick = id === 'new' ? Math.floor(Math.random() * SPRITES.length) : (spriteNo(p && p.sprite) ?? spriteNo(J && J.sprite) ?? 0);
+  $('pErr').textContent = '';
+  renderProfile(true);
+  $('profileView').hidden = false; $('profileView').scrollTop = 0;
+}
+function renderProfile(redrawChars) {
+  if (!profCtx) return;
+  const { id, room } = profCtx, isNew = id === 'new', guest = id === 'guest', p = profiles[id];
+  if (!isNew && !guest && !p && profState === 'ready' && !room) { closeProfile(); return; }
+  const live = isNew || guest;
+  $('profFace').innerHTML = sprite(live ? profPick : (spriteNo(p && p.sprite) ?? profPick));
+  $('profName').textContent = live ? ($('pName').value.trim() || (isNew ? 'New profile' : 'Guest')) : (p ? p.name : (J ? J.name : ''));
+  $('profEyebrow').textContent = isNew ? 'New profile' : guest ? 'Playing as a guest' : 'Profile';
+  $('profStatsBox').hidden = live;
+  if (!live) {
+    const st = statsOf(p);
+    $('profStats').innerHTML = [[st.wins, 'Wins'], [st.losses, 'Losses'], [st.ratio, 'W/L ratio'], [st.pts, 'Total points'], [st.aces, 'Aces'], [st.games, 'Games played']]
+      .map(([v, l]) => `<div class="stat"><span class="sv">${esc(v)}</span><span class="sl">${l}</span></div>`).join('');
+  }
+  $('profNote').textContent = isNew ? 'Pick a name and a character. You can change them any time.'
+    : guest ? 'You can change your name and character for this game. To keep stats, sign in with Google on the home screen and make a profile.'
+    : 'Stats come from live games you join with this profile. Total points are the points you won yourself. An Ace is answering every question in a category yourself. W/L ratio is wins divided by losses.';
+  $('profEditTitle').textContent = isNew ? 'Make your profile' : 'Customise';
+  $('pSave').textContent = isNew ? 'Create profile' : 'Save changes';
+  $('pDelete').hidden = live || room;
+  if (redrawChars) renderCharPick($('pChars'), profPick);
+}
+function closeProfile() { $('profileView').hidden = true; profCtx = null; }
+$('pChars').addEventListener('click', e => { const n = charClick($('pChars'), e); if (n != null) { profPick = n; renderProfile(); } });
+$('pName').addEventListener('input', () => { if (profCtx && (profCtx.id === 'new' || profCtx.id === 'guest')) renderProfile(); });
+$('profBack').addEventListener('click', closeProfile);
+$('profForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!profCtx) return;
+  const name = $('pName').value.trim().replace(/\s+/g, ' '), err = $('pErr'), btn = $('pSave');
+  err.textContent = '';
+  if (!name) { err.textContent = 'Type a name.'; return; }
+  const { id, room } = profCtx;
+  btn.disabled = true;
+  try {
+    let pid = id;
+    if (id !== 'guest') {
+      if (!(me && me.google)) { err.textContent = 'You’re signed out. Sign in with Google to save a profile.'; btn.disabled = false; return; }
+      if (id === 'new') pid = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      await L.update(`users/${me.uid}/profiles/${pid}`, id === 'new' ? { name, sprite: profPick, created: L.now() } : { name, sprite: profPick });
+      if (id === 'new') jProf = pid;
+    }
+    /* In a game: the board shows the new name and character straight away */
+    if (room && J && (id === 'guest' || J.profile === pid)) {
+      J.name = name; J.sprite = profPick; if (id === 'guest') J.guest = name;
+      store.set(K_JOIN, J);
+      await L.update(`rooms/${J.code}/players/${myUid}`, { name });
+      saveSprite();
+    }
+    closeProfile();
+  } catch (ex) { liveErr(ex); err.textContent = 'Couldn’t save. Check the internet connection and try again.'; }
+  btn.disabled = false;
+});
+$('pDelete').addEventListener('click', async () => {
+  const id = profCtx && profCtx.id, p = profiles[id];
+  if (!p || !me) return;
+  if (!confirm(`Delete the profile “${p.name}” and all its stats? This can’t be undone.`)) return;
+  try { await L.remove(`users/${me.uid}/profiles/${id}`); if (jProf === id) jProf = null; closeProfile(); }
+  catch (e) { liveErr(e); $('pErr').textContent = 'Couldn’t delete it. Try again.'; }
+});
+
+/* ---- join screen: pick a profile or play as a guest ---- */
+function renderJoinWho() {
+  const box = $('jWho'), guestBox = $('jGuest');
+  if (!accountsOn() || authState === 'failed') { box.hidden = true; guestBox.hidden = false; return; }
+  box.hidden = false;
+  let h;
+  if (!(me && me.google)) {
+    h = `<div class="jwho-row"><span>Got a profile?</span>${signInBtn('')}</div>`;
+    guestBox.hidden = false;
+  } else if (profState !== 'ready') {
+    h = `<div class="jwho-row">${profState === 'error' ? 'Your profiles couldn’t be loaded, so you can play as a guest.' : 'Loading your profiles…'}</div>`;
+    guestBox.hidden = false;
+  } else {
+    const list = profList();
+    if (!(jProf === 'guest' || profiles[jProf])) jProf = list.length ? list[0][0] : 'guest';
+    h = `<span class="lab">Who’s playing?</span><div class="jprofs">${list.map(([id, p]) => `<button type="button" data-jprof="${esc(id)}" aria-pressed="${id === jProf}">${sprite(spriteNo(p.sprite) ?? 0)}${esc(p.name)}</button>`).join('')}`
+      + `<button type="button" class="plain" data-jprof="guest" aria-pressed="${jProf === 'guest'}">Play as a guest</button>`
+      + (list.length < MAX_PROFILES ? '<button type="button" class="plain" data-jnew>+ New profile</button>' : '') + '</div>'
+      + `<div class="jwho-row"><span>Signed in as ${esc(me.name || me.email || 'Google user')}</span><button class="linkbtn" type="button" data-signout>Sign out</button></div>`;
+    guestBox.hidden = jProf !== 'guest';
+  }
+  if (box.innerHTML !== h) box.innerHTML = h;
+}
+$('jWho').addEventListener('click', e => {
+  const b = e.target.closest('[data-jprof]'); if (b) { jProf = b.dataset.jprof; renderJoinWho(); return; }
+  if (e.target.closest('[data-jnew]')) openProfile('new', {});
+});
+
+/* ---- saving stats when a live game ends ---- */
+/* Win: the player's team has the top score (a tie for first counts). Aces: categories where every question was won by this player. */
+function recordStats() {
+  if (!S.live || !S.live.code || !Object.keys(S.used).length) return;
+  if (!S.live.gid) { S.live.gid = 'g' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); store.set(K_GAME, S); }
+  const top = Math.max(...S.teams.map(t => t.score));
+  const cats = S.bank.cats.map((c, ci) => c.qs.map((_, r) => idOf(ci, r)));
+  Object.entries(players).forEach(([uid, p]) => {
+    if (!p || !p.profile || !/^[\w-]{1,40}$/.test(p.profile) || !S.teams[p.team]) return;
+    const aces = cats.filter(ids => ids.length && ids.every(id => S.used[id] && S.used[id].uid === uid)).length;
+    L.set(`users/${uid}/profiles/${p.profile}/games/${S.live.gid}`, { room: S.live.code, won: S.teams[p.team].score === top, pts: ppOf(uid), aces, at: L.now() }).catch(liveErr);
+  });
+}
+
+/* ---------- Final Showdown ---------- */
+/* After the last tile, a "Final Showdown" row in the CSV gives one last question. Everyone sees the category and bets some of their points.
+   The host shows the question and a timer runs while players type their answers (one-screen games: teams write theirs down).
+   Then the host reveals every answer and the right one, marks who got it, and each bet is won or lost. Only then comes the podium.
+   Live games: each player bets up to their own points. One-screen games: each team bets up to its score. */
+const FINAL_SECS = 60;
+let finTick = null, finLive = {}, finUnsub = null;
+const finCat = () => (S.bank.final.cat || 'Mystery category');
+const clampW = (v, max) => Math.max(0, Math.min(max, Math.floor(Number(v) || 0)));
+const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim().replace(/^(the|a|an) /, '');
+function sameAnswer(a, fq) {
+  const x = norm(a); if (!x) return false;
+  return (isOpen(fq) ? [fq.ans] : [fq.o[fq.a], LETTERS[fq.a]]).some(g => g && norm(g) === x);
+}
+function endOrFinal() {
+  if (S.bank.final && !(S.fin && S.fin.phase === 'done')) startFinal(); else showEnd();
+}
+function startFinal() {
+  if (!S.fin) {
+    const max = {}, who = {};
+    if (S.live) Object.entries(players).forEach(([uid, p]) => {
+      if (!p || p.name == null || !S.teams[p.team]) return;
+      max[uid] = Math.max(0, ppOf(uid)); who[uid] = { name: String(p.name), team: p.team };
+    });
+    else S.teams.forEach((t, i) => { max[i] = Math.max(0, t.score); who[i] = { name: t.name, team: i }; });
+    S.fin = { phase: 'wager', max, who, wagers: {}, answers: {}, marks: {}, left: FINAL_SECS };
+    save();
+    if (S.live) liveInit().then(() => L.set(roomPath('final'), { phase: 'wager', cat: finCat(), max })).catch(liveErr);
+  }
+  if (S.live) liveInit().then(finListen).catch(liveErr);
+  $('finalView').hidden = false; $('finalView').scrollTop = 0;
+  renderFinal();
+  if (S.fin.phase === 'answer') finTimer();
+}
+function finListen() {
+  if (finUnsub) finUnsub();
+  finUnsub = L.on(roomPath('final'), v => { finLive = v || {}; if (S && S.fin && !$('finalView').hidden) renderFinal(); });
+}
+function closeFinal() {
+  stopFinTimer();
+  if (finUnsub) { finUnsub(); finUnsub = null; }
+  finLive = {};
+  $('finalView').hidden = true; finMedia('');
+}
+const finWho = () => Object.entries(S.fin.who || {}).map(([k, x]) => ({
+  key: k, team: x.team,
+  name: S.live ? String((players[k] && players[k].name) || x.name) : (S.teams[x.team] ? S.teams[x.team].name : x.name),
+  sprite: S.live ? spriteOf(k, players[k]) : teamSprite(x.team),
+}));
+const finWager = k => clampW((S.live && S.fin.phase === 'wager' ? (finLive.wagers || {}) : S.fin.wagers)[k], S.fin.max[k] || 0);
+const finAnswer = k => String((S.live && /answer|locked/.test(S.fin.phase) ? (finLive.answers || {}) : S.fin.answers)[k] || '');
+function renderFinal() {
+  if (!S || !S.fin || S.fin.phase === 'done') return;
+  const f = S.fin, fq = S.bank.final, ph = f.phase, live = !!S.live, who = finWho();
+  $('finCat').textContent = finCat();
+  const showQ = ph !== 'wager', rev = ph === 'reveal';
+  $('finQ').hidden = !showQ;
+  $('finPrompt').innerHTML = showQ ? fmt(fq.p) : '';
+  const opts = $('finOpts');
+  opts.hidden = !showQ || !fq.o.length;
+  opts.innerHTML = showQ ? fq.o.map((o, i) => `<li class="${rev && i === fq.a ? 'right' : ''}"><span class="k">${LETTERS[i]}</span><span>${esc(o)}</span></li>`).join('') : '';
+  finMedia(showQ ? (rev && fq.amedia ? fq.amedia : fq.img) : '', rev && !!fq.amedia);
+  $('finQ').classList.toggle('has-media', showQ && !$('finMedia').hidden);
+  $('finTimer').hidden = ph !== 'answer'; renderFinTimer();
+  $('finAnswer').hidden = !rev;
+  $('finAnswer').innerHTML = rev ? `<span class="lbl">Answer</span>${esc(answerText(fq))}` : '';
+  $('finExplain').hidden = !(rev && fq.e);
+  $('finExplain').innerHTML = rev && fq.e ? `<span class="lbl">How it works</span><div>${esc(fq.e)}</div>` : '';
+  const n = who.length, of = (k, word) => `${k} of ${n} ${word}${n === 1 ? '' : 's'} in.`;
+  const nBets = who.filter(w => (finLive.wagers || {})[w.key] != null).length, nAns = who.filter(w => finAnswer(w.key)).length;
+  $('finStep').textContent = {
+    wager: !n ? 'Nobody is playing, so there are no bets to make.' : live ? `Here’s the category. Players, bet some of your points on your phone. ${of(nBets, 'bet')}` : 'Here’s the category. Each team bets up to its score. Type each team’s bet, then show the question.',
+    answer: live ? `Type your answer on your phone before time runs out. ${of(nAns, 'answer')}` : 'Each team writes down its answer before time runs out.',
+    locked: live ? `Time’s up! ${of(nAns, 'answer')} Reveal them when you’re ready.` : 'Time’s up! Pens down.',
+    reveal: live ? 'Mark each answer right or wrong, then add up the scores. Exact matches are already marked right.' : 'Mark each team right or wrong, then add up the scores.',
+  }[ph] || '';
+  const list = $('finList'), focused = document.activeElement && list.contains(document.activeElement) ? document.activeElement.dataset.wager : null;
+  list.innerHTML = who.map(w => finCard(w, ph, live)).join('');
+  if (focused != null) { const i = list.querySelector(`[data-wager="${focused}"]`); if (i) i.focus(); }
+  $('finGo').textContent = { wager: 'Show the question', answer: 'Stop answers now', locked: live ? 'Reveal the answers' : 'Reveal the answer', reveal: 'Add up the scores' }[ph] || '';
+  $('finBoard').hidden = ph !== 'wager';
+}
+function finCard(w, ph, live) {
+  const t = S.teams[w.team], tn = live && t && t.name !== w.name ? esc(t.name) + ' · ' : '';
+  const max = S.fin.max[w.key] || 0, bet = ph === 'wager' ? finWager(w.key) : clampW(S.fin.wagers[w.key], max);
+  const head = `${sprite(w.sprite)}<span class="fp-name">${esc(w.name)}</span>`;
+  if (ph === 'wager') {
+    if (!live) return `<div class="fin-p">${head}<span class="fp-sub">${max} points to bet</span><input type="number" inputmode="numeric" min="0" max="${max}" step="1" value="${S.fin.wagers[w.key] ?? ''}" data-wager="${esc(w.key)}" aria-label="${esc(w.name)}’s bet, from 0 to ${max}" placeholder="0"></div>`;
+    const inB = (finLive.wagers || {})[w.key] != null;
+    return `<div class="fin-p${inB ? ' in' : ''}">${head}<span class="fp-sub">${tn}${max ? (inB ? 'Bet in ✓' : 'Thinking…') : 'No points to bet'}</span></div>`;
+  }
+  if (ph !== 'reveal') {
+    if (!live) return `<div class="fin-p">${head}<span class="fp-sub">Bet: ${bet}</span></div>`;
+    const inA = !!finAnswer(w.key);
+    return `<div class="fin-p${inA ? ' in' : ''}">${head}<span class="fp-sub">${tn}${inA ? 'Answer in ✓' : ph === 'locked' ? 'No answer' : 'Typing…'}</span></div>`;
+  }
+  const m = S.fin.marks[w.key], a = finAnswer(w.key), k = esc(w.key);
+  return `<div class="fin-p ${m === true ? 'right' : m === false ? 'wrong' : ''}">${head}<span class="fp-sub">${tn.replace(/ · $/, '')}</span>`
+    + (live ? `<div class="fp-ans${a ? '' : ' none'}">${a ? esc(a) : 'No answer'}</div>` : '')
+    + `<div class="fp-bet"><span>Bet <b>${bet}</b></span><span class="fp-marks"><button type="button" data-mark="${k}" data-ok="1" aria-pressed="${m === true}">Right</button><button type="button" data-mark="${k}" data-ok="0" aria-pressed="${m === false}">Wrong</button></span></div></div>`;
+}
+/* The question's picture, video or sound (and the answer's, once revealed) */
+function finMedia(name, isAns) {
+  const fig = $('finMedia'), key = name ? (isAns ? 'a|' : 'q|') + name : '';
+  if (fig.dataset.key === key && (key || fig.hidden)) return;
+  fig.querySelectorAll('video, audio').forEach(v => { try { v.pause(); } catch (e) {} });
+  fig.innerHTML = ''; fig.dataset.key = key; fig.hidden = !name;
+  if (!name) return;
+  fig.classList.toggle('is-answer', !!isAns);
+  if (isAns) fig.append(el('div', 'mlabel', 'Answer'));
+  const m = mediaOf(name), box = el('div', 'mbox');
+  if (!m) box.append(el('div', 'miss', `File not found: ${name}`));
+  else if (m.kind === 'image') { const img = el('img'); img.src = m.src; img.alt = isAns ? 'Picture for the answer' : 'Picture for the Final Showdown question'; box.append(img); }
+  else if (m.kind === 'video' || m.kind === 'audio') {
+    const v = el(m.kind); v.src = m.src; v.controls = true; v.preload = 'metadata'; v.playsInline = true;
+    if (m.kind === 'audio') box.append(el('div', 'sound', 'Listen'));
+    box.append(v);
+  } else {
+    const f = el('iframe', 'yt'); f.title = 'YouTube video';
+    f.src = `https://www.youtube.com/embed/${m.id}?rel=0&playsinline=1${m.start ? '&start=' + m.start : ''}`;
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen = true; f.referrerPolicy = 'strict-origin-when-cross-origin';
+    box.append(f);
+  }
+  fig.append(box);
+}
+function finTimer() {
+  stopFinTimer(); renderFinTimer();
+  finTick = setInterval(() => {
+    if (!S || !S.fin || S.fin.phase !== 'answer') { stopFinTimer(); return; }
+    S.fin.left = Math.max(0, (S.fin.left || 0) - 1); store.set(K_GAME, S); renderFinTimer();
+    if (!S.fin.left) finLock();
+  }, 1000);
+}
+function stopFinTimer() { if (finTick) { clearInterval(finTick); finTick = null; } }
+function renderFinTimer() {
+  if (!S || !S.fin) return;
+  const left = S.fin.left || 0;
+  $('finSecs').textContent = left;
+  $('finFill').style.width = (left / FINAL_SECS * 100) + '%';
+  $('finTimer').classList.toggle('low', left <= 10);
+}
+function finLock() {
+  stopFinTimer(); S.fin.phase = 'locked'; S.fin.left = 0; save();
+  if (S.live) L.update(roomPath('final'), { phase: 'locked' }).catch(liveErr);
+  renderFinal();
+}
+function finNext() {
+  const f = S.fin, fq = S.bank.final;
+  if (!f) return;
+  if (f.phase === 'wager') {
+    if (S.live) Object.keys(f.max).forEach(k => { f.wagers[k] = finWager(k); });
+    else $('finList').querySelectorAll('[data-wager]').forEach(i => { f.wagers[i.dataset.wager] = clampW(i.value, f.max[i.dataset.wager] || 0); });
+    f.phase = 'answer'; f.left = FINAL_SECS; save();
+    if (S.live) L.update(roomPath('final'), { phase: 'answer', q: fq.p, opts: fq.o.length ? fq.o : null, secs: FINAL_SECS }).catch(liveErr);
+    renderFinal(); finTimer();
+  } else if (f.phase === 'answer') finLock();
+  else if (f.phase === 'locked') {
+    if (S.live) Object.keys(f.max).forEach(k => { f.answers[k] = String((finLive.answers || {})[k] || '').slice(0, 200); });
+    if (S.live) Object.keys(f.max).forEach(k => { if (f.marks[k] == null && sameAnswer(f.answers[k], fq)) f.marks[k] = true; });
+    f.phase = 'reveal'; save();
+    if (S.live) L.update(roomPath('final'), { phase: 'reveal', answer: answerText(fq) }).catch(liveErr);
+    renderFinal();
+  } else if (f.phase === 'reveal') {
+    const unmarked = Object.keys(f.max).filter(k => f.marks[k] == null).length;
+    if (unmarked && !confirm(`${unmarked} ${unmarked === 1 ? 'answer isn’t' : 'answers aren’t'} marked yet. Count ${unmarked === 1 ? 'it' : 'them'} as wrong?`)) return;
+    const res = {};
+    Object.keys(f.max).forEach(k => {
+      const w = clampW(f.wagers[k], f.max[k] || 0), d = f.marks[k] === true ? w : -w, team = (f.who[k] || {}).team;
+      res[k] = d;
+      if (S.teams[team]) S.teams[team].score += d;
+      if (S.live) addPP(k, d);
+    });
+    f.res = res; f.phase = 'done'; save();
+    if (S.live) L.update(roomPath('final'), { phase: 'done', res }).catch(liveErr);
+    renderAll(); showEnd();
+  }
+}
+$('finGo').addEventListener('click', finNext);
+$('finList').addEventListener('click', e => {
+  const b = e.target.closest('[data-mark]'); if (!b || !S.fin) return;
+  const k = b.dataset.mark, ok = b.dataset.ok === '1';
+  S.fin.marks[k] = S.fin.marks[k] === ok ? null : ok; save(); renderFinal();
+});
+$('finList').addEventListener('input', e => {
+  const i = e.target.closest('[data-wager]'); if (!i || !S.fin) return;
+  S.fin.wagers[i.dataset.wager] = i.value === '' ? null : clampW(i.value, S.fin.max[i.dataset.wager] || 0); store.set(K_GAME, S);
+});
+$('finList').addEventListener('change', e => { const i = e.target.closest('[data-wager]'); if (i && i.value !== '') i.value = clampW(i.value, S.fin.max[i.dataset.wager] || 0); });
+$('finBoard').addEventListener('click', () => {
+  if (S.live) L.set(roomPath('final'), null).catch(liveErr);
+  S.fin = null; save(); closeFinal();
+});
+$('finSkip').addEventListener('click', () => {
+  if (!confirm('Skip the Final Showdown and go straight to the final scores?')) return;
+  S.fin = { ...(S.fin || {}), phase: 'done', skipped: true, res: {} }; save();
+  if (S.live) L.set(roomPath('final'), null).catch(liveErr);
+  showEnd();
+});
+$('finMedia').addEventListener('click', e => { const img = e.target.closest('img'); if (img) { $('imgZoomEl').src = img.src; $('imgZoom').hidden = false; } });
+
+/* ---- Final Showdown on a player's phone ---- */
+let plyRebet = false, plyFinTick = null, plyFinKey = '', plyFinEnd = 0;
+function renderPlyFinal(r, put) {
+  const f = r.final, max = f.max ? f.max[myUid] : undefined;
+  if (f.phase !== 'wager') plyRebet = false;
+  const head = `<div class="ply-fin">Final Showdown</div><div class="ply-sub">The category is</div><div class="ply-big">${esc(f.cat || 'Mystery category')}</div>`;
+  if (max == null) { put(head + '<div class="ply-sub">You joined after the bets were placed, so you’re watching this one. Eyes on the board!</div>'); plyCountdown(f); return; }
+  const w = (f.wagers || {})[myUid], bet = clampW(w, max), a = (f.answers || {})[myUid];
+  const qh = `<p class="ply-q">${fmt(f.q || '')}</p>${f.opts ? `<div class="ply-sub">${f.opts.map((o, i) => `${LETTERS[i]}: ${esc(o)}`).join('<br>')}</div>` : ''}`;
+  if (f.phase === 'wager') {
+    if (max <= 0) put(head + '<div class="ply-sub">You have no points to bet, so your bet is 0. You can still answer the question!</div>');
+    else if (w != null && !plyRebet) put(head + `<div class="ply-big good">Bet locked in: ${bet}</div><div class="ply-sub">Wait for the host to show the question.</div><button class="btn" type="button" data-rebet>Change my bet</button>`);
+    else put(head + `<form class="ply-form" data-fwager novalidate><label for="fWager">You have ${max} points. How many will you bet?<input id="fWager" type="number" inputmode="numeric" min="0" max="${max}" step="1" autocomplete="off" placeholder="0 to ${max}"></label><p class="err" id="fErr" aria-live="polite"></p><button class="btn primary big" type="submit">Lock in my bet</button></form>`);
+  } else if (f.phase === 'answer') {
+    put(head + `<div class="ply-sub">You bet ${bet}.</div>${qh}<div class="ply-count" id="fCount" aria-hidden="true"></div><form class="ply-form" data-fanswer novalidate><label for="fAns">Your answer<input id="fAns" autocomplete="off" maxlength="200"></label><p class="err" id="fErr" aria-live="polite"></p><button class="btn primary big" type="submit">${a ? 'Change my answer' : 'Send my answer'}</button></form>${a ? `<div class="ply-sub">Sent: <b>${esc(a)}</b>. You can change it until time runs out.</div>` : ''}`);
+  } else if (f.phase === 'locked') {
+    put(head + `<div class="ply-big">Time’s up!</div><div class="ply-sub">${a ? `Your answer: <b>${esc(a)}</b>.` : 'No answer was sent.'} You bet ${bet}.</div>`);
+  } else if (f.phase === 'reveal') {
+    put(head + `<div class="ply-sub">The answer is</div><div class="ply-big good">${esc(f.answer || '')}</div><div class="ply-sub">${a ? `You said <b>${esc(a)}</b>.` : 'You didn’t send an answer.'} The host is marking the answers.</div>`);
+  } else {
+    const d = f.res ? f.res[myUid] : null;
+    put(head + (d > 0 ? `<div class="ply-big good">+${d}</div><div class="ply-sub">You got it! Look at the board for the final scores.</div>`
+      : d < 0 ? `<div class="ply-big bad">−${-d}</div><div class="ply-sub">Not this time. Look at the board for the final scores.</div>`
+      : '<div class="ply-big">No change</div><div class="ply-sub">Look at the board for the final scores.</div>'));
+  }
+  plyCountdown(f);
+}
+/* The phone counts down from when it first sees the question, so it can't drift far from the board */
+function plyCountdown(f) {
+  if (!f || f.phase !== 'answer') { if (plyFinTick) { clearInterval(plyFinTick); plyFinTick = null; } return; }
+  const key = (f.cat || '') + '|' + (f.q || '');
+  if (plyFinKey !== key) { plyFinKey = key; plyFinEnd = Date.now() + (Number(f.secs) || FINAL_SECS) * 1000; }
+  const show = () => { const c = $('fCount'); if (c) c.textContent = Math.max(0, Math.ceil((plyFinEnd - Date.now()) / 1000)); };
+  show();
+  if (!plyFinTick) plyFinTick = setInterval(show, 500);
+}
+$('plyStage').addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = plyRoom && plyRoom.final, err = $('fErr');
+  if (!J || !f) return;
+  if (e.target.matches('[data-fwager]')) {
+    const max = (f.max || {})[myUid] || 0, raw = $('fWager').value.trim(), n = Number(raw);
+    if (raw === '' || !Number.isInteger(n) || n < 0 || n > max) { err.textContent = `Type a whole number from 0 to ${max}.`; return; }
+    try { await L.set(`rooms/${J.code}/final/wagers/${myUid}`, n); plyRebet = false; plyHtml = ''; renderPly(); }
+    catch (ex) { liveErr(ex); err.textContent = 'Your bet didn’t go through. It may be too late, or the connection dropped.'; }
+  } else if (e.target.matches('[data-fanswer]')) {
+    const v = $('fAns').value.trim().replace(/\s+/g, ' ').slice(0, 200);
+    if (!v) { err.textContent = 'Type your answer first.'; return; }
+    try { await L.set(`rooms/${J.code}/final/answers/${myUid}`, v); }
+    catch (ex) { liveErr(ex); err.textContent = 'Your answer didn’t go through. Time may be up, or the connection dropped.'; }
+  }
 });
 
 /* ---------- boot ---------- */
@@ -1903,7 +2686,8 @@ function start(data) {
   if (data.S) S = data.S;
   renderAll();
   if (data.Q && S) { Q = data.Q; $('qView').hidden = false; renderQ(); startTimer(); }
-  else if (!S) showSetup();
+  else if (!S) showHome();
+  authBoot();
   if (S && S.live && S.live.code) resumeLive();
   if (linkCode() !== null) showJoin();
 }

@@ -13,6 +13,7 @@
             "online": { ".validate": "newData.isBoolean()" },
             "joined": { ".validate": "newData.isNumber()" },
             "sprite": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 16" },
+            "profile": { ".validate": "newData.isString() && newData.val().matches(/^[A-Za-z0-9_-]{1,40}$/)" },
             "$other": { ".validate": false }
           }
         },
@@ -22,6 +23,47 @@
           },
           "answer": {
             ".write": "auth != null && !data.exists() && root.child('rooms').child($code).child('q/buzz/uid').val() === auth.uid && newData.child('uid').val() === auth.uid"
+          }
+        },
+        "final": {
+          "wagers": {
+            "$uid": {
+              ".write": "auth != null && auth.uid === $uid && root.child('rooms').child($code).child('final/phase').val() === 'wager'",
+              ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= root.child('rooms').child($code).child('final/max').child($uid).val()"
+            }
+          },
+          "answers": {
+            "$uid": {
+              ".write": "auth != null && auth.uid === $uid && root.child('rooms').child($code).child('final/phase').val() === 'answer'",
+              ".validate": "newData.isString() && newData.val().length <= 200"
+            }
+          }
+        }
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        "profiles": {
+          "$pid": {
+            ".validate": "$pid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.hasChildren(['name', 'sprite'])",
+            "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 30" },
+            "sprite": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 16" },
+            "created": { ".validate": "newData.isNumber()" },
+            "games": {
+              "$gid": {
+                ".write": "auth != null && newData.exists() && newData.child('room').isString() && root.child('rooms').child(newData.child('room').val()).child('host').val() === auth.uid && root.child('rooms').child(newData.child('room').val()).child('players').child($uid).child('profile').val() === $pid",
+                ".validate": "newData.hasChildren(['room', 'won', 'pts', 'aces', 'at'])",
+                "room": { ".validate": "newData.isString() && newData.val().matches(/^[0-9]{6}$/)" },
+                "won": { ".validate": "newData.isBoolean()" },
+                "pts": { ".validate": "newData.isNumber()" },
+                "aces": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 6" },
+                "at": { ".validate": "newData.isNumber()" },
+                "$other": { ".validate": false }
+              }
+            },
+            "$other": { ".validate": false }
           }
         }
       }
