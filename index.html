@@ -284,7 +284,16 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 
 /* ---------- characters ---------- */
 .sprite { display: inline-block; flex: none; width: 1.4em; height: 1.4em; vertical-align: middle; overflow: visible; }
-.chars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.look { display: grid; gap: 8px; }
+.look-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+.look-lab { font-size: 16px; color: var(--ink-2); }
+.look-lab b { color: var(--ink); }
+.swatches { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; margin-bottom: 6px; }
+@media (min-width: 520px) { .swatches { grid-template-columns: repeat(12, minmax(0, 1fr)); } }
+.swatches button { aspect-ratio: 1; padding: 0; border: 3px solid var(--card); border-radius: 50%; background: var(--sw); box-shadow: 0 0 0 1.5px var(--grid-strong); transition: transform .12s; }
+.swatches button:hover { transform: scale(1.1); background: var(--sw); }
+.swatches button[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--ink); transform: scale(1.08); }
+.chars { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
 @media (min-width: 520px) { .chars { grid-template-columns: repeat(8, minmax(0, 1fr)); } }
 .chars button { aspect-ratio: 1; padding: 5px; border: 2px solid transparent; border-radius: 10px; background: var(--paper); transition: transform .12s, background .12s; }
 .chars button:hover { background: #FFF3BF; transform: translateY(-2px); }
@@ -664,7 +673,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
       <div class="room-code" id="lobbyCode"></div>
     </div>
     <div class="lobby-count" id="lobbyCount"></div>
-    <p class="warn-line" id="lobbyWarn" hidden>Players' characters aren't being saved, so the board is choosing one for each player. To fix it, paste the rules from database.rules.json into Firebase (Realtime Database &gt; Rules).</p>
+    <p class="warn-line" id="lobbyWarn" hidden><span id="lobbyWarnWhat"></span> To fix it, paste the rules from database.rules.json into Firebase (Realtime Database &gt; Rules).</p>
     <div class="lobby-teams" id="lobbyTeams"></div>
     <div class="actions">
       <button class="btn primary big" id="lobbyGo" type="button">Start game</button>
@@ -716,7 +725,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
     <form class="panel prof-edit" id="profForm" novalidate>
       <h3 id="profEditTitle">Customise</h3>
       <label for="pName">Name<input id="pName" autocomplete="off" maxlength="20"></label>
-      <fieldset class="char-pick"><legend>Character</legend><div class="chars" id="pChars"></div></fieldset>
+      <fieldset class="char-pick"><legend>Character</legend><div class="look" id="pChars"></div></fieldset>
       <p class="err" id="pErr" aria-live="polite"></p>
       <div class="actions">
         <button class="btn primary big" id="pSave" type="submit">Save</button>
@@ -775,7 +784,7 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
       <div class="jwho" id="jWho" hidden></div>
       <div class="jwho" id="jGuest">
         <label for="jName">Your first name or a nickname<input id="jName" autocomplete="off" maxlength="20"></label>
-        <fieldset class="char-pick"><legend>Pick your character</legend><div class="chars" id="jChars"></div></fieldset>
+        <fieldset class="char-pick"><legend>Pick your character</legend><div class="look" id="jChars"></div></fieldset>
       </div>
       <p class="err" id="jErr" aria-live="polite"></p>
       <button class="btn primary big" id="jGo" type="submit">Join</button>
@@ -806,7 +815,8 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
    Database rules: copy everything in database.rules.json (next to this file) into
    Firebase > Realtime Database > Rules, replacing what is there, and press Publish.
    Older rules drop each player's character, profile and Final Showdown bets: joining still works,
-   but the board picks a character for them and stats aren't saved.
+   but the board picks a character for them and stats aren't saved. Rules from before November 2026
+   also drop the separate colour and shape, so players show the nearest of the original 16 characters.
 
    Google sign-in (profiles and stats) needs two switches in the Firebase console:
    1. Authentication > Sign-in method > Add new provider > Google > Enable > Save.
@@ -1246,25 +1256,49 @@ const SHAPES = {
   pill: { d: '<rect x="12" y="26" width="76" height="50" rx="25" transform="rotate(-12 50 51)"/>', f: [50, 51, .95] },
   flower: { d: [0, 1, 2, 3, 4, 5].map(k => `<circle cx="${(50 + 27 * Math.cos(k * Math.PI / 3)).toFixed(1)}" cy="${(52 + 27 * Math.sin(k * Math.PI / 3)).toFixed(1)}" r="15"/>`).join('') + '<circle cx="50" cy="52" r="28"/>', f: [50, 53, .9] },
   crown: { d: '<path d="M14 88 L14 22 L32 36 L50 16 L68 36 L86 22 L86 88 Z"/>', f: [50, 62, 1] },
+  round: { d: '<circle cx="50" cy="52" r="38"/>', f: [50, 52, 1] },
+  heart: { d: '<path d="M50 88 C20 66 10 50 12 34 C14 18 30 10 42 18 C46 21 49 25 50 28 C51 25 54 21 58 18 C70 10 86 18 88 34 C90 50 80 66 50 88 Z"/>', f: [50, 46, .85] },
+  octagon: { d: '<polygon points="' + Array.from({ length: 8 }, (_, k) => { const a = Math.PI / 8 + k * Math.PI / 4; return (50 + 42 * Math.cos(a)).toFixed(1) + ',' + (50 + 42 * Math.sin(a)).toFixed(1); }).join(' ') + '"/>', f: [50, 50, 1] },
+  shield: { d: '<path d="M16 16 L84 16 L84 50 C84 72 66 84 50 92 C34 84 16 72 16 50 Z"/>', f: [50, 46, 1] },
+  mushroom: { d: '<path d="M10 52 C10 24 30 10 50 10 C70 10 90 24 90 52 Z"/><rect x="28" y="44" width="44" height="44" rx="12"/>', f: [50, 64, .8] },
+  jelly: { d: '<path d="M14 58 C14 30 30 14 50 14 C70 14 86 30 86 58 Z"/><path d="M26 58 Q21 72 28 86 M42 58 Q37 74 44 90 M58 58 Q63 74 56 90 M74 58 Q79 72 72 86" fill="none" stroke-width="8" stroke-linecap="round"/>', f: [50, 42, .9] },
+  bear: { d: '<circle cx="24" cy="26" r="13"/><circle cx="76" cy="26" r="13"/><circle cx="50" cy="56" r="35"/>', f: [50, 58, 1] },
+  bunny: { d: '<ellipse cx="36" cy="22" rx="9" ry="20"/><ellipse cx="64" cy="22" rx="9" ry="20"/><rect x="16" y="38" width="68" height="52" rx="26"/>', f: [50, 62, .95] },
 };
-const SPRITES = [
-  { n: 'Purple box', c: '#6A2CF5', s: 'box', e: 'one', m: 'teeth' },
-  { n: 'Blue egg', c: '#1F6BFF', s: 'egg', e: 'two', m: 'grin' },
-  { n: 'Sky-blue drop', c: '#00B2F0', s: 'drop', e: 'two', m: 'smile' },
-  { n: 'Green hexagon', c: '#00B84A', s: 'hex', e: 'wink', m: 'smirk' },
-  { n: 'Yellow cloud', c: '#FFD000', s: 'cloud', e: 'two', m: 'grin' },
-  { n: 'Orange triangle', c: '#FF7A00', s: 'tri', e: 'happy', m: 'smile' },
-  { n: 'Red crown', c: '#F0202E', s: 'crown', e: 'two', m: 'fang' },
-  { n: 'Pink ghost', c: '#F03FD0', s: 'ghost', e: 'happy', m: 'o' },
-  { n: 'Lime star', c: '#7ED321', s: 'star', e: 'wink', m: 'smile' },
-  { n: 'Indigo pill', c: '#4A3BFF', s: 'pill', e: 'three', m: 'smile' },
-  { n: 'Teal cat', c: '#00C2A8', s: 'cat', e: 'two', m: 'flat' },
-  { n: 'Charcoal bean', c: '#343A48', s: 'bean', e: 'sleepy', m: 'wobbly' },
-  { n: 'Forest sprout', c: '#11903A', s: 'sprout', e: 'sleepy', m: 'smirk' },
-  { n: 'Gold flower', c: '#FFAA00', s: 'flower', e: 'two', m: 'o' },
-  { n: 'Navy diamond', c: '#1C3FD6', s: 'diamond', e: 'one', m: 'smile' },
-  { n: 'Brown blob', c: '#9A4A14', s: 'blob', e: 'happy', m: 'grin' },
+/* Players pick a colour and a shape separately. Each shape has its own face.
+   The first 16 colours and shapes, paired by position, are the original 16 characters (Purple box, Blue egg ...),
+   so older records that only stored `sprite` (0-15) still show the same character. Add new ones at the END of each list. */
+const COLOURS = [
+  { n: 'Purple', c: '#6A2CF5' }, { n: 'Blue', c: '#1F6BFF' }, { n: 'Sky blue', c: '#00B2F0' }, { n: 'Green', c: '#00B84A' },
+  { n: 'Yellow', c: '#FFD000' }, { n: 'Orange', c: '#FF7A00' }, { n: 'Red', c: '#F0202E' }, { n: 'Pink', c: '#F03FD0' },
+  { n: 'Lime', c: '#7ED321' }, { n: 'Indigo', c: '#4A3BFF' }, { n: 'Teal', c: '#00C2A8' }, { n: 'Charcoal', c: '#343A48' },
+  { n: 'Forest green', c: '#11903A' }, { n: 'Gold', c: '#FFAA00' }, { n: 'Navy', c: '#1C3FD6' }, { n: 'Brown', c: '#9A4A14' },
+  { n: 'Coral', c: '#FF6B5B', near: 6 }, { n: 'Lavender', c: '#B48CFF', near: 0 }, { n: 'Mint', c: '#3DDC97', near: 10 }, { n: 'Maroon', c: '#8C1D40', near: 6 },
+  { n: 'Peach', c: '#FFB07A', near: 5 }, { n: 'Silver', c: '#A7B1C2', near: 11 }, { n: 'Rose', c: '#FF7EAE', near: 7 }, { n: 'Olive', c: '#7A8B2A', near: 12 },
 ];
+const LOOKS = [
+  { n: 'Box', s: 'box', e: 'one', m: 'teeth' }, { n: 'Egg', s: 'egg', e: 'two', m: 'grin' },
+  { n: 'Drop', s: 'drop', e: 'two', m: 'smile' }, { n: 'Hexagon', s: 'hex', e: 'wink', m: 'smirk' },
+  { n: 'Cloud', s: 'cloud', e: 'two', m: 'grin' }, { n: 'Triangle', s: 'tri', e: 'happy', m: 'smile' },
+  { n: 'Crown', s: 'crown', e: 'two', m: 'fang' }, { n: 'Ghost', s: 'ghost', e: 'happy', m: 'o' },
+  { n: 'Star', s: 'star', e: 'wink', m: 'smile' }, { n: 'Pill', s: 'pill', e: 'three', m: 'smile' },
+  { n: 'Cat', s: 'cat', e: 'two', m: 'flat' }, { n: 'Bean', s: 'bean', e: 'sleepy', m: 'wobbly' },
+  { n: 'Sprout', s: 'sprout', e: 'sleepy', m: 'smirk' }, { n: 'Flower', s: 'flower', e: 'two', m: 'o' },
+  { n: 'Diamond', s: 'diamond', e: 'one', m: 'smile' }, { n: 'Blob', s: 'blob', e: 'happy', m: 'grin' },
+  { n: 'Ball', s: 'round', e: 'two', m: 'teeth' }, { n: 'Heart', s: 'heart', e: 'happy', m: 'smile' },
+  { n: 'Octagon', s: 'octagon', e: 'three', m: 'o' }, { n: 'Shield', s: 'shield', e: 'two', m: 'flat' },
+  { n: 'Mushroom', s: 'mushroom', e: 'two', m: 'smile' }, { n: 'Jellyfish', s: 'jelly', e: 'sleepy', m: 'o' },
+  { n: 'Bear', s: 'bear', e: 'two', m: 'grin' }, { n: 'Bunny', s: 'bunny', e: 'wink', m: 'teeth' },
+];
+const NC = COLOURS.length, NLEGACY = 16, NLOOK = LOOKS.length * NC;
+/* A character is one number inside the page: shape * NC + colour. The database stores shape and colour as two fields. */
+const lookCode = (shape, colour) => shape * NC + colour;
+const lookParts = code => [Math.floor(code / NC), code % NC];
+const lookName = code => { const [sh, co] = lookParts(code); return `${COLOURS[co].n} ${LOOKS[sh].n.toLowerCase()}`; };
+const fromLegacy = i => lookCode(i, i);
+/* The nearest original character, written as `sprite` so database rules from before this change still show something close.
+   It keeps the colour (new colours use `near`, the closest of the first 16), since that's what players spot on the board. */
+const toLegacy = code => { const [sh, co] = lookParts(code); return sh === co ? sh : co < NLEGACY ? co : COLOURS[co].near; };
 const shade = (hex, k) => '#' + [1, 3, 5].map(i => Math.round(parseInt(hex.slice(i, i + 2), 16) * k).toString(16).padStart(2, '0')).join('');
 const EYE = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" stroke="#17214D" stroke-width="1.6"/><circle cx="${x + r * .22}" cy="${y + r * .18}" r="${r * .38}" fill="#17214D"/><circle cx="${x + r * .05}" cy="${y}" r="${r * .13}" fill="#fff"/>`;
 const ARC = (x, y) => `<path d="M${x - 6} ${y + 3} Q${x} ${y - 7} ${x + 6} ${y + 3}" fill="none" stroke="#17214D" stroke-width="3.5" stroke-linecap="round"/>`;
@@ -1287,19 +1321,32 @@ const MOUTHS = {
   smirk: () => LINE('M-10 11 Q3 15 12 5'),
   wobbly: () => LINE('M-12 11 Q-8 7 -4 11 T4 11 T12 11'),
 };
-const spriteSvgs = SPRITES.map(sp => {
-  const sh = SHAPES[sp.s], [fx, fy, fk] = sh.f, dark = shade(sp.c, .6);
+const spriteCache = {};
+const spriteSvg = code => spriteCache[code] || (spriteCache[code] = (() => {
+  const [si, ci] = lookParts(code), lk = LOOKS[si], col = COLOURS[ci].c, sh = SHAPES[lk.s], [fx, fy, fk] = sh.f, dark = shade(col, .6);
   const body = (fill, t) => `<g fill="${fill}" stroke="${fill}" stroke-width="7" stroke-linejoin="round"${t ? ` transform="${t}"` : ''}>${sh.d}</g>`;
-  return body(dark, 'translate(2.5 4.5)') + body(sp.c) + `<g transform="translate(${fx} ${fy}) scale(${fk})">${EYES[sp.e](sp.c)}${MOUTHS[sp.m]()}</g>`;
-});
-const spriteNo = i => (Number.isInteger(i) && i >= 0 && i < SPRITES.length ? i : null);
+  return body(dark, 'translate(2.5 4.5)') + body(col) + `<g transform="translate(${fx} ${fy}) scale(${fk})">${EYES[lk.e](col)}${MOUTHS[lk.m]()}</g>`;
+})());
+const spriteNo = i => (Number.isInteger(i) && i >= 0 && i < NLOOK ? i : null);
+const legacyNo = i => (Number.isInteger(i) && i >= 0 && i < NLEGACY ? i : null);
+/* A record's character (player in a room, saved profile, or this device's last join): shape + colour, or an older `sprite` only */
+const lookOf = r => {
+  if (!r) return null;
+  const sh = r.shape, co = r.colour;
+  if (Number.isInteger(sh) && Number.isInteger(co) && sh >= 0 && sh < LOOKS.length && co >= 0 && co < NC) return lookCode(sh, co);
+  if (spriteNo(r.look) != null) return r.look;
+  return legacyNo(r.sprite) != null ? fromLegacy(r.sprite) : null;
+};
+/* What to write to the database for a character */
+const lookRecord = code => { const [shape, colour] = lookParts(code); return { shape, colour }; };
+const randomLook = () => Math.floor(Math.random() * NLOOK);
 /* label: an accessible name, or leave it out when the sprite sits next to a name that says who it is */
-const sprite = (i, label) => `<svg class="sprite" viewBox="-4 -4 110 110"${label ? ` role="img" aria-label="${esc(label)}"` : ' aria-hidden="true"'}>${spriteSvgs[spriteNo(i) ?? 0]}</svg>`;
+const sprite = (i, label) => `<svg class="sprite" viewBox="-4 -4 110 110"${label ? ` role="img" aria-label="${esc(label)}"` : ' aria-hidden="true"'}>${spriteSvg(spriteNo(i) ?? 0)}</svg>`;
 /* A player's character, read from their database record so the board and their phone always agree.
    If the database didn't keep their choice (see the Firebase rules note at the top), pick one from their id so it never changes. */
-const hashSprite = s => { let h = 7; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % SPRITES.length; };
-const spriteOf = (uid, p) => spriteNo(p && p.sprite) ?? hashSprite(uid);
-const teamSprite = i => (i * 5 + 1) % SPRITES.length;
+const hashSprite = s => { let h = 7; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % NLOOK; };
+const spriteOf = (uid, p) => lookOf(p) ?? hashSprite(uid);
+const teamSprite = i => fromLegacy((i * 5 + 1) % NLEGACY);
 
 /* ---------- podium ---------- */
 /* Projector only. rows: [{ name, score, sprites: [sprite numbers] }]. Top three stand on steps (2nd, 1st, 3rd); everyone else is listed underneath. */
@@ -1852,7 +1899,11 @@ function renderLobby() {
   lobbyQr();
   const list = Object.entries(players).filter(([, p]) => p && p.name != null);
   /* A player's character arrives in its own write just after they join. If it still hasn't come, the database rules are refusing it. */
-  $('lobbyWarn').hidden = !list.some(([uid, p]) => spriteNo(p.sprite) == null && Date.now() - (seenAt[uid] || Date.now()) > SPRITE_WAIT);
+  const late = ([uid]) => Date.now() - (seenAt[uid] || Date.now()) > SPRITE_WAIT;
+  const noChar = list.some(p => late(p) && legacyNo(p[1].sprite) == null), oldChar = list.some(p => late(p) && legacyNo(p[1].sprite) != null && !Number.isInteger(p[1].shape));
+  $('lobbyWarn').hidden = !(noChar || oldChar);
+  $('lobbyWarnWhat').textContent = noChar ? 'Players’ characters aren’t being saved, so the board is choosing one for each player.'
+    : 'Players’ colour and shape choices aren’t being saved, so the board shows the nearest older character.';
   $('lobbyCount').textContent = list.length ? `${list.length} player${list.length === 1 ? '' : 's'} joined` : 'Waiting for players to join…';
   $('lobbyTeams').innerHTML = S.teams.map((t, i) => {
     const ps = list.filter(([, p]) => p.team === i).sort((a, b) => String(a[1].name).localeCompare(String(b[1].name)));
@@ -1992,7 +2043,7 @@ function plyShow(which) {
 function showJoin() {
   const saved = store.get(K_JOIN);
   if (saved) { $('jCode').value = saved.code ? fmtCode(saved.code) : ''; $('jName').value = saved.guest || (saved.profile ? '' : saved.name) || ''; }
-  pickedSprite = spriteNo(saved && saved.sprite) ?? Math.floor(Math.random() * SPRITES.length);
+  pickedSprite = lookOf(saved) ?? randomLook();
   jProf = saved && saved.profile ? saved.profile : jProf;
   $('home').hidden = true;
   renderChars();
@@ -2011,7 +2062,7 @@ async function quickRejoin(saved) {
     const room = await L.get('rooms/' + saved.code);
     const me = room && room.players && room.players[myUid];
     if (room && room.host && room.status !== 'ended' && me) {
-      J = { code: saved.code, name: me.name, team: me.team, sprite: spriteNo(me.sprite) ?? spriteNo(saved.sprite), profile: me.profile || null };
+      J = { code: saved.code, name: me.name, team: me.team, look: lookOf(saved) ?? lookOf(me), profile: me.profile || null };
       await L.update(`rooms/${saved.code}/players/${myUid}`, { online: true });
       enterPlay();
     }
@@ -2033,7 +2084,7 @@ function leaveLocal() {
   if (plyUnsub) { plyUnsub(); plyUnsub = null; }
   if (presenceOff) { presenceOff(); presenceOff = null; }
   plyRoom = null; plyHtml = '';
-  const s = store.get(K_JOIN); if (s) store.set(K_JOIN, { code: s.code, name: s.name, sprite: s.sprite, profile: s.profile || null, guest: s.guest || '' });
+  const s = store.get(K_JOIN); if (s) store.set(K_JOIN, { code: s.code, name: s.name, look: lookOf(s), profile: s.profile || null, guest: s.guest || '' });
   if (!$('profileView').hidden && profCtx && profCtx.room) $('profileView').hidden = true;
   plyShow('form');
 }
@@ -2045,7 +2096,7 @@ function renderPly() {
   if (!me) { J = null; leaveLocal(); $('jErr').textContent = 'You were removed from the game. You can join again with the code.'; return; }
   const teams = r.teams || [], scores = r.scores || [], tname = teams[me.team] || 'your team';
   plyWho(me.name, spriteOf(myUid, me));
-  if (J) { J.name = me.name; J.sprite = spriteNo(me.sprite) ?? J.sprite; }
+  if (J) J.name = me.name;
   const mine = (r.pp && +r.pp[myUid]) || 0;
   $('plyScore').textContent = `${tname} · ${scores[me.team] || 0} points · You: ${mine}`;
   if (r.final && r.status !== 'ended') { renderPlyFinal(r, put); return; }
@@ -2131,7 +2182,7 @@ $('joinForm').addEventListener('submit', async e => {
     if (!room || !room.host) err.textContent = `No game found with code ${fmtCode(code)}. Check the code on the board.`;
     else if (room.status === 'ended') err.textContent = 'That game has finished.';
     else {
-      J = { code, name, sprite: prof ? spriteNo(prof.sprite) ?? 0 : pickedSprite, profile: prof ? jProf : null, guest };
+      J = { code, name, look: prof ? lookOf(prof) ?? 0 : pickedSprite, profile: prof ? jProf : null, guest };
       const me = room.players && room.players[myUid];
       if (me && room.teams && room.teams[me.team] != null) {
         J.team = me.team;
@@ -2139,20 +2190,26 @@ $('joinForm').addEventListener('submit', async e => {
         saveSprite(); saveProfileTag();
         enterPlay();
       } else {
-        renderTeamPick(room.teams); plyShow('team'); plyWho(name, J.sprite);
+        renderTeamPick(room.teams); plyShow('team'); plyWho(name, J.look);
       }
     }
   } catch (ex) { liveErr(ex); err.textContent = "Couldn't connect to the game. Check your internet connection and try again."; }
   btn.disabled = false; btn.textContent = 'Join';
 });
-/* The character and the profile tag go in their own writes too, so rules that don't allow them can't stop the join */
-function saveSprite() { if (J && spriteNo(J.sprite) != null) L.update(`rooms/${J.code}/players/${myUid}`, { sprite: J.sprite }).catch(liveErr); }
+/* The character and the profile tag go in their own writes too, so rules that don't allow them can't stop the join.
+   The nearest original character (`sprite`) goes first, so rules that only know `sprite` still keep something close. */
+function saveSprite() {
+  if (!J || spriteNo(J.look) == null) return;
+  const path = `rooms/${J.code}/players/${myUid}`;
+  L.update(path, { sprite: toLegacy(J.look) }).catch(liveErr);
+  L.update(path, lookRecord(J.look)).catch(liveErr);
+}
 function saveProfileTag() {
   if (!J) return;
   if (J.profile) L.update(`rooms/${J.code}/players/${myUid}`, { profile: J.profile }).catch(liveErr);
   else L.remove(`rooms/${J.code}/players/${myUid}/profile`).catch(() => {});
 }
-$('jChars').addEventListener('click', e => { const n = charClick($('jChars'), e); if (n != null) pickedSprite = n; });
+$('jChars').addEventListener('click', e => { const n = charClick($('jChars'), e, pickedSprite); if (n != null) pickedSprite = n; });
 $('teamPickList').addEventListener('click', async e => {
   const b = e.target.closest('[data-team]'); if (!b || !J) return;
   J.team = +b.dataset.team;
@@ -2292,19 +2349,31 @@ function renderProfiles() {
     : 'Make a profile, then pick it when you join a game. Your wins, points and Aces are saved to it.';
   grid.innerHTML = list.map(([id, p]) => {
     const st = statsOf(p);
-    return `<button class="pcard" type="button" data-open="${esc(id)}">${sprite(spriteNo(p.sprite) ?? 0)}<span class="pc-name">${esc(p.name)}</span><span class="pc-meta">${st.wins} win${st.wins === 1 ? '' : 's'} · ${st.pts} points</span></button>`;
+    return `<button class="pcard" type="button" data-open="${esc(id)}">${sprite(lookOf(p) ?? 0)}<span class="pc-name">${esc(p.name)}</span><span class="pc-meta">${st.wins} win${st.wins === 1 ? '' : 's'} · ${st.pts} points</span></button>`;
   }).join('') + (list.length < MAX_PROFILES ? '<button class="pcard add" type="button" data-open="new"><span class="plus" aria-hidden="true">+</span><span>New profile</span></button>' : '');
 }
 $('profGrid').addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) openProfile(b.dataset.open, {}); });
 
-/* the character grid, shared by the join screen and the profile screen */
+/* the character picker, shared by the join screen and the profile screen: a row of colours, then every shape drawn in that colour */
 function renderCharPick(box, sel) {
-  box.innerHTML = SPRITES.map((sp, i) => `<button type="button" data-char="${i}" aria-pressed="${i === sel}" aria-label="${esc(sp.n)}" title="${esc(sp.n)}">${sprite(i)}</button>`).join('');
+  const [si, ci] = lookParts(spriteNo(sel) ?? 0);
+  box.innerHTML = `<div class="look-row"><span class="look-lab" id="${box.id}Col">Colour: <b>${esc(COLOURS[ci].n)}</b></span>`
+    + `<button class="linkbtn" type="button" data-rand>Surprise me</button></div>`
+    + `<div class="swatches" role="group" aria-labelledby="${box.id}Col">${COLOURS.map((c, i) => `<button type="button" data-col="${i}" aria-pressed="${i === ci}" aria-label="${esc(c.n)}" title="${esc(c.n)}" style="--sw:${c.c}"></button>`).join('')}</div>`
+    + `<div class="look-row"><span class="look-lab" id="${box.id}Shp">Shape: <b>${esc(LOOKS[si].n)}</b></span></div>`
+    + `<div class="chars" role="group" aria-labelledby="${box.id}Shp">${LOOKS.map((lk, i) => `<button type="button" data-shape="${i}" aria-pressed="${i === si}" aria-label="${esc(lk.n)}" title="${esc(lk.n)}">${sprite(lookCode(i, ci))}</button>`).join('')}</div>`;
 }
-function charClick(box, e) {
-  const b = e.target.closest('[data-char]'); if (!b) return null;
-  box.querySelectorAll('[data-char]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-  return +b.dataset.char;
+/* Returns the new character, or null if the click wasn't on a choice. Redraws the picker and keeps focus on the same button. */
+function charClick(box, e, cur) {
+  const b = e.target.closest('[data-col],[data-shape],[data-rand]'); if (!b) return null;
+  let [si, ci] = lookParts(spriteNo(cur) ?? 0), focus;
+  if (b.dataset.col != null) { ci = +b.dataset.col; focus = `[data-col="${ci}"]`; }
+  else if (b.dataset.shape != null) { si = +b.dataset.shape; focus = `[data-shape="${si}"]`; }
+  else { [si, ci] = lookParts(randomLook()); focus = '[data-rand]'; }
+  const n = lookCode(si, ci);
+  renderCharPick(box, n);
+  const f = box.querySelector(focus); if (f) f.focus();
+  return n;
 }
 
 /* ---- profile screen: stats, name and character ---- */
@@ -2312,7 +2381,7 @@ function openProfile(id, ctx) {
   profCtx = { id, room: !!(ctx && ctx.room) };
   const p = profiles[id];
   $('pName').value = id === 'new' ? '' : id === 'guest' ? (J ? J.name : '') : (p ? String(p.name) : (J && J.profile === id ? J.name : ''));
-  profPick = id === 'new' ? Math.floor(Math.random() * SPRITES.length) : (spriteNo(p && p.sprite) ?? spriteNo(J && J.sprite) ?? 0);
+  profPick = id === 'new' ? randomLook() : (lookOf(p) ?? (J && spriteNo(J.look)) ?? 0);
   $('pErr').textContent = '';
   renderProfile(true);
   $('profileView').hidden = false; $('profileView').scrollTop = 0;
@@ -2322,7 +2391,7 @@ function renderProfile(redrawChars) {
   const { id, room } = profCtx, isNew = id === 'new', guest = id === 'guest', p = profiles[id];
   if (!isNew && !guest && !p && profState === 'ready' && !room) { closeProfile(); return; }
   const live = isNew || guest;
-  $('profFace').innerHTML = sprite(live ? profPick : (spriteNo(p && p.sprite) ?? profPick));
+  $('profFace').innerHTML = sprite(live ? profPick : (lookOf(p) ?? profPick));
   $('profName').textContent = live ? ($('pName').value.trim() || (isNew ? 'New profile' : 'Guest')) : (p ? p.name : (J ? J.name : ''));
   $('profEyebrow').textContent = isNew ? 'New profile' : guest ? 'Playing as a guest' : 'Profile';
   $('profStatsBox').hidden = live;
@@ -2340,7 +2409,7 @@ function renderProfile(redrawChars) {
   if (redrawChars) renderCharPick($('pChars'), profPick);
 }
 function closeProfile() { $('profileView').hidden = true; profCtx = null; }
-$('pChars').addEventListener('click', e => { const n = charClick($('pChars'), e); if (n != null) { profPick = n; renderProfile(); } });
+$('pChars').addEventListener('click', e => { const n = charClick($('pChars'), e, profPick); if (n != null) { profPick = n; renderProfile(); } });
 $('pName').addEventListener('input', () => { if (profCtx && (profCtx.id === 'new' || profCtx.id === 'guest')) renderProfile(); });
 $('profBack').addEventListener('click', closeProfile);
 $('profForm').addEventListener('submit', async e => {
@@ -2356,12 +2425,15 @@ $('profForm').addEventListener('submit', async e => {
     if (id !== 'guest') {
       if (!(me && me.google)) { err.textContent = 'You’re signed out. Sign in with Google to save a profile.'; btn.disabled = false; return; }
       if (id === 'new') pid = 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-      await L.update(`users/${me.uid}/profiles/${pid}`, id === 'new' ? { name, sprite: profPick, created: L.now() } : { name, sprite: profPick });
+      const path = `users/${me.uid}/profiles/${pid}`, legacy = toLegacy(profPick);
+      await L.update(path, id === 'new' ? { name, sprite: legacy, created: L.now() } : { name, sprite: legacy });
+      /* Colour and shape in their own write: rules from before this change refuse them, and the profile keeps the nearest original character */
+      await L.update(path, lookRecord(profPick)).catch(liveErr);
       if (id === 'new') jProf = pid;
     }
     /* In a game: the board shows the new name and character straight away */
     if (room && J && (id === 'guest' || J.profile === pid)) {
-      J.name = name; J.sprite = profPick; if (id === 'guest') J.guest = name;
+      J.name = name; J.look = profPick; if (id === 'guest') J.guest = name;
       store.set(K_JOIN, J);
       await L.update(`rooms/${J.code}/players/${myUid}`, { name });
       saveSprite();
@@ -2393,7 +2465,7 @@ function renderJoinWho() {
   } else {
     const list = profList();
     if (!(jProf === 'guest' || profiles[jProf])) jProf = list.length ? list[0][0] : 'guest';
-    h = `<span class="lab">Who’s playing?</span><div class="jprofs">${list.map(([id, p]) => `<button type="button" data-jprof="${esc(id)}" aria-pressed="${id === jProf}">${sprite(spriteNo(p.sprite) ?? 0)}${esc(p.name)}</button>`).join('')}`
+    h = `<span class="lab">Who’s playing?</span><div class="jprofs">${list.map(([id, p]) => `<button type="button" data-jprof="${esc(id)}" aria-pressed="${id === jProf}">${sprite(lookOf(p) ?? 0)}${esc(p.name)}</button>`).join('')}`
       + `<button type="button" class="plain" data-jprof="guest" aria-pressed="${jProf === 'guest'}">Play as a guest</button>`
       + (list.length < MAX_PROFILES ? '<button type="button" class="plain" data-jnew>+ New profile</button>' : '') + '</div>'
       + `<div class="jwho-row"><span>Signed in as ${esc(me.name || me.email || 'Google user')}</span><button class="linkbtn" type="button" data-signout>Sign out</button></div>`;
