@@ -13,6 +13,8 @@
             "online": { ".validate": "newData.isBoolean()" },
             "joined": { ".validate": "newData.isNumber()" },
             "sprite": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 16" },
+            "shape": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 64" },
+            "colour": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 64" },
             "profile": { ".validate": "newData.isString() && newData.val().matches(/^[A-Za-z0-9_-]{1,40}$/)" },
             "$other": { ".validate": false }
           }
@@ -50,6 +52,8 @@
             ".validate": "$pid.matches(/^[A-Za-z0-9_-]{1,40}$/) && newData.hasChildren(['name', 'sprite'])",
             "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 30" },
             "sprite": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 16" },
+            "shape": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 64" },
+            "colour": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 64" },
             "created": { ".validate": "newData.isNumber()" },
             "games": {
               "$gid": {
