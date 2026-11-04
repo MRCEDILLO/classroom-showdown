@@ -465,6 +465,13 @@ details.fmt summary { cursor: pointer; font-weight: 700; }
 .fin-p.wrong { border-color: var(--bad); }
 .fin-p input { font: inherit; font-family: var(--font-display); font-weight: 900; font-size: 28px; width: 100%; padding: 4px 10px; border: 2px solid var(--grid-strong); border-radius: 6px; background: var(--card); color: var(--ink); grid-column: 1 / -1; }
 .fin-p input:focus { border-color: var(--ink); }
+.fin-p.sc { grid-template-columns: auto minmax(0, 1fr) auto; }
+.fin-p.sc input { grid-column: 1 / -1; }
+.fin-p .fp-score { grid-row: span 2; grid-column: 3; text-align: right; line-height: 1; }
+.fin-p .fp-score b { display: block; font-family: var(--font-display); font-weight: 900; font-size: clamp(30px, 3vw, 40px); color: var(--ink); }
+.fin-p .fp-score b.neg { color: var(--bad); }
+.fin-p .fp-score small { font-size: 13px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; letter-spacing: .04em; }
+.fin-p .fp-rank { position: absolute; top: -9px; left: -9px; min-width: 26px; height: 26px; padding: 0 6px; border-radius: 13px; background: var(--ink); color: var(--paper); font-weight: 900; font-size: 14px; display: grid; place-items: center; }
 .fin-opts { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .fin-opts li { display: flex; align-items: center; gap: 12px; border: 2px solid var(--ink); border-radius: 10px; padding: 10px 14px; font-size: clamp(20px, 2.2vw, 30px); min-width: 0; overflow-wrap: anywhere; }
 .fin-opts li.right { background: var(--good); border-color: var(--good); color: #fff; }
@@ -2544,6 +2551,8 @@ const finWho = () => Object.entries(S.fin.who || {}).map(([k, x]) => ({
   name: S.live ? String((players[k] && players[k].name) || x.name) : (S.teams[x.team] ? S.teams[x.team].name : x.name),
   sprite: S.live ? spriteOf(k, players[k]) : teamSprite(x.team),
 }));
+/* Score going into the Final Showdown, shown while bets are placed */
+const finScore = w => S.live ? ppOf(w.key) : (S.teams[w.team] ? S.teams[w.team].score : S.fin.max[w.key] || 0);
 const finWager = k => clampW((S.live && S.fin.phase === 'wager' ? (finLive.wagers || {}) : S.fin.wagers)[k], S.fin.max[k] || 0);
 const finAnswer = k => String((S.live && /answer|locked/.test(S.fin.phase) ? (finLive.answers || {}) : S.fin.answers)[k] || '');
 function renderFinal() {
@@ -2566,12 +2575,17 @@ function renderFinal() {
   const n = who.length, of = (k, word) => `${k} of ${n} ${word}${n === 1 ? '' : 's'} in.`;
   const nBets = who.filter(w => (finLive.wagers || {})[w.key] != null).length, nAns = who.filter(w => finAnswer(w.key)).length;
   $('finStep').textContent = {
-    wager: !n ? 'Nobody is playing, so there are no bets to make.' : live ? `Here’s the category. Players, bet some of your points on your phone. ${of(nBets, 'bet')}` : 'Here’s the category. Each team bets up to its score. Type each team’s bet, then show the question.',
+    wager: !n ? 'Nobody is playing, so there are no bets to make.' : live ? `Here’s the category and everyone’s score. Players, bet some of your points on your phone. ${of(nBets, 'bet')}` : 'Here’s the category and each team’s score. Each team bets up to its score. Type each team’s bet, then show the question.',
     answer: live ? `Type your answer on your phone before time runs out. ${of(nAns, 'answer')}` : 'Each team writes down its answer before time runs out.',
     locked: live ? `Time’s up! ${of(nAns, 'answer')} Reveal them when you’re ready.` : 'Time’s up! Pens down.',
     reveal: live ? 'Mark each answer right or wrong, then add up the scores. Exact matches are already marked right.' : 'Mark each team right or wrong, then add up the scores.',
   }[ph] || '';
   const list = $('finList'), focused = document.activeElement && list.contains(document.activeElement) ? document.activeElement.dataset.wager : null;
+  if (ph === 'wager') {
+    who.forEach(w => { w.score = finScore(w); });
+    who.sort((a, b) => b.score - a.score);
+    who.forEach((w, i) => { w.rank = i && w.score === who[i - 1].score ? who[i - 1].rank : i + 1; });
+  }
   list.innerHTML = who.map(w => finCard(w, ph, live)).join('');
   if (focused != null) { const i = list.querySelector(`[data-wager="${focused}"]`); if (i) i.focus(); }
   $('finGo').textContent = { wager: 'Show the question', answer: 'Stop answers now', locked: live ? 'Reveal the answers' : 'Reveal the answer', reveal: 'Add up the scores' }[ph] || '';
@@ -2582,9 +2596,10 @@ function finCard(w, ph, live) {
   const max = S.fin.max[w.key] || 0, bet = ph === 'wager' ? finWager(w.key) : clampW(S.fin.wagers[w.key], max);
   const head = `${sprite(w.sprite)}<span class="fp-name">${esc(w.name)}</span>`;
   if (ph === 'wager') {
-    if (!live) return `<div class="fin-p">${head}<span class="fp-sub">${max} points to bet</span><input type="number" inputmode="numeric" min="0" max="${max}" step="1" value="${S.fin.wagers[w.key] ?? ''}" data-wager="${esc(w.key)}" aria-label="${esc(w.name)}’s bet, from 0 to ${max}" placeholder="0"></div>`;
+    const sc = `<span class="fp-rank" aria-label="Place ${w.rank}">${w.rank}</span><span class="fp-score"><b${w.score < 0 ? ' class="neg"' : ''}>${w.score}</b><small>points</small></span>`;
+    if (!live) return `<div class="fin-p sc">${sc}${head}<span class="fp-sub">Can bet up to ${max}</span><input type="number" inputmode="numeric" min="0" max="${max}" step="1" value="${S.fin.wagers[w.key] ?? ''}" data-wager="${esc(w.key)}" aria-label="${esc(w.name)}’s bet, from 0 to ${max}" placeholder="0"></div>`;
     const inB = (finLive.wagers || {})[w.key] != null;
-    return `<div class="fin-p${inB ? ' in' : ''}">${head}<span class="fp-sub">${tn}${max ? (inB ? 'Bet in ✓' : 'Thinking…') : 'No points to bet'}</span></div>`;
+    return `<div class="fin-p sc${inB ? ' in' : ''}">${sc}${head}<span class="fp-sub">${tn}${max ? (inB ? 'Bet in ✓' : 'Thinking…') : 'No points to bet'}</span></div>`;
   }
   if (ph !== 'reveal') {
     if (!live) return `<div class="fin-p">${head}<span class="fp-sub">Bet: ${bet}</span></div>`;
